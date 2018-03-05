@@ -1,4 +1,4 @@
-# README
+# CTF.io
 
 This project is not finished. Please contribute!
 
