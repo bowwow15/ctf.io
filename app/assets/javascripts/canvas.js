@@ -27,7 +27,7 @@ $(document).ready(function () {
 		Context.context.beginPath(); //resets path that is being drawn.
 
 		Context.context.beginPath();
-		Context.context.arc(95,50,40,0,2*Math.PI);
+		Context.context.arc(canvas.width / 2 - 20,canvas.height / 2 - 20,40,0,2*Math.PI);
 		Context.context.fillStyle = 'blue';
 		Context.context.stroke();
 		Context.context.fill();
