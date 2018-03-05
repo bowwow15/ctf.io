@@ -23,17 +23,19 @@ $(document).ready(function () {
 	Context.create("canvas");
 	resizeCanvas();
 
-	function drawClientPlayer () {
-		Context.context.beginPath(); //resets path that is being drawn.
+	var Player = {
+		size: 40,
 
-		Context.context.beginPath();
-		Context.context.arc(canvas.width / 2 - 20,canvas.height / 2 - 20,40,0,2*Math.PI);
-		Context.context.fillStyle = '#fff4d9'; //skin tone
-		Context.context.stroke();
-		Context.context.fill();
-	}
+		draw = function () {
+			Context.context.beginPath(); //resets path that is being drawn.
 
-	drawClientPlayer();
+			Context.context.beginPath();
+			Context.context.arc(canvas.width / 2 - 20,canvas.height / 2 - 20,this.size,0,2*Math.PI);
+			Context.context.fillStyle = '#fff4d9'; //skin tone
+			Context.context.stroke();
+			Context.context.fill();
+		}
+	};
 
-	Context.context.beginPath();
+	Player.draw();
 });
