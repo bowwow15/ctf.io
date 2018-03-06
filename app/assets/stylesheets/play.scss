@@ -1,3 +1,9 @@
 // Place all the styles related to the Play controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$background-color: #344e28; /* It's green... Like trees. */
+
+body {
+	background-color: $background-color;
+}
