@@ -32,7 +32,7 @@ $(document).ready(function () {
 			Context.context.beginPath(); //resets path that is being drawn.
 
 			Context.context.beginPath();
-			Context.context.arc(this.x - 20, this.y - 20,this.size,0,2*Math.PI);
+			Context.context.arc(this.x - 10, this.y - 10,this.size,0,2*Math.PI);
 			Context.context.fillStyle = '#fff4d9'; //skin tone
 			Context.context.stroke();
 			Context.context.fill();
