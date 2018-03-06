@@ -33,7 +33,7 @@ $(document).ready(function () {
 
 			Context.context.beginPath();
 			Context.context.arc(this.x - 10, this.y - 10,this.size,0,2*Math.PI);
-			Context.context.fillStyle = '#fff4d9'; //skin tone
+			Context.context.fillStyle = '#ffe0bd'; //skin tone
 			Context.context.stroke();
 			Context.context.fill();
 		}
