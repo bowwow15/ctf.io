@@ -28,7 +28,7 @@ $(document).ready(function () {
 		x: canvas.width / 2,
 		y: canvas.height / 2,
 
-		draw = function () {
+		draw: function () {
 			Context.context.beginPath(); //resets path that is being drawn.
 
 			Context.context.beginPath();
