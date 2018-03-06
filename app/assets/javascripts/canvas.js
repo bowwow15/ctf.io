@@ -19,6 +19,7 @@ function resizeCanvas() {
 
 $(document).ready(function () {
 	//runs when HTML page loads...
+	ctx = Context.context //important shorthand notice
 
 	Context.create("canvas");
 	resizeCanvas();
@@ -29,21 +30,29 @@ $(document).ready(function () {
 		y: canvas.height / 2,
 
 		draw: function () {
-			Context.context.beginPath(); //resets path that is being drawn.
+			ctx.beginPath(); //resets path that is being drawn.
 
-			Context.context.beginPath();
-			Context.context.arc(this.x - 10, this.y - 20,this.size,0,2*Math.PI);
-			Context.context.fillStyle = '#ffe0bd'; //skin tone
-			Context.context.stroke();
-			Context.context.fill();
+			ctx.beginPath();
+			ctx.arc(this.x - 10, this.y - 20,this.size,0,2*Math.PI);
+			ctx.fillStyle = '#ffe0bd'; //skin tone
+			ctx.stroke();
+			ctx.fill();
 		}
 	};
 
 	var Frame = {
 		fps: 30,
 
+		showFps: function () {
+			ctx.beginPath();
+			ctx.fillStyle = 'black';
+			ctx.font = "15px Arial";
+			ctx.fillText(this.fps + " fps",10,20);
+		},
+
 		draw: function () {
 			Player.draw();
+			this.showFps();
 		}
 	};
 
@@ -53,5 +62,10 @@ $(document).ready(function () {
 		}, 1000 / Frame.fps);
 	}
 
-	startFrameCycle();
+	function start () {
+		startFrameCycle();
+		$("#playButton").hide();
+	}
+
+	start();
 });

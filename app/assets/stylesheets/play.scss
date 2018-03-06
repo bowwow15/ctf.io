@@ -7,3 +7,11 @@ $background-color: #72a958; /* It's green... Like trees. */
 body {
 	background-color: $background-color;
 }
+
+.playButton {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
