@@ -32,12 +32,26 @@ $(document).ready(function () {
 			Context.context.beginPath(); //resets path that is being drawn.
 
 			Context.context.beginPath();
-			Context.context.arc(this.x - 10, this.y - 10,this.size,0,2*Math.PI);
+			Context.context.arc(this.x - 10, this.y - 20,this.size,0,2*Math.PI);
 			Context.context.fillStyle = '#ffe0bd'; //skin tone
 			Context.context.stroke();
 			Context.context.fill();
 		}
 	};
 
-	Player.draw();
+	var Frame = {
+		fps: 30,
+
+		draw: function () {
+			Player.draw();
+		}
+	};
+
+	function startFrameCycle () {
+		window.setInterval(function() {
+			Frame.draw();
+		}, 1000 / Frame.fps);
+	}
+
+	startFrameCycle();
 });
