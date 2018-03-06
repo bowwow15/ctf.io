@@ -9,38 +9,39 @@ var Context = {
 	}
 };
 
+
+ctx = Context.context; //important shorthand notice
+
+
 // resize the canvas to fill browser window dynamically
 window.addEventListener('resize', resizeCanvas, false);
 
-function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-}
 
 $(document).ready(function () {
 	//runs when HTML page loads...
-	ctx = Context.context //important shorthand notice
 
 	Context.create("canvas");
 	resizeCanvas();
 
-	var Player = {
+	var Player = { // just player data and draw player function
 		size: 40,
-		x: canvas.width / 2,
-		y: canvas.height / 2,
+		playerMoveX: 0,
+		playerMoveY: 0,
 
 		draw: function () {
+			var playerX = canvas.width / 2 + this.playerMoveX;
+			var playerY = canvas.height / 2 + this.playerMoveY;
+
 			ctx.beginPath(); //resets path that is being drawn.
 
-			ctx.beginPath();
-			ctx.arc(this.x - 10, this.y - 20,this.size,0,2*Math.PI);
+			ctx.arc(playerX - 10, playerY - 20,this.size, 0, 2*Math.PI);
 			ctx.fillStyle = '#ffe0bd'; //skin tone
 			ctx.stroke();
 			ctx.fill();
 		}
 	};
 
-	var Frame = {
+	var Frame = { // holds framerate and function to draw a frame
 		fps: 30,
 
 		showFps: function () {
@@ -69,3 +70,19 @@ $(document).ready(function () {
 
 	start();
 });
+
+function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        //draws background
+        if (ctx === null) {
+        	Context.create("canvas");
+        	ctx = Context.context;
+        }
+
+        ctx.beginPath();
+        ctx.fillStyle = '#72a958';
+        ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+        ctx.fill();
+}
