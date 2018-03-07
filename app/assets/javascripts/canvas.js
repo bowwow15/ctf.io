@@ -23,23 +23,114 @@ $(document).ready(function () {
 	Context.create("canvas");
 	resizeCanvas();
 
+	(function() {
+	  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+	    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+	  window.requestAnimationFrame = requestAnimationFrame;
+	})();
+
+	//event listener
+	window.addEventListener("keydown", onKeyDown, false);
+	window.addEventListener("keyup", onKeyUp, false);
+
+	function onKeyDown(event) {
+	  var keyCode = event.keyCode;
+	  switch (keyCode) {
+	    case 68: //d
+	      keyD = true;
+	      break;
+	    case 83: //s
+	      keyS = true;
+	      break;
+	    case 65: //a
+	      keyA = true;
+	      break;
+	    case 87: //w
+	      keyW = true;
+	      break;
+	    case 16: //shift key (sprint)
+	      keyShift = true;
+	      break;
+	  }
+	}
+
+	function onKeyUp(event) {
+	  var keyCode = event.keyCode;
+
+	  switch (keyCode) {
+	    case 68: //d
+	      keyD = false;
+	      break;
+	    case 83: //s
+	      keyS = false;
+	      break;
+	    case 65: //a
+	      keyA = false;
+	      break;
+	    case 87: //w
+	      keyW = false;
+	      break;
+	    case 16: //shift key (sprint)
+	      keyShift = false;
+	      break;
+	  }
+	}
+
+	//neccessary variables
+	var tickX = 10;
+	var tickY = 10;
+
+	var keyW = false;
+	var keyA = false;
+	var keyS = false;
+	var keyD = false;
+	var keyShift = false;
+
 	var Player = { // just player data and draw player function
 		size: 40,
 		playerMoveX: 0,
 		playerMoveY: 0,
 
 		draw: function () {
-			var playerX = canvas.width / 2 + this.playerMoveX;
-			var playerY = canvas.height / 2 + this.playerMoveY;
-
-			ctx.beginPath(); //resets path that is being drawn.
-
-			ctx.arc(playerX, playerY,this.size, 0, 2*Math.PI);
-			ctx.fillStyle = '#ffe0bd'; //skin tone
-			ctx.stroke();
-			ctx.fill();
+			
 		}
 	};
+
+	function drawPlayer () {
+		window.requestAnimationFrame(drawPlayer);
+		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
+
+		var playerX = canvas.width / 2 + Player.playerMoveX;
+		var playerY = canvas.height / 2 + Player.playerMoveY;
+
+		ctx.beginPath(); //resets path that is being drawn.
+
+		ctx.arc(playerX, playerY, Player.size, 0, 2*Math.PI, false);
+		ctx.fillStyle = '#ffe0bd'; //skin tone
+		ctx.stroke();
+		ctx.fill();
+
+		//controls
+
+		playerSpeed = 2; //default setting sets the speed of player 
+
+		if (keyShift == true) {
+			playerSpeed = 3;
+		}
+
+		if (keyD == true) {
+		  Player.playerMoveX += playerSpeed;
+		}
+		if (keyS == true) {
+		  Player.playerMoveY += playerSpeed;
+		}
+		if (keyA == true) {
+		  Player.playerMoveX -= playerSpeed;
+		}
+		if (keyW == true) {
+		  Player.playerMoveY -= playerSpeed;
+		}
+	}
 
 	var Frame = { // holds framerate and function to draw a frame
 		fps: 30,
@@ -52,15 +143,15 @@ $(document).ready(function () {
 		},
 
 		draw: function () {
-			Player.draw();
+			window.requestAnimationFrame(drawPlayer);
 			this.showFps();
 		}
 	};
 
 	function startFrameCycle () {
-		window.setInterval(function() {
+		//window.setInterval(function() {
 			Frame.draw();
-		}, 1000 / Frame.fps);
+		//}, 1000 / Frame.fps);
 	}
 
 	function start () {
