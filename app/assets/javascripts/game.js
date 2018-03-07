@@ -40,8 +40,20 @@ $(document).ready(function () {
 	    case 16: //shift key (sprint)
 	      keyShift = true;
 	      break;
+	    case 67: //b
+	      keyC = true;
+	      break;
 	  }
-	}
+
+	  if (keyC == true) {
+					if (Player.color != true) {
+						Player.color = true;
+					}
+					else {
+						Player.color = false;
+					}
+				}
+		}
 
 	function onKeyUp(event) {
 	  var keyCode = event.keyCode;
@@ -62,6 +74,9 @@ $(document).ready(function () {
 	    case 16: //shift key (sprint)
 	      keyShift = false;
 	      break;
+	    case 67: //b
+	      keyC = false;
+	      break;
 	  }
 	}
 
@@ -74,14 +89,31 @@ $(document).ready(function () {
 	var keyS = false;
 	var keyD = false;
 	var keyShift = false;
+	var keyC = false;
 
 	var Player = { // just player data and draw player function
 		size: 40,
+		color: false,
 		x: 0,
 		y: 0,
 
 		draw: function () {
 			
+		}
+	};
+
+	var HudItems = {
+		slot_1: null,
+		slot_2: null,
+		slot_3: null,
+		slot_4: null,
+		slot_5: null,
+		slot_6: null,
+		slot_7: null,
+		slot_8: null,
+
+		drawItems: function () {
+			//draws the items in your HUD (HTML HUD!)
 		}
 	};
 
@@ -98,7 +130,13 @@ $(document).ready(function () {
 			ctx.beginPath(); //resets path that is being drawn.
 
 			ctx.arc(playerX, playerY, Player.size, 0, 2*Math.PI, false);
-			ctx.fillStyle = '#ffe0bd'; //skin tone
+			if (Player.color != true) {
+				ctx.fillStyle = '#ffe0bd'; //skin tone
+			}
+			else {
+				ctx.fillStyle = 'blue';
+			}
+			ctx.strokeStyle = '#274729';
 			ctx.stroke();
 			ctx.fill();
 
@@ -107,7 +145,7 @@ $(document).ready(function () {
 			playerSpeed = 2; //default setting sets the speed of player 
 
 			if (keyShift == true) {
-				playerSpeed = 3;
+				playerSpeed = 3.5;
 			}
 			if (Player.x < ServerGameObject.x + ServerGameObject.width  && Player.x + Player.width  > ServerGameObject.x &&
 			Player.y < ServerGameObject.y + ServerGameObject.height && Player.y + Player.height > ServerGameObject.y) {
