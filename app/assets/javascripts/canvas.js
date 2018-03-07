@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 			ctx.beginPath(); //resets path that is being drawn.
 
-			ctx.arc(playerX - 10, playerY - 20,this.size, 0, 2*Math.PI);
+			ctx.arc(playerX, playerY,this.size, 0, 2*Math.PI);
 			ctx.fillStyle = '#ffe0bd'; //skin tone
 			ctx.stroke();
 			ctx.fill();
