@@ -71,7 +71,7 @@ $(document).ready(function () {
 	start();
 });
 
-function resizeCanvas() {
+function resizeCanvas() { //resizes canvas to browser window
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
