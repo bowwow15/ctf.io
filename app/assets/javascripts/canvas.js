@@ -18,7 +18,7 @@ window.addEventListener('resize', resizeCanvas, false);
 
 
 
-function resizeCanvas() { //resizes canvas to browser window
+function resizeCanvas () { //resizes canvas to browser window
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 

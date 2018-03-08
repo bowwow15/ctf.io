@@ -1,3 +1,12 @@
+//set variables for html dom use and reference
+var HudItem;
+
+var Map;
+
+var playerSpeed;
+
+var augmentedPlayer;
+
 var ServerGameObject = {
 	x: 50,
 	y: 50,
@@ -11,12 +20,21 @@ var ServerGameObject = {
 	}
 };
 
+// GETS MAP DATA FROM SERVER
+Map = {
+  translateView: [0, 0] //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+};
+
+$.get( "getMap", function( data ) {
+  Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct
+});
+
 
 var Player = { // just player data and draw player function
   size: 40,
   color: false,
-  x: 0, //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
-  y: 0,
+  x: 150, //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
+  y: 150,
 
   draw: function () {
     
@@ -25,6 +43,29 @@ var Player = { // just player data and draw player function
   move: function (x, y) {
     this.x += x; //changes coordinates on the client side. (absolute coords)
     this.y += y;
+
+    //detect canvas edge, and edit translateView[]
+    augmentedPlayer = [this.x + Map.translateView[0], this.y + Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
+    var marginOfMovement = 150;
+    var canvasEdge = [canvas.height - Player.size - marginOfMovement, canvas.width - Player.size - marginOfMovement, 0 + Player.size + marginOfMovement, 0 + Player.size + marginOfMovement]; // [top, right, bottom, left] ... detects the edge of canvas
+
+    if (augmentedPlayer[1] > canvasEdge[0]) { // stops at top edge
+      Map.translateView[1] -= playerSpeed; //decleared in game.js
+    }
+
+    if (augmentedPlayer[0] > canvasEdge[1]) { // stops at right edge
+      Map.translateView[0] -= playerSpeed;
+    }
+
+    if (augmentedPlayer[1] < canvasEdge[2]) { // stops at bottom edge
+      Map.translateView[1] += playerSpeed;
+    }
+
+    if (augmentedPlayer[0] < canvasEdge[3]) { // stops at left edge
+      Map.translateView[0] += playerSpeed;
+    }
+
+    return [this.x, this.y];
   }
 };
 

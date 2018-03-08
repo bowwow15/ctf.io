@@ -1,22 +1,8 @@
-//set variables for html dom use and reference
-var HudItem;
-
-var Map;
-
 $(document).ready(function () {
 	//runs when HTML page loads...
 
 	Context.create("canvas");
 	resizeCanvas();
-
-	// GETS MAP DATA FROM SERVER
-	Map = {
-		translateView: [0, 0] //used to determine where the screen is viewing on the map...
-	};
-
-	$.get( "getMap", function( data ) {
-		Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct
-	});
 
 	HudItem = {
 		slot_1: null,
@@ -55,8 +41,8 @@ $(document).ready(function () {
 			drawPlayerAnimation = requestAnimationFrame(drawPlayer);
 			ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
-			var playerX = canvas.width / 2 + Player.x + Map.translateView[0]; //(translateView[x, y])
-			var playerY = canvas.height / 2 + Player.y + Map.translateView[1]; // 0 = x, 1 = y.
+			var playerX = Player.x + Map.translateView[0]; //(translateView[x, y])
+			var playerY = Player.y + Map.translateView[1]; // 0 = x, 1 = y.
 
 			ctx.beginPath(); //resets path that is being drawn.
 
