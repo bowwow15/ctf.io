@@ -21,3 +21,36 @@
     top: 0;
     left: 0;
 }
+
+.hudSlot {
+	padding: 30px;
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: whitesmoke;
+	display: inline-block;
+	margin: 5px;
+}
+
+.hudSlot:hover {
+	background-color: lightgrey;
+	cursor: pointer;
+}
+
+.hudSelected {
+	background-color: lightgrey;
+	border: 2px solid black;
+	padding: 29px;
+}
+
+.hud {
+	border: 1px solid black;
+	border-radius: 5px;
+	z-index: 10;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 0px auto;
+	width: -moz-fit-content;
+	width: fit-content;
+}

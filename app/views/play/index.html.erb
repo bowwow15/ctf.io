@@ -1,8 +1,8 @@
 <canvas id="canvas" class="fullScreenCanvas" width="640" height="480"></canvas>
-<div id="hud">
+<div id="hud" class="hud">
 	<% hudItemId = 0 %>
 	<% $hud.each do |h| %>
-	<div id="hudSlot<%= hudItemId %>"></div>
+	<div id="hudSlot<%= hudItemId %>" class="hudSlot <% if hudItemId == 0 %>hudSelected<% end %>" onClick="HudItem.select(<%= hudItemId %>)"></div>
 	<% hudItemId += 1 %>
 	<% end %>
 </div>
