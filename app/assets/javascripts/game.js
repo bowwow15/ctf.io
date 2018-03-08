@@ -41,12 +41,14 @@ $(document).ready(function () {
 			drawPlayerAnimation = requestAnimationFrame(drawPlayer);
 			ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
-			var playerX = Player.x + Map.translateView[0]; //(translateView[x, y])
-			var playerY = Player.y + Map.translateView[1]; // 0 = x, 1 = y.
+			//below variables defined in gameObjects.js
+			playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
+			playerY = Player.y - Map.translateView[1]; // 0 = x, 1 = y.
 
 			ctx.beginPath(); //resets path that is being drawn.
 
 			ctx.arc(playerX, playerY, Player.size, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
+			
 			if (Player.color != true) {
 				ctx.fillStyle = '#ffe0bd'; //skin tone
 			}

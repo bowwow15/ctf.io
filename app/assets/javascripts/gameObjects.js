@@ -1,3 +1,5 @@
+//this file contains JavaScript canvas objects used in game.js, or other places...
+
 //set variables for html dom use and reference
 var HudItem;
 
@@ -6,6 +8,9 @@ var Map;
 var playerSpeed;
 
 var augmentedPlayer;
+
+var PlayerX;
+var PlayerY;
 
 var ServerGameObject = {
 	x: 50,
@@ -22,19 +27,28 @@ var ServerGameObject = {
 
 // GETS MAP DATA FROM SERVER
 Map = {
-  translateView: [0, 0] //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+  spawnPoint: [0, 0] //default
 };
 
-$.get( "getMap", function( data ) {
+$.ajax({
+  url: "getMap",
+  async: false,
+}).done(function( data ) {
+
   Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct
+
+  Map.translateView[0] = Map.spawnPoint[0];
+  Map.translateView[1] = Map.spawnPoint[1];
+
 });
 
 
 var Player = { // just player data and draw player function
   size: 40,
   color: false,
-  x: 150, //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
-  y: 150,
+  x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
+  y: Map.spawnPoint[1],
 
   draw: function () {
     
@@ -45,24 +59,24 @@ var Player = { // just player data and draw player function
     this.y += y;
 
     //detect canvas edge, and edit translateView[]
-    augmentedPlayer = [this.x + Map.translateView[0], this.y + Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
+    augmentedPlayer = [this.x - Map.translateView[0], this.y - Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
     var marginOfMovement = 150;
     var canvasEdge = [canvas.height - Player.size - marginOfMovement, canvas.width - Player.size - marginOfMovement, 0 + Player.size + marginOfMovement, 0 + Player.size + marginOfMovement]; // [top, right, bottom, left] ... detects the edge of canvas
 
     if (augmentedPlayer[1] > canvasEdge[0]) { // stops at top edge
-      Map.translateView[1] -= playerSpeed; //decleared in game.js
+      Map.translateView[1] += playerSpeed; //decleared in game.js
     }
 
     if (augmentedPlayer[0] > canvasEdge[1]) { // stops at right edge
-      Map.translateView[0] -= playerSpeed;
+      Map.translateView[0] += playerSpeed;
     }
 
     if (augmentedPlayer[1] < canvasEdge[2]) { // stops at bottom edge
-      Map.translateView[1] += playerSpeed;
+      Map.translateView[1] -= playerSpeed;
     }
 
     if (augmentedPlayer[0] < canvasEdge[3]) { // stops at left edge
-      Map.translateView[0] += playerSpeed;
+      Map.translateView[0] -= playerSpeed;
     }
 
     return [this.x, this.y];

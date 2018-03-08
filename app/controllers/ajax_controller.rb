@@ -9,6 +9,6 @@ class AjaxController < ApplicationController
 
 	def getMap
 		$mapLimit = [50000, 50000] # [x, y]
-		$spawnPoint = [50, 50] # [x, y]
+		$spawnPoint = [rand(0 .. $mapLimit[0]), rand(0 .. $mapLimit[1])] # [x, y]
 	end
 end
