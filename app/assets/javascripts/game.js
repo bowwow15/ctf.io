@@ -42,11 +42,13 @@ $(document).ready(function () {
 			drawPlayerAnimation = requestAnimationFrame(drawPlayer);
 			ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
+			drawGrid(50, 50);
+
+			ctx.beginPath(); //resets path that is being drawn.
+
 			//below variables defined in gameObjects.js
 			playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
 			playerY = Player.y - Map.translateView[1]; // 0 = x, 1 = y.
-
-			ctx.beginPath(); //resets path that is being drawn.
 
 			ctx.arc(playerX, playerY, Player.size, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 			
@@ -57,6 +59,7 @@ $(document).ready(function () {
 				ctx.fillStyle = 'blue';
 			}
 			ctx.strokeStyle = '#274729';
+			ctx.lineWidth = 7;
 			ctx.stroke();
 			ctx.fill();
 
@@ -87,10 +90,13 @@ $(document).ready(function () {
 		//cancelAnimationFrame(drawPlayerAnimation);
 	}
 
+
 	var Game = { // holds framerate and function to draw a frame
 	  fps: 60, // frames per second
 
 	  draw: function () {
+	  	// drawGrid();
+
 	    drawPlayer(); //referenced below... somewhere.
 	  },
 

@@ -1,5 +1,12 @@
 var GameCanvas;
 
+var Map;
+
+Map = {
+  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+  spawnPoint: [0, 0] //default
+};
+
 //CANVAS JS BELOW
 var Context = {
 	canvas: null,
@@ -11,8 +18,22 @@ var Context = {
 	}
 };
 
-
 ctx = Context.context; //important shorthand notice
+
+var boxesX = 0;
+var boxesY = 0;
+var drawGrid = function(w, y) {
+	// while (boxesX*w < canvas.width) {
+		ctx.beginPath();
+
+		ctx.strokeStyle = 'black';
+		ctx.rect(Map.spawnPoint[0] - Map.translateView[0], Map.spawnPoint[1] - Map.translateView[1], w, y);
+		ctx.lineWidth = 1;
+		ctx.stroke();
+	// 	boxesX += 1;
+	// }
+};
+
 
 
 // resize the canvas to fill browser window dynamically
@@ -30,10 +51,12 @@ function resizeCanvas () { //resizes canvas to browser window
         	ctx = Context.context;
         }
 
-        ctx.beginPath();
-        ctx.fillStyle = '#72a958';
-        ctx.rect(0, 0, window.innerWidth, window.innerHeight);
-        ctx.fill();
+        // ctx.beginPath();
+        // ctx.fillStyle = '#72a958';
+        // ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+        // ctx.fill();
+        // Not using above code because it was decided to use HTML adn CSS to create a background.
+
 
         GameCanvas = {
 			width: canvas.width,

@@ -3,8 +3,6 @@
 //set variables for html dom use and reference
 var HudItem;
 
-var Map;
-
 var playerSpeed;
 
 var augmentedPlayer;
@@ -28,18 +26,15 @@ var ServerGameObject = {
 	}
 };
 
+
 // GETS MAP DATA FROM SERVER
-Map = {
-  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
-  spawnPoint: [0, 0] //default
-};
 
 $.ajax({
   url: "getMap",
   async: false,
 }).done(function( data ) {
 
-  Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct
+  Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct (MAP OBJECT DECLARED IN CANVAS.JS)
 
   canvasWidthCenter = GameCanvas.width;
   canvasHeightCenter = GameCanvas.height / 2;
@@ -67,6 +62,7 @@ var Player = { // just player data and draw player function
     //detect canvas edge, and edit translateView[]
     augmentedPlayer = [this.x - Map.translateView[0], this.y - Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
     var marginOfMovement = 150;
+
     var canvasEdge = [canvas.height - Player.size - marginOfMovement, canvas.width - Player.size - marginOfMovement, 0 + Player.size + marginOfMovement, 0 + Player.size + marginOfMovement]; // [top, right, bottom, left] ... detects the edge of canvas
 
     if (augmentedPlayer[1] > canvasEdge[0]) { // stops at top edge
