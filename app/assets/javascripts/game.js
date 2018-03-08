@@ -34,6 +34,7 @@ $(document).ready(function () {
 		}
 	};
 
+
 	var drawPlayerAnimation;
 	function drawPlayer () {
 		window.setTimeout(function() {
@@ -79,6 +80,8 @@ $(document).ready(function () {
 			  Player.move(0, -playerSpeed);
 			}
 
+			Player.move(0, 0); //Important for formatting canvas view...
+
 		}, 1000 / Game.fps);
 
 		//cancelAnimationFrame(drawPlayerAnimation);
@@ -89,6 +92,10 @@ $(document).ready(function () {
 
 	  draw: function () {
 	    drawPlayer(); //referenced below... somewhere.
+	  },
+
+	  drawCoords: function () {
+
 	  }
 	};
 

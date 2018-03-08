@@ -1,3 +1,5 @@
+var GameCanvas;
+
 //CANVAS JS BELOW
 var Context = {
 	canvas: null,
@@ -32,4 +34,17 @@ function resizeCanvas () { //resizes canvas to browser window
         ctx.fillStyle = '#72a958';
         ctx.rect(0, 0, window.innerWidth, window.innerHeight);
         ctx.fill();
+
+        GameCanvas = {
+			width: canvas.width,
+			height: canvas.height
+		};
+
+		canvasWidthCenter = canvas.width;
+  		canvasHeightCenter = canvas.height / 2;
 }
+
+GameCanvas = {
+	width: document.getElementById('canvas').width,
+	height: document.getElementById('canvas').height
+};

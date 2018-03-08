@@ -12,6 +12,9 @@ var augmentedPlayer;
 var PlayerX;
 var PlayerY;
 
+var canvasWidthCenter;
+var canvasHeightCenter;
+
 var ServerGameObject = {
 	x: 50,
 	y: 50,
@@ -38,8 +41,11 @@ $.ajax({
 
   Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct
 
-  Map.translateView[0] = Map.spawnPoint[0];
-  Map.translateView[1] = Map.spawnPoint[1];
+  canvasWidthCenter = GameCanvas.width;
+  canvasHeightCenter = GameCanvas.height / 2;
+
+  Map.translateView[0] = Map.spawnPoint[0] - canvasWidthCenter;
+  Map.translateView[1] = Map.spawnPoint[1] - canvasHeightCenter;
 
 });
 
