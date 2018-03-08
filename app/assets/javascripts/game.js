@@ -4,6 +4,13 @@ $(document).ready(function () {
 	Context.create("canvas");
 	resizeCanvas();
 
+	// GETS MAP DATA FROM SERVER
+	var Map;
+
+	$.get( "getMap", function( data ) {
+		Map = JSON.parse(data); //map obejct
+	});
+
 	var Game = { // holds framerate and function to draw a frame
 		fps: 60, //not in use
 
@@ -94,11 +101,16 @@ $(document).ready(function () {
 	var Player = { // just player data and draw player function
 		size: 40,
 		color: false,
-		x: 0,
+		x: 0, //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
 		y: 0,
 
 		draw: function () {
 			
+		},
+
+		move: function (x, y) {
+			this.x += x; //changes coordinates on the client side. (absolute coords)
+			this.y += y;
 		}
 	};
 
@@ -114,6 +126,10 @@ $(document).ready(function () {
 
 		drawItems: function () {
 			//draws the items in your HUD (HTML HUD!)
+			//ajax get request to get HUD
+			$.get( "getHUD", function( data ) {
+			  
+			});
 		}
 	};
 
@@ -145,23 +161,19 @@ $(document).ready(function () {
 			playerSpeed = 2; //default setting sets the speed of player 
 
 			if (keyShift == true) {
-				playerSpeed = 3.5;
-			}
-			if (Player.x < ServerGameObject.x + ServerGameObject.width  && Player.x + Player.width  > ServerGameObject.x &&
-			Player.y < ServerGameObject.y + ServerGameObject.height && Player.y + Player.height > ServerGameObject.y) {
-				alert("test");
+				playerSpeed = 4;
 			}
 			if (keyD == true) {
-			  Player.x += playerSpeed;
+			  Player.move(playerSpeed, 0);
 			}
 			if (keyS == true) {
-			  Player.y += playerSpeed;
+			  Player.move(0, playerSpeed);
 			}
 			if (keyA == true) {
-			  Player.x -= playerSpeed;
+			  Player.move(-playerSpeed, 0);
 			}
 			if (keyW == true) {
-			  Player.y -= playerSpeed;
+			  Player.move(0, -playerSpeed);
 			}
 
 		}, 1000 / Game.fps);

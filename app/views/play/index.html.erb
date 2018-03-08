@@ -1,2 +1,8 @@
 <canvas id="canvas" class="fullScreenCanvas" width="640" height="480"></canvas>
-<button class="playButton" id="playButton" onClick="startFrameCycle();">PLAY</button>
+<div id="hud">
+	<% hudItemId = 1 %>
+	<% $hud.each do |h| %>
+	<div id="hudSlot<%= hudItemId %>"></div>
+	<% hudItemId += 1 %>
+	<% end %>
+</div>
