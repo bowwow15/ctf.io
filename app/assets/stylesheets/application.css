@@ -54,3 +54,21 @@
 	width: -moz-fit-content;
 	width: fit-content;
 }
+
+
+@media (max-width: 700px) {
+	.hud {
+
+	}
+
+	.hudSlot {
+		padding: 20px !important;
+		margin: 2px !important;
+	}
+}
+
+@media (max-width: 450px) {
+	.hudSlot {
+		padding: 15px !important;
+	}
+}
