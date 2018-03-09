@@ -4,7 +4,8 @@ var Map;
 
 Map = {
   translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
-  spawnPoint: [0, 0] //default
+  spawnPoint: [0, 0], //default
+  scope: 1
 };
 
 //CANVAS JS BELOW
@@ -23,6 +24,9 @@ ctx = Context.context; //important shorthand notice
 var boxesX;
 var boxesY;
 var drawGrid = function(w, l, maxX, maxY) {
+	w = w / Map.scope;
+	l = l / Map.scope;
+	
 	ctx.strokeStyle = '#629953';
 	ctx.lineWidth = 1;
 	for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) {

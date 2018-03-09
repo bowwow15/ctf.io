@@ -50,7 +50,7 @@ $(document).ready(function () {
 			playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
 			playerY = Player.y - Map.translateView[1]; // 0 = x, 1 = y.
 
-			ctx.arc(playerX, playerY, Player.size, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
+			ctx.arc(playerX, playerY, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 			
 			if (Player.color != true) {
 				ctx.fillStyle = '#ffe0bd'; //skin tone

@@ -95,10 +95,10 @@ var Player = { // just player data and draw player function
     }
 
     //detect canvas edge, and edit translateView[]
-    augmentedPlayer = [this.x - Map.translateView[0], this.y - Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
-    var marginOfMovement = 200;
+    augmentedPlayer = [(this.x - Map.translateView[0]) / Map.scope, (this.y - Map.translateView[1]) / Map.scope]; // [x, y] devides by Map.scope because zoomed out looks slower ... basically the augmented coordinates, augmented by the view of the canvas...
+    var marginOfMovement = 200; // margin of movement before the view starts following the player. See Map.translateView[]
 
-    var canvasEdge = [canvas.height - Player.size - marginOfMovement, canvas.width - Player.size - marginOfMovement, 0 + Player.size + marginOfMovement, 0 + Player.size + marginOfMovement]; // [top, right, bottom, left] ... detects the edge of canvas
+    var canvasEdge = [(canvas.height - Player.size - marginOfMovement) / Map.scope, (canvas.width - Player.size - marginOfMovement) / Map.scope, (0 + Player.size + marginOfMovement) / Map.scope, (0 + Player.size + marginOfMovement) / Map.scope]; // [top, right, bottom, left] ... detects the edge of canvas
 
     if (augmentedPlayer[1] > canvasEdge[0]) { // stops at top edge
       Map.translateView[1] += playerSpeed; //decleared in game.js
@@ -150,6 +150,14 @@ function onKeyDown(event) {
       break;
     case 67: //b
       keyC = true;
+      break;
+    case 189:
+      //ZOOMS OUT
+      Map.scope += .1;
+      break;
+    case 187:
+      //ZOOMS OUT
+      Map.scope -= .1;
       break;
   }
 

@@ -24,26 +24,26 @@
 
 .hudSlot {
 	padding: 30px;
-	border: 1px solid black;
+	border: none;
 	border-radius: 5px;
-	background-color: whitesmoke;
+	background-color: #d3d3d336;
 	display: inline-block;
 	margin: 5px;
 }
 
 .hudSlot:hover {
-	background-color: lightgrey;
+	background-color: #d3d3d361;
 	cursor: pointer;
 }
 
 .hudSelected {
-	background-color: lightgrey;
-	border: 2px solid black;
+	background-color: #d3d3d361;
+	border: 1px solid black;
 	padding: 29px;
 }
 
 .hud {
-	border: 1px solid black;
+	border: none;
 	border-bottom: none !important;
 	border-radius: 5px 5px 0px 0px;
 	z-index: 10;
