@@ -65,11 +65,15 @@ $(document).ready(function () {
 
 			//controls
 
-			playerSpeed = 1; //default setting sets the speed of player 
+			playerSpeed = 2; //default setting sets the speed of player 
 
 			if (keyShift == true) {
 				playerSpeed = 3;
 			}
+			if (keyAlt == true) { //sneaking
+				playerSpeed = 1;
+			}
+
 			if (keyD == true) {
 			  Player.move(playerSpeed, 0);
 			}

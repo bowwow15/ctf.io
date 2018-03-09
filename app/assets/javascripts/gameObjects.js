@@ -148,6 +148,9 @@ function onKeyDown(event) {
     case 16: //shift key (sprint)
       keyShift = true;
       break;
+    case 18:
+      keyAlt = true;
+      break;
     case 67: //b
       keyC = true;
       break;
@@ -196,6 +199,9 @@ function onKeyUp(event) {
     case 16: //shift key (sprint)
       keyShift = false;
       break;
+    case 18:
+      keyAlt = false;
+      break;
     case 67: //b
       keyC = false;
       break;
@@ -211,6 +217,7 @@ var keyA = false;
 var keyS = false;
 var keyD = false;
 var keyShift = false;
+var keyAlt = false;
 var keyC = false;
 
 //for HUD
