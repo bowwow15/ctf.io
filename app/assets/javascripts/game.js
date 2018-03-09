@@ -68,7 +68,7 @@ $(document).ready(function () {
 			playerSpeed = 1; //default setting sets the speed of player 
 
 			if (keyShift == true) {
-				playerSpeed = 2;
+				playerSpeed = 3;
 			}
 			if (keyD == true) {
 			  Player.move(playerSpeed, 0);

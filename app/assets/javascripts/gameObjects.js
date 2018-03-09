@@ -55,9 +55,44 @@ var Player = { // just player data and draw player function
     
   },
 
+  mapEdgeDetect: function (x, y) {
+    var move = true; //sets default
+    var edgeStop = 25; //margin that player stops from edge of map
+
+    //check if near the edge of map
+    if (x < 0) { //moving left
+      if (this.x < 0 + this.size + edgeStop) {
+        move = false;
+      }
+    }
+    if (x > 0) { //moving right
+      if (this.x > Map.mapLimit[0] - this.size - edgeStop) {
+        move = false;
+      }
+    }
+    if (y < 0) { //moving up
+      if (this.y < 0 + this.size + edgeStop) {
+        move = false;
+      }
+    }
+    if (y > 0) { //moving down
+      if (this.y > Map.mapLimit[1] - this.size - edgeStop) {
+        move = false;
+      }
+    }
+
+    return move;
+  },
+
   move: function (x, y) {
-    this.x += x; //changes coordinates on the client side. (absolute coords)
-    this.y += y;
+    var move = true; //sets default
+
+    move = this.mapEdgeDetect(x, y);
+
+    if (move === true) {
+      this.x += x; //changes coordinates on the client side. (absolute coords)
+      this.y += y;
+    }
 
     //detect canvas edge, and edit translateView[]
     augmentedPlayer = [this.x - Map.translateView[0], this.y - Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
