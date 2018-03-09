@@ -13,6 +13,8 @@ var PlayerY;
 var canvasWidthCenter;
 var canvasHeightCenter;
 
+var Map;
+
 var ServerGameObject = {
 	x: 50,
 	y: 50,
@@ -26,6 +28,22 @@ var ServerGameObject = {
 	}
 };
 
+Map = {
+  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+  spawnPoint: [0, 0], //default
+  scope: 1
+};
+
+//CANVAS JS BELOW
+var Context = {
+  canvas: null,
+  context: null,
+
+  create: function (canvas_tag_id) {
+    this.canvas = document.getElementById(canvas_tag_id); // Initializes canvas by element ID
+    this.context = this.canvas.getContext('2d'); // 2 dimentional canvas
+  }
+};
 
 // GETS MAP DATA FROM SERVER
 
@@ -47,18 +65,37 @@ $.ajax({
 var boxesX;
 var boxesY;
 var drawGrid = function(w, l, maxX, maxY) {
-  w = w / Map.scope;
+
+  w = w / Map.scope; //this sets the grid proportional to the zoom...
   l = l / Map.scope;
   
+
+  //first, lets draw a square that is as big as the map dimentions...
+  ctx.strokeStyle = '#547a40'; // dark green
+  ctx.fillStyle = '#72a958'; // same as backrgound
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.rect(0 - Map.translateView[0] - ctx.lineWidth, 0 - Map.translateView[1] - ctx.lineWidth, Map.mapLimit[0] + (ctx.lineWidth*2), Map.mapLimit[1] + (ctx.lineWidth*2)); //always implement translateView[]
+  ctx.shadowColor = '#547a40';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.stroke();
+  ctx.fill();
+
+  //reset once done
+  ctx.shadowBlur = 0;
+
   ctx.strokeStyle = '#629953';
   ctx.lineWidth = 1;
-  for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) {
+
+  for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) { //draws horizontal squares...
     ctx.beginPath();
 
     ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1], w, l); // implementing translateView to effect the movement
     ctx.stroke();
 
-    for (boxesY = 0; (boxesY*l / 2) < maxY; boxesY++) {
+    for (boxesY = 0; (boxesY*l / 2) < maxY; boxesY++) { //then vertical squares.
       ctx.beginPath();
 
       ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1] + (boxesY*w / 2), w, l); // implementing translateView to effect the movement
