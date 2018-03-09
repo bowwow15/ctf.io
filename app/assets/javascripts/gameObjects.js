@@ -96,7 +96,7 @@ var Player = { // just player data and draw player function
 
     //detect canvas edge, and edit translateView[]
     augmentedPlayer = [this.x - Map.translateView[0], this.y - Map.translateView[1]]; // [x, y] ... basically the augmented coordinates, augmented by the view of the canvas...
-    var marginOfMovement = 150;
+    var marginOfMovement = 200;
 
     var canvasEdge = [canvas.height - Player.size - marginOfMovement, canvas.width - Player.size - marginOfMovement, 0 + Player.size + marginOfMovement, 0 + Player.size + marginOfMovement]; // [top, right, bottom, left] ... detects the edge of canvas
 
