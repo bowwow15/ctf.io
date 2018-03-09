@@ -151,31 +151,10 @@ function onKeyDown(event) {
     case 67: //b
       keyC = true;
       break;
+  }
 
-    case 49:
-      key1 = true;
-      break;
-    case 50:
-      key1 = true;
-      break;
-    case 51:
-      key1 = true;
-      break;
-    case 52:
-      key1 = true;
-      break;
-    case 53:
-      key1 = true;
-      break;
-    case 54:
-      key1 = true;
-      break;
-    case 55:
-      key1 = true;
-      break;
-    case 56:
-      key1 = true;
-      break;
+  if (keyCode >= 49 && keyCode <= 56) {
+    HudItem.select(keyCode - 49); //49 - 49 = 0.
   }
 
   if (keyC == true) {
@@ -211,31 +190,6 @@ function onKeyUp(event) {
       break;
     case 67: //b
       keyC = false;
-      break;
-
-    case 49:
-      key1 = false;
-      break;
-    case 50:
-      key1 = false;
-      break;
-    case 51:
-      key1 = false;
-      break;
-    case 52:
-      key1 = false;
-      break;
-    case 53:
-      key1 = false;
-      break;
-    case 54:
-      key1 = false;
-      break;
-    case 55:
-      key1 = false;
-      break;
-    case 56:
-      key1 = false;
       break;
   }
 }
