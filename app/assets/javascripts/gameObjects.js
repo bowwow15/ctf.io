@@ -44,6 +44,32 @@ $.ajax({
 
 });
 
+var boxesX;
+var boxesY;
+var drawGrid = function(w, l, maxX, maxY) {
+  w = w / Map.scope;
+  l = l / Map.scope;
+  
+  ctx.strokeStyle = '#629953';
+  ctx.lineWidth = 1;
+  for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) {
+    ctx.beginPath();
+
+    ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1], w, l); // implementing translateView to effect the movement
+    ctx.stroke();
+
+    for (boxesY = 0; (boxesY*l / 2) < maxY; boxesY++) {
+      ctx.beginPath();
+
+      ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1] + (boxesY*w / 2), w, l); // implementing translateView to effect the movement
+      ctx.stroke();
+      boxesY += 1;
+    }
+
+    boxesX += 1;
+  }
+};
+
 
 var Player = { // just player data and draw player function
   size: 40,
