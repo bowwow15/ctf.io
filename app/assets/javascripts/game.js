@@ -42,7 +42,7 @@ $(document).ready(function () {
 			drawPlayerAnimation = requestAnimationFrame(drawPlayer);
 			ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
-			drawGrid(50, 50);
+			drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects
 
 			ctx.beginPath(); //resets path that is being drawn.
 

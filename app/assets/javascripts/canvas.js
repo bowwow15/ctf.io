@@ -20,18 +20,29 @@ var Context = {
 
 ctx = Context.context; //important shorthand notice
 
-var boxesX = 0;
-var boxesY = 0;
-var drawGrid = function(w, y) {
-	// while (boxesX*w < canvas.width) {
+var boxesX;
+var boxesY;
+var drawGrid = function(w, l, maxX, maxY) {
+	for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) {
 		ctx.beginPath();
 
 		ctx.strokeStyle = 'black';
-		ctx.rect(Map.spawnPoint[0] - Map.translateView[0], Map.spawnPoint[1] - Map.translateView[1], w, y);
+		ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1], w, l); // implementing translateView to effect the movement
 		ctx.lineWidth = 1;
 		ctx.stroke();
-	// 	boxesX += 1;
-	// }
+
+		for (boxesY = 0; (boxesY*l / 2) < maxY; boxesY++) {
+			ctx.beginPath();
+
+			ctx.strokeStyle = 'black';
+			ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1] + (boxesY*w / 2), w, l); // implementing translateView to effect the movement
+			ctx.lineWidth = 1;
+			ctx.stroke();
+			boxesY += 1;
+		}
+
+		boxesX += 1;
+	}
 };
 
 
