@@ -1,9 +1,7 @@
 class AjaxController < ApplicationController
 	cache = ActiveSupport::Cache::MemoryStore.new
-	
-	layout false
 
-	$hud = ["test", "test2", "test3", "test", "test", "test", "rest", "tseds"]
+	layout false
 
 	def getHUD
 

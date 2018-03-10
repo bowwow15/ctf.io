@@ -1,4 +1,7 @@
 $(document).ready(function () {
+	//initiate WebSockets...
+	var dispatcher = new WebSocketRails(window.location.hostname + ':3000/websocket');
+
 	//runs when HTML page loads...
 
 	Context.create("canvas");
