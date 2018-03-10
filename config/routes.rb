@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   get 'getHUD' => 'ajax#getHUD'
 
   get 'getMap' => 'ajax#getMap'
+
+  mount ActionCable.server => "/cable" #actionCable
 end
