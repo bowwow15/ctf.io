@@ -9,3 +9,6 @@ The main goals of this project are to:
 * Create a mobile client for iOS and Android.
 
 A live example is available at https://bowwow15.github.io/ctf.io/
+
+Depenencies:
+REDIS server - https://redis.io/topics/quickstart
