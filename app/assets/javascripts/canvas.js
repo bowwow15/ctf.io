@@ -48,8 +48,9 @@ $(document).ready(function () {
 	
 	//animate border-radius
 	$( ".hudSlot" ).animate({
-	    opacity: 1
-	  }, 1000, function() {
+	    opacity: 1,
+	    borderRadius: 0
+	  }, 500, function() {
 	    // Animation complete.
 	  });
 });

@@ -28,6 +28,7 @@
 }
 
 .hudSlot {
+	border-radius: 50%;
 	padding: 30px;
 	margin: 5px;
 	opacity: 0;
