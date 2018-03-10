@@ -11,4 +11,5 @@ The main goals of this project are to:
 A live example is available at https://bowwow15.github.io/ctf.io/
 
 Depenencies:<br>
-REDIS server - https://redis.io/topics/quickstart
+Ruby on Rails server - http://rubyonrails.org/<br>
+REDIS server - https://redis.io/topics/quickstart<br>
