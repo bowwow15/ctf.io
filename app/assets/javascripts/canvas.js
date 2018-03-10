@@ -65,4 +65,17 @@ $(document).ready(function () {
 	  }, 500, function() {
 	    // Animation complete.
 	  });
+
+	$( "#hud" ).animate({
+	    bottom: 0
+	  }, 500, function() {
+	    // Animation complete.
+	  });
+
+	//animate name inpit
+	$( "#name" ).animate({
+	    top: 0
+	  }, 500, function() {
+	    // Animation complete.
+	  });
 });

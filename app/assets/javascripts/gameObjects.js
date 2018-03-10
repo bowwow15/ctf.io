@@ -122,6 +122,7 @@ var drawGrid = function(w, h, maxX, maxY) {
 var Player = { // just player data and draw player function
   size: 40,
   name: "",
+  nameFont: "Helvetica",
   turnRadius: 0,
   color: false,
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
@@ -135,7 +136,7 @@ var Player = { // just player data and draw player function
     ctx.beginPath(); //resets path that is being drawn.
     ctx.fillStyle = 'black';
 
-    ctx.font = (this.size*3 / (this.name.length / 2)).toString() + "px Helvetica";
+    ctx.font = (this.size*3 / (this.name.length / 2)).toString() + "px " + this.nameFont;
     ctx.fillText(this.name, x - this.size/1.8, y + this.size/4);         //math for formatting...
   },
 

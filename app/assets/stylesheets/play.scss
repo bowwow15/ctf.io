@@ -25,13 +25,12 @@ textarea, input, button { outline: none; }
 	padding: 20px;
 	border: 3px solid limegreen;
 	border-top: none !important;
-	height: fit-content;
+	height: 55px;
 	width: fit-content;
-	height: -moz-fit-content;
 	width: -moz-fit-content;
 	position: fixed;
 	margin: 0px auto;
-	top: 0;
+	top: -100px;
 	left: 0;
 	right: 0;
 	bottom: 0;
