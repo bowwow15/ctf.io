@@ -10,5 +10,5 @@ The main goals of this project are to:
 
 A live example is available at https://bowwow15.github.io/ctf.io/
 
-Depenencies:
+Depenencies:<br>
 REDIS server - https://redis.io/topics/quickstart
