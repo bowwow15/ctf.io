@@ -7,17 +7,17 @@ App.game = App.cable.subscriptions.create "GameChannel",
     EndGame();
 
   received: (data) ->
-    # Called when there's incoming data on the websocket for this channel
+
     switch data.action
-    	when "game_end"
-    		$("#status").html("Game has ended.");
+    	when "get_name"
+    		$("#status").html(data.name);
 
   start_game: (name) ->
+    @perform 'start_game', name: name
     Start();
-    @perform 'start', data: name
 
   move_player: (coords) ->
-  	@perform 'move_player', data: coords
+  	@perform 'move_player', coords: coords
 
   get_name: () ->
   	name = @perform 'get_name'

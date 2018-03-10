@@ -10,17 +10,15 @@ class GameChannel < ApplicationCable::Channel
     #disconnect
   end
 
-  def start (uuid, name)
-    #commands
-    Game.start(uuid, name)
+  def start_game (data)
+    Game.start_game(uuid, data['name'])
   end
 
-  def move_player (coords)
-  	#commands
-  	Game.move_player(uuid, coords)
+  def move_player (data)
+  	Game.move_player(uuid, data['coords'])
   end
 
   def get_name
-  	return Game.get_name(uuid)
+  	Game.get_name(uuid)
   end
 end

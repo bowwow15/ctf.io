@@ -121,6 +121,7 @@ var drawGrid = function(w, h, maxX, maxY) {
 
 var Player = { // just player data and draw player function
   size: 40,
+  name: null,
   turnRadius: 0,
   color: false,
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)

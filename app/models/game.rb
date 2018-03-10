@@ -1,5 +1,5 @@
 class Game < ApplicationRecord
-	def self.start (uuid, name)
+	def self.start_game (uuid, name)
 		REDIS.set("player_name_#{uuid}", name)
 	end
 
@@ -16,6 +16,7 @@ class Game < ApplicationRecord
 	def self.get_name (uuid)
 		name = REDIS.get("player_name_#{uuid}")
 
+		ActionCable.server.broadcast "player_#{uuid}", {action: "get_name", name: "#{name}"}
 		return name
 	end
 end

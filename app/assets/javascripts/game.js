@@ -1,6 +1,17 @@
 var Start;
 var EndGame;
 
+var playerName; //set by websocket server
+
+App.cable.subscriptions.create({
+  channel: "GameChannel",
+  id: 1
+},{
+  received: function(data) {
+  	//does nothing
+  }
+});
+
 //initiate WebSockets...
 
 //runs when HTML page loads...
@@ -40,7 +51,7 @@ HudItem = {
 
 
 var drawContentAnimation;
-function drawContent (name) {
+function drawContent () {
 	// window.setTimeout(function() {
 
 		drawContentAnimation = requestAnimationFrame(drawContent);
@@ -100,10 +111,10 @@ function drawContent (name) {
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
 
-  draw: function (name) {
+  draw: function () {
   	// drawGrid();
 
-    drawContent(name); //referenced below... somewhere.
+    drawContent(); //referenced below... somewhere.
   },
 
   drawCoords: function () {
@@ -111,12 +122,13 @@ var Game = { // holds framerate and function to draw a frame
   }
 };
 
-function startFrameCycle (name) {
-	Game.draw(name);
+function startFrameCycle () {
+	Game.draw();
 }
 
 Start = function () {
-	startFrameCycle(App.game.get_name());
+	App.game.get_name()
+	startFrameCycle();
 	$("#playButton").hide();
 }
 
