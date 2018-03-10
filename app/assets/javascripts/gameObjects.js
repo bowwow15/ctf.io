@@ -107,7 +107,7 @@ var drawGrid = function(w, h, maxX, maxY) {
     ctx.rect(mapGridXZeroHorizontal, mapGridYZeroHorizontal, w, h); // implementing translateView to effect the movement
     ctx.stroke();
 
-    for (boxesY = 0; (boxesY*h / 2) < maxY; boxesY++) { //then vertical squares.
+    for (boxesY = 0; (boxesY*h / 2) < maxY - w; boxesY++) { //then vertical squares.
       let mapGridXZeroVertical = (0 - Map.translateView[0]) + (boxesX*w / 2); //calculations for grid boxes vertically
       let mapGridYZeroVertical = (0 - Map.translateView[1]) + (boxesY*h / 2);
 

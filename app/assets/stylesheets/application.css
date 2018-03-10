@@ -25,10 +25,12 @@
 .hudSlot {
 	padding: 30px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 0px;
 	background-color: #d3d3d336;
 	display: inline-block;
 	margin: 5px;
+	-webkit-box-shadow: inset 0px 0px 6px 1px #00000096; 
+	box-shadow: inset 0px 0px 6px 1px #00000096;
 }
 
 .hudSlot:hover {
@@ -38,14 +40,15 @@
 
 .hudSelected {
 	background-color: #d3d3d361;
-	border: 1px solid black;
-	padding: 29px;
+	-webkit-box-shadow: 0px 0px 6px 1px #00000096; 
+	box-shadow: 0px 0px 6px 1px #00000096;
+	padding: 30px;
 }
 
 .hud {
 	border: none;
 	border-bottom: none !important;
-	border-radius: 5px 5px 0px 0px;
+	border-radius: 0px 0px 0px 0px;
 	z-index: 10;
 	position: fixed;
 	bottom: 0;
