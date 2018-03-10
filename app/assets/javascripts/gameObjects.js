@@ -14,6 +14,7 @@ var canvasWidthCenter;
 var canvasHeightCenter;
 
 var Map;
+var Hud;
 
 var ServerGameObject = {
 	x: 50,
@@ -37,6 +38,12 @@ Map = {
     this.scope += scopeChange;
     // this.translateView[0] = this.translateView[0] / (this.scope);
     // this.translateView[1] = this.translateView[1] / (this.scope);
+  }
+};
+
+Hud = {
+  toggle: function () {
+    $('.hud').toggle();
   }
 };
 
@@ -237,6 +244,9 @@ function onKeyDown(event) {
     case 67: //b
       keyC = true;
       break;
+    case 72:
+      keyH = true;
+      break;
     case 189:
       //ZOOMS OUT
       Map.zoom(0.1);
@@ -260,6 +270,9 @@ function onKeyDown(event) {
 		}
 	}
 
+  if (keyH == true) {
+    Hud.toggle();
+  }
 
 }
 
@@ -288,6 +301,9 @@ function onKeyUp(event) {
     case 67: //b
       keyC = false;
       break;
+    case 72:
+      keyH = false;
+      break;
   }
 }
 
@@ -302,6 +318,7 @@ var keyD = false;
 var keyShift = false;
 var keyAlt = false;
 var keyC = false;
+var keyH = false;
 
 //for HUD
 var key1 = false;
