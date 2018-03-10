@@ -8,6 +8,22 @@ body {
 	background-color: $background-color;
 }
 
+.name {
+	padding: 20px;
+	height: fit-content;
+	width: fit-content;
+	height: -moz-fit-content;
+	width: -moz-fit-content;
+	position: fixed;
+	margin: 0px auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 15;
+	font-size: 50px;
+}
+
 .playButton {
 	position: absolute;
 	top: 0;
