@@ -261,14 +261,14 @@ function onKeyDown(event) {
     HudItem.select(keyCode - 49); //49 - 49 = 0.
   }
 
-  if (keyC == true) {
-		if (Player.color != true) {
-			Player.color = true;
-		}
-		else {
-			Player.color = false;
-		}
-	}
+ //  if (keyC == true) {
+	// 	if (Player.color != true) {
+	// 		Player.color = true;
+	// 	}
+	// 	else {
+	// 		Player.color = false;
+	// 	}
+	// }
 
   if (keyH == true) {
     Hud.toggle();
