@@ -39,3 +39,17 @@ GameCanvas = {
 	width: document.getElementById('canvas').width,
 	height: document.getElementById('canvas').height
 };
+
+//spread HUD items 5px (css animation)
+$(document).ready(function () {
+	for (i = 0; i < 8; i++) {
+		document.getElementById("hudSlot" + i).classList.add('spread5px');
+	}
+	
+	//animate border-radius
+	$( ".hudSlot" ).animate({
+	    opacity: 1
+	  }, 1000, function() {
+	    // Animation complete.
+	  });
+});
