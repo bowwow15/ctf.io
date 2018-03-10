@@ -37,11 +37,11 @@ $(document).ready(function () {
 	};
 
 
-	var drawPlayerAnimation;
-	function drawPlayer () {
+	var drawContentAnimation;
+	function drawContent () {
 		window.setTimeout(function() {
 
-			drawPlayerAnimation = requestAnimationFrame(drawPlayer);
+			drawContentAnimation = requestAnimationFrame(drawContent);
 			ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
 			drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects
@@ -93,7 +93,7 @@ $(document).ready(function () {
 
 		}, 1000 / Game.fps);
 
-		//cancelAnimationFrame(drawPlayerAnimation);
+		//cancelAnimationFrame(drawContentAnimation);
 	}
 
 
@@ -103,7 +103,7 @@ $(document).ready(function () {
 	  draw: function () {
 	  	// drawGrid();
 
-	    drawPlayer(); //referenced below... somewhere.
+	    drawContent(); //referenced below... somewhere.
 	  },
 
 	  drawCoords: function () {
