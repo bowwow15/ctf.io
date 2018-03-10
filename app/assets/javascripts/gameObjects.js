@@ -77,7 +77,7 @@ var drawGrid = function(w, l, maxX, maxY) {
   ctx.beginPath();
   ctx.rect(0 - Map.translateView[0] - ctx.lineWidth, 0 - Map.translateView[1] - ctx.lineWidth, Map.mapLimit[0] + (ctx.lineWidth*2), Map.mapLimit[1] + (ctx.lineWidth*2)); //always implement translateView[]
   ctx.shadowColor = '#547a40';
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur = 200;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   ctx.stroke();
