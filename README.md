@@ -8,8 +8,17 @@ The main goals of this project are to:
 * Make an API capable of enabling people to easily create their own ctf.io server.
 * Create a mobile client for iOS and Android.
 
-A live example is available at https://bowwow15.github.io/ctf.io/
-
 Depenencies:<br>
 Ruby on Rails server - http://rubyonrails.org/<br>
-REDIS server - https://redis.io/topics/quickstart<br>
+REDIS server - https://redis.io/topics/quickstart<br><br>
+## Server
+CTF.io uses Rails ActionCable to enable the game to have very low-latency, and nearly lag-free gameplay.<br>
+REDIS server, listed in dependencies, also allows lightning fast game data storage.<br>
+## Client
+CTF.io uses HTML5 canvas, controlled by JavaScript, and minimalistic jQuery, split up into three main files:
+
+ 1. [canvas.js](https://github.com/bowwow15/ctf.io/blob/master/app/assets/javascripts/canvas.js) - initiates the canvas, and resizes, proportional to view.
+ 2. [game.js](https://github.com/bowwow15/ctf.io/blob/master/app/assets/javascripts/game.js) - all of the functionality within the game. Calls methods from gameObjects.js.
+ 3. [gameObjects.js](https://github.com/bowwow15/ctf.io/blob/master/app/assets/javascripts/gameObjects.js) - Self explanatory. Declares objects and methods used in game.
+
+This game uses no game libraries. The only library used in the making of CTF.io is jQuery, which is not a canvas game library, and is used very -   minimalistically in the development of the game itself.
