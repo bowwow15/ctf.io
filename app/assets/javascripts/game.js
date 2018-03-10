@@ -146,7 +146,7 @@ EndGame = function () {
 function startGame () {
 	var name = $("#name").val();
 
-	$("#name").hide();
+	$("#name").slideUp(500); //500 ms (1/2) of a second
 
 	addKeyEventListeners(); //detect game keystrokes
 
