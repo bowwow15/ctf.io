@@ -74,25 +74,11 @@ function drawContent () {
 
 		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects
 
-		ctx.beginPath(); //resets path that is being drawn.
-
 		//below variables defined in gameObjects.js
 		playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
 		playerY = Player.y - Map.translateView[1]; // 0 = x, 1 = y.
 
-		ctx.arc(playerX, playerY, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
-		
-
-		if (Player.color != true) {
-			ctx.fillStyle = '#ffe0bd'; //skin tone
-		}
-		else {
-			ctx.fillStyle = 'blue';
-		}
-		ctx.strokeStyle = '#274729';
-		ctx.lineWidth = 7;
-		ctx.stroke();
-		ctx.fill();
+		Player.drawPerson(playerX, playerY);
 
 		Player.drawName(playerX, playerY);
 

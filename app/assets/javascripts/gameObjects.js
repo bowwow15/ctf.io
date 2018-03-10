@@ -130,8 +130,21 @@ var Player = { // just player data and draw player function
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
   y: Map.spawnPoint[1],
 
-  draw: function (x, y) {
+  drawPerson: function (x, y) {
+    ctx.beginPath(); //resets path that is being drawn.
 
+    ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
+
+    if (this.color != true) {
+      ctx.fillStyle = '#ffe0bd'; //skin tone
+    }
+    else {
+      ctx.fillStyle = 'blue';
+    }
+    ctx.strokeStyle = '#274729';
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    ctx.fill();
   },
 
   drawName: function (x, y) {
