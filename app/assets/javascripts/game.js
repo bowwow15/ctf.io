@@ -40,7 +40,7 @@ HudItem = {
 
 
 var drawContentAnimation;
-function drawContent () {
+function drawContent (name) {
 	// window.setTimeout(function() {
 
 		drawContentAnimation = requestAnimationFrame(drawContent);
@@ -100,10 +100,10 @@ function drawContent () {
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
 
-  draw: function () {
+  draw: function (name) {
   	// drawGrid();
 
-    drawContent(); //referenced below... somewhere.
+    drawContent(name); //referenced below... somewhere.
   },
 
   drawCoords: function () {
@@ -111,12 +111,12 @@ var Game = { // holds framerate and function to draw a frame
   }
 };
 
-function startFrameCycle () {
-	Game.draw();
+function startFrameCycle (name) {
+	Game.draw(name);
 }
 
 Start = function () {
-	startFrameCycle();
+	startFrameCycle(App.game.get_name());
 	$("#playButton").hide();
 }
 

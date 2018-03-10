@@ -3,6 +3,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
     # Called when the subscription is ready for use on the server
   disconnected: ->
     # Called when the subscription has been terminated by the server
+
     EndGame();
 
   received: (data) ->
@@ -13,7 +14,11 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
   start_game: (name) ->
     Start();
-    @perform 'new_game', data: name
+    @perform 'start', data: name
 
   move_player: (coords) ->
   	@perform 'move_player', data: coords
+
+  get_name: () ->
+  	name = @perform 'get_name'
+  	#alert(name);
