@@ -19,6 +19,21 @@ App.cable.subscriptions.create({
 Context.create("canvas");
 resizeCanvas();
 
+var Game = { // holds framerate and function to draw a frame
+  fps: 60, // frames per second
+  running: false,
+
+  draw: function () {
+  	// drawGrid();
+
+    drawContent(); //referenced below... somewhere.
+  },
+
+  drawCoords: function () {
+
+  }
+};
+
 HudItem = {
 	slot_1: null,
 	slot_2: null,
@@ -67,6 +82,7 @@ function drawContent () {
 
 		ctx.arc(playerX, playerY, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 		
+
 		if (Player.color != true) {
 			ctx.fillStyle = '#ffe0bd'; //skin tone
 		}
@@ -77,6 +93,8 @@ function drawContent () {
 		ctx.lineWidth = 7;
 		ctx.stroke();
 		ctx.fill();
+
+		Player.drawName(playerX, playerY);
 
 		//controls
 
@@ -108,28 +126,16 @@ function drawContent () {
 }
 
 
-var Game = { // holds framerate and function to draw a frame
-  fps: 60, // frames per second
-
-  draw: function () {
-  	// drawGrid();
-
-    drawContent(); //referenced below... somewhere.
-  },
-
-  drawCoords: function () {
-
-  }
-};
-
 function startFrameCycle () {
 	Game.draw();
 }
 
 Start = function () {
-	App.game.get_name()
+	App.game.get_name();
 	startFrameCycle();
-	$("#playButton").hide();
+	window.setTimeout(function() {
+		App.game.get_name(); //just in case it doesn't show up
+	}, 1000);
 }
 
 EndGame = function () {
@@ -140,12 +146,11 @@ EndGame = function () {
 function startGame () {
 	var name = $("#name").val();
 
-	App.game.start_game(name);
 	$("#name").hide();
 
 	addKeyEventListeners(); //detect game keystrokes
 
-	return true;
+	App.game.start_game(name);
 }
 
 

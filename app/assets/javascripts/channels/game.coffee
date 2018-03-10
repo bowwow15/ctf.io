@@ -10,7 +10,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
     switch data.action
     	when "get_name"
-    		$("#status").html(data.name);
+    		Player.name = data.name;
 
   start_game: (name) ->
     @perform 'start_game', name: name
@@ -20,5 +20,4 @@ App.game = App.cable.subscriptions.create "GameChannel",
   	@perform 'move_player', coords: coords
 
   get_name: () ->
-  	name = @perform 'get_name'
-  	#alert(name);
+  	@perform 'get_name'
