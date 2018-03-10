@@ -167,6 +167,9 @@ var Player = { // just player data and draw player function
     if (move === true) {
       this.x += x; //changes coordinates on the client side. (absolute coords)
       this.y += y;
+
+      //tell server that you moved
+      App.game.move_player([this.x, this.y]);
     }
 
     //detect canvas edge, and edit translateView[]
@@ -206,8 +209,10 @@ var Player = { // just player data and draw player function
 })();
 
 //event listener
-window.addEventListener("keydown", onKeyDown, false);
-window.addEventListener("keyup", onKeyUp, false);
+function addKeyEventListeners () { //calls this function after username is entered
+  window.addEventListener("keydown", onKeyDown, false);
+  window.addEventListener("keyup", onKeyUp, false);
+}
 
 function onKeyDown(event) {
   var keyCode = event.keyCode;

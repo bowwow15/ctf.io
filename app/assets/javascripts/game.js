@@ -1,4 +1,5 @@
 var Start;
+var EndGame;
 
 //initiate WebSockets...
 
@@ -68,13 +69,13 @@ function drawContent () {
 
 		//controls
 
-		playerSpeed = 2; //default setting sets the speed of player 
+		playerSpeed = 3; //default setting sets the speed of player 
 
 		if (keyShift == true) {
-			playerSpeed = 3;
+			playerSpeed = 4;
 		}
 		if (keyAlt == true) { //sneaking
-			playerSpeed = 1;
+			playerSpeed = 2;
 		}
 
 		if (keyD == true) {
@@ -93,8 +94,6 @@ function drawContent () {
 		Player.move(0, 0); //Important for formatting canvas view...
 
 	// }, 1000 / Game.fps);
-
-	//cancelAnimationFrame(drawContentAnimation);
 }
 
 
@@ -121,11 +120,18 @@ Start = function () {
 	$("#playButton").hide();
 }
 
+EndGame = function () {
+	cancelAnimationFrame(drawContentAnimation);
+	$("#status").html("<span style='color: red'>connection lost</span>");
+}
+
 function startGame () {
 	var name = $("#name").val();
 
 	App.game.start_game(name);
 	$("#name").hide();
+
+	addKeyEventListeners(); //detect game keystrokes
 
 	return true;
 }

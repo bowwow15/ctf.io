@@ -8,8 +8,23 @@ body {
 	background-color: $background-color;
 }
 
+textarea, input, button { outline: none; }
+
+.statusText {
+	position: fixed;
+	z-index: 20;
+	top: 0;
+	left: 0; right: 0;
+	width: -moz-fit-content;
+	width: fit-content;
+	margin: 0px auto;
+	font-size: 20px;
+}
+
 .name {
 	padding: 20px;
+	border: 3px solid limegreen;
+	border-top: none !important;
 	height: fit-content;
 	width: fit-content;
 	height: -moz-fit-content;

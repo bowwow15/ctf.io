@@ -1,4 +1,6 @@
 <form onsubmit="event.preventDefault(); return startGame();" action=""><input autofocus id="name" class="name" type="text" placeholder="Enter a name"></form>
+<div id="status" class="statusText"></div>
+
 <canvas id="canvas" class="fullScreenCanvas" width="640" height="480" onLoad="resizeCanvas()"></canvas>
 <div id="hud" class="hud">
 	<% hudItemId = 0 %>
