@@ -5,10 +5,10 @@ var HudItem;
 
 var playerSpeed;
 
-var augmentedPlayer;
-
 var PlayerX;
 var PlayerY;
+
+var AugmentedPlayer;
 
 var canvasWidthCenter;
 var canvasHeightCenter;
@@ -31,7 +31,13 @@ var ServerGameObject = {
 Map = {
   translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
   spawnPoint: [0, 0], //default
-  scope: 1
+  scope: 1,
+
+  zoom: function (scopeChange) {
+    this.scope += scopeChange;
+    // this.translateView[0] = this.translateView[0] / (this.scope);
+    // this.translateView[1] = this.translateView[1] / (this.scope);
+  }
 };
 
 //CANVAS JS BELOW
@@ -64,10 +70,13 @@ $.ajax({
 
 var boxesX;
 var boxesY;
-var drawGrid = function(w, l, maxX, maxY) {
+var drawGrid = function(w, h, maxX, maxY) {
 
-  w = w / Map.scope; //this sets the grid proportional to the zoom...
-  l = l / Map.scope;
+  w = w; //this sets the grid proportional to the zoom...
+  h = h;
+
+  maxX = maxX;
+  maxY = maxY;
   
 
   //first, lets draw a square that is as big as the map dimentions...
@@ -75,7 +84,7 @@ var drawGrid = function(w, l, maxX, maxY) {
   ctx.fillStyle = '#72a958'; // same as backrgound
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.rect(0 - Map.translateView[0] - ctx.lineWidth, 0 - Map.translateView[1] - ctx.lineWidth, Map.mapLimit[0] + (ctx.lineWidth*2), Map.mapLimit[1] + (ctx.lineWidth*2)); //always implement translateView[]
+  ctx.rect((0 - Map.translateView[0] - ctx.lineWidth), (0 - Map.translateView[1] - ctx.lineWidth), (Math.round(maxX) + (ctx.lineWidth*2)), (Math.round(maxY) + (ctx.lineWidth*2))); //always implement translateView[]
   ctx.shadowColor = '#547a40';
   ctx.shadowBlur = 200;
   ctx.shadowOffsetX = 0;
@@ -90,15 +99,21 @@ var drawGrid = function(w, l, maxX, maxY) {
   ctx.lineWidth = 1;
 
   for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) { //draws horizontal squares...
+    let mapGridXZeroHorizontal = (0 - Map.translateView[0]) + (boxesX*w / 2); //calculations for grid boxes horizontally
+    let mapGridYZeroHorizontal = (0 - Map.translateView[1]) + (boxesY*h / 2);
+
     ctx.beginPath();
 
-    ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1], w, l); // implementing translateView to effect the movement
+    ctx.rect(mapGridXZeroHorizontal, mapGridYZeroHorizontal, w, h); // implementing translateView to effect the movement
     ctx.stroke();
 
-    for (boxesY = 0; (boxesY*l / 2) < maxY; boxesY++) { //then vertical squares.
+    for (boxesY = 0; (boxesY*h / 2) < maxY; boxesY++) { //then vertical squares.
+      let mapGridXZeroVertical = (0 - Map.translateView[0]) + (boxesX*w / 2); //calculations for grid boxes vertically
+      let mapGridYZeroVertical = (0 - Map.translateView[1]) + (boxesY*h / 2);
+
       ctx.beginPath();
 
-      ctx.rect(0 - Map.translateView[0] + (boxesX*w / 2), 0 - Map.translateView[1] + (boxesY*w / 2), w, l); // implementing translateView to effect the movement
+      ctx.rect(mapGridXZeroVertical, mapGridYZeroVertical, w, h); // implementing translateView to effect the movement
       ctx.stroke();
       boxesY += 1;
     }
@@ -110,6 +125,7 @@ var drawGrid = function(w, l, maxX, maxY) {
 
 var Player = { // just player data and draw player function
   size: 40,
+  turnRadius: 0,
   color: false,
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
   y: Map.spawnPoint[1],
@@ -158,24 +174,28 @@ var Player = { // just player data and draw player function
     }
 
     //detect canvas edge, and edit translateView[]
-    augmentedPlayer = [(this.x - Map.translateView[0]) / Map.scope, (this.y - Map.translateView[1]) / Map.scope]; // [x, y] devides by Map.scope because zoomed out looks slower ... basically the augmented coordinates, augmented by the view of the canvas...
+    AugmentedPlayer = {
+      coords: [(this.x - Map.translateView[0]), (this.y - Map.translateView[1])], // [x, y] devides by Map.scope because zoomed out looks slower ... basically the augmented coordinates, augmented by the view of the canvas...
+      size: Player.size
+    };
+
     var marginOfMovement = 200; // margin of movement before the view starts following the player. See Map.translateView[]
 
-    var canvasEdge = [(canvas.height - Player.size - marginOfMovement) / Map.scope, (canvas.width - Player.size - marginOfMovement) / Map.scope, (0 + Player.size + marginOfMovement) / Map.scope, (0 + Player.size + marginOfMovement) / Map.scope]; // [top, right, bottom, left] ... detects the edge of canvas
+    var canvasEdge = [(canvas.height - AugmentedPlayer.size - marginOfMovement), (canvas.width - Player.size - marginOfMovement), (0 + Player.size + marginOfMovement), (0 + Player.size + marginOfMovement)]; // [top, right, bottom, left] ... detects the edge of canvas
 
-    if (augmentedPlayer[1] > canvasEdge[0]) { // stops at top edge
+    if (AugmentedPlayer.coords[1] > canvasEdge[0]) { // stops at top edge
       Map.translateView[1] += playerSpeed; //decleared in game.js
     }
 
-    if (augmentedPlayer[0] > canvasEdge[1]) { // stops at right edge
+    if (AugmentedPlayer.coords[0] > canvasEdge[1]) { // stops at right edge
       Map.translateView[0] += playerSpeed;
     }
 
-    if (augmentedPlayer[1] < canvasEdge[2]) { // stops at bottom edge
+    if (AugmentedPlayer.coords[1] < canvasEdge[2]) { // stops at bottom edge
       Map.translateView[1] -= playerSpeed;
     }
 
-    if (augmentedPlayer[0] < canvasEdge[3]) { // stops at left edge
+    if (AugmentedPlayer.coords[0] < canvasEdge[3]) { // stops at left edge
       Map.translateView[0] -= playerSpeed;
     }
 
@@ -219,11 +239,11 @@ function onKeyDown(event) {
       break;
     case 189:
       //ZOOMS OUT
-      Map.scope += .1;
+      Map.zoom(0.1);
       break;
     case 187:
       //ZOOMS OUT
-      Map.scope -= .1;
+      Map.zoom(-0.1);
       break;
   }
 
