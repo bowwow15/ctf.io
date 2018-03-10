@@ -1,3 +1,4 @@
+var Start;
 $(document).ready(function () {
 	//initiate WebSockets...
 
@@ -115,10 +116,10 @@ $(document).ready(function () {
 		Game.draw();
 	}
 
-	function start () {
+	Start = function () {
 		startFrameCycle();
 		$("#playButton").hide();
 	}
 
-	start();
+	App.game.start_game();
 });
