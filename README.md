@@ -34,6 +34,10 @@ Sprint: Hold **shift** key.<br>
 Crouch/Sneak: Hold **alt** key on Windows/Linux, or **option** on Mac.<br>
 Select Item from inventory: numbers **1**-**8** (no numpad).<br>
 
+![In-game screenshot](https://github.com/bowwow15/ctf.io/blob/master/public/images/example.png?raw=true)
+
+![enter image description here](https://github.com/bowwow15/ctf.io/blob/master/public/images/example0.png?raw=true)
+
 ----------
 Copyright 2018 Brooks Jeremiah Wibberding, 
 All rights reserved.
