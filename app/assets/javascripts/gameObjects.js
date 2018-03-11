@@ -123,7 +123,7 @@ var Player = { // just player data and draw player function
     }
     ctx.strokeStyle = '#274729';
     ctx.lineWidth = 7;
-    ctx.stroke();
+    // ctx.stroke();
     ctx.fill();
   },
 
@@ -159,7 +159,7 @@ var Player = { // just player data and draw player function
     ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
-    ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
+    ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 3) / Map.scope, 0, 2*Math.PI, false);
 
     ctx.stroke();
     ctx.fill();
@@ -170,7 +170,7 @@ var Player = { // just player data and draw player function
     ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
-    ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
+    ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 3) / Map.scope, 0, 2*Math.PI, false);
 
     ctx.stroke();
     ctx.fill();
