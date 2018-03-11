@@ -1,5 +1,5 @@
 class Global < ApplicationRecord
-	def self.start_game (uuid, name)
+	def self.start_game (uuid, name, coords)
 		name.slice! 15..-1 #limits name length to 15 characters
 
 		REDIS.set("player_name_#{uuid}", name)
@@ -21,10 +21,10 @@ class Global < ApplicationRecord
 
 	def self.move_player (uuid, coords)
 		#sets player location in database
-
-		ActionCable.server.broadcast "global", {action: "send_player_coords", uuid: uuid, coords: coords}
 		
 		if REDIS.get("player_name_#{uuid}") #only move is player exists
+			ActionCable.server.broadcast "global", {action: "send_player_coords", uuid: uuid, coords: coords}
+
 			REDIS.set("coords_for_#{uuid}", coords) #only move if coordinates aren't equal to last coorinates
 		end
 	end

@@ -19,8 +19,8 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		@perform 'unsubscribed'
     		Player.die();
 
-  start_game: (name) ->
-    @perform 'start_game', name: name
+  start_game: (name, coords) ->
+    @perform 'start_game', name: name, coords: coords
     Start();
 
   broadcast_name: (name) ->

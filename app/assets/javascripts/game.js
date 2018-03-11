@@ -134,7 +134,7 @@ function startGame () {
 
 	addKeyEventListeners(); //detect game keystrokes
 
-	App.game.start_game(name);
+	App.game.start_game(name, [Player.x, Player.y]);
 }
 
 

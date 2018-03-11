@@ -11,7 +11,7 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def start_game (data)
-    Global.start_game(uuid, data['name'])
+    Global.start_game(uuid, data['name'], data['coords'])
   end
 
   def broadcast_name (data)
