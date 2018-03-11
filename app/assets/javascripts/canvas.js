@@ -81,7 +81,7 @@ var SplashScreen = {
 	    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
 	    ctx.fill();
 
-	    drawGrid(200, 200, window.innerWidth, window.innerHeight);
+	    drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]);
 	}
 }
 
