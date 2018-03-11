@@ -133,6 +133,7 @@ function startGame () {
 	var name = $("#name").val();
 
 	$("#name").slideUp(500); //500 ms (1/2) of a second
+	$(".upper").fadeOut(500);
 
 	addKeyEventListeners(); //detect game keystrokes
 

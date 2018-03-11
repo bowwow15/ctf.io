@@ -6,6 +6,7 @@ $background-color: black; /* It's green... Like trees. */
 
 body {
 	background-color: $background-color;
+	font-family: sans-serif;
 }
 
 textarea, input, button { outline: none; }
@@ -45,4 +46,21 @@ textarea, input, button { outline: none; }
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+
+.upper {
+	position: fixed;
+	top: 0;
+	margin: 5px;
+	color: #426333 !important;
+}
+a {
+	color: #426333 !important;
+}
+
+.left {
+	left: 5px;
+}
+.right {
+	right: 5px;
 }
