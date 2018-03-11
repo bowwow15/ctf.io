@@ -36,7 +36,7 @@ Select Item from inventory: numbers **1**-**8** (no numpad).<br>
 
 ![In-game screenshot](https://github.com/bowwow15/ctf.io/blob/master/public/images/example.png?raw=true)
 
-![enter image description here](https://github.com/bowwow15/ctf.io/blob/master/public/images/example0.png?raw=true)
+![enter image description here](https://github.com/bowwow15/ctf.io/blob/master/public/images/example1.png?raw=true)
 
 ----------
 Copyright 2018 Brooks Jeremiah Wibberding, 
