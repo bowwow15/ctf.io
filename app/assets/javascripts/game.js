@@ -75,8 +75,6 @@ var drawContentAnimation;
 function drawContent () {
 	// window.setTimeout(function() {
 
-		App.game.get_players(); //gets all players from server
-
 		drawContentAnimation = requestAnimationFrame(drawContent);
 		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
@@ -91,10 +89,10 @@ function drawContent () {
 		Player.drawName(Player.x, Player.y, Player.name);
 
 		//server players...
-		Object.keys(OnlinePlayers).forEach(function (coords) { //draws all players on server
-			if (coords != Player.self_uuid) { // if the player isn't your own
-				Player.drawPerson(OnlinePlayers[coords][0][0], OnlinePlayers[coords][0][1]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
-				Player.drawName(OnlinePlayers[coords][0][0], OnlinePlayers[coords][0][1], OnlinePlayers[coords][1]); //draws Multiplayer user name
+		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
+			if (uuid != Player.self_uuid) { // if the player isn't your own
+				Player.drawPerson(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
+				Player.drawName(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid + "_name"]); //draws Multiplayer user name
 			}
 		});
 

@@ -1,10 +1,4 @@
 class Game < ApplicationRecord
-	def self.start_game (uuid, name)
-		name.slice! 15..-1 #limits name length to 15 characters
-
-		REDIS.set("player_name_#{uuid}", name)
-	end
-
 	def self.delete_user (uuid)
 		REDIS.del("coords_for_#{uuid}")
 		REDIS.del("player_name_#{uuid}") #deletes user when disconects

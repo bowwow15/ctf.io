@@ -109,20 +109,22 @@ var Player = { // just player data and draw player function
   },
 
   drawName: function (x, y, name) {
-    x = x - Map.translateView[0];
-    y = y - Map.translateView[1];
+    if (name) { // name might be undifined?
+      x = x - Map.translateView[0];
+      y = y - Map.translateView[1];
 
-    ctx.beginPath(); //resets path that is being drawn.
-    ctx.fillStyle = 'black';
-    ctx.textAlign="center";
+      ctx.beginPath(); //resets path that is being drawn.
+      ctx.fillStyle = 'black';
+      ctx.textAlign="center";
 
-    calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
-    if (calculatedNameSize < this.nameSize) {
-      this.nameSize = calculatedNameSize;
+      calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
+      if (calculatedNameSize < this.nameSize) {
+        this.nameSize = calculatedNameSize;
+      }
+
+      ctx.font = this.nameSize + "px " + this.nameFont;
+      ctx.fillText(name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
     }
-
-    ctx.font = this.nameSize + "px " + this.nameFont;
-    ctx.fillText(name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
   },
 
   mapEdgeDetect: function (x, y) {
@@ -166,6 +168,7 @@ var Player = { // just player data and draw player function
       //tell server that you moved
       if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
         App.game.move_player([this.x, this.y]);
+
         if (Player.center === true) {
           Map.translateView[0] += x;
           Map.translateView[1] += y;

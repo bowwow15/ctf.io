@@ -23,6 +23,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
     @perform 'start_game', name: name
     Start();
 
+  broadcast_name: (name) ->
+  	@perform 'broadcast_name', name: name
+
   move_player: (coords) ->
   	@perform 'move_player', coords: coords
 

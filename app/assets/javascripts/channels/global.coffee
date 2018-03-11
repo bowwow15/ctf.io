@@ -9,6 +9,11 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     switch data.action
     	when "send_player_coords"
     		#draw player at coords
-    		OnlinePlayers[data.uuid] = [eval(data.coords), data.name]; #eval turns data into array
+    		OnlinePlayers[data.uuid] = eval(data.coords); #eval turns data into array
+
+    	when "send_player_name"
+    		#send the player's name to all online players
+    		OnlinePlayers[data.uuid + "_name"] = data.name;
+
     	when "delete_player"
-    		delete OnlinePlayers[data.uuid] #deletes user from local object
+    		delete OnlinePlayers[data.uuid]; #deletes user from local object
