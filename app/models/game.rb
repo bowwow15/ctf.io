@@ -8,6 +8,8 @@ class Game < ApplicationRecord
 	def self.delete_user (uuid)
 		REDIS.del("coords_for_#{uuid}")
 		REDIS.del("player_name_#{uuid}") #deletes user when disconects
+
+		ActionCable.server.broadcast "global", {action: "delete_player", uuid: uuid, name: name}
 	end
 
 	def self.get_name (uuid)
