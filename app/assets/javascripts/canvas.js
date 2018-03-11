@@ -76,10 +76,6 @@ window.addEventListener('resize', resizeCanvas, false);
 
 var SplashScreen = {
 	draw: function () {
-		ctx.beginPath();
-	    ctx.fillStyle = '#72a958';
-	    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
-	    ctx.fill();
 
 	    drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]);
 
