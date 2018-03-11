@@ -29,13 +29,6 @@ var Game = { // holds framerate and function to draw a frame
 
     drawContent(); //referenced below... somewhere.
 
- //    window.setInterval(function() {
-	//     var playerIndex = 0;
-	// 	Game.players.forEach(function (element) { //gets player coordinates, and adds to object
-	// 		App.game.get_player_coords(Game.players[playerIndex]);
-	// 		playerIndex += 1;
-	// 	});
-	// }, 1000 / 30);
   },
 
   drawCoords: function () {
@@ -89,10 +82,12 @@ function drawContent () {
 
 		//below methods defined in gameObjects.js
 
+		//local players...
 		Player.drawPerson(Player.x, Player.y);
 
 		Player.drawName(Player.x, Player.y, Player.name);
 
+		//server players...
 		Object.keys(OnlinePlayers).forEach(function (coords) { //draws all players on server
 			if (coords != Player.self_uuid) { // if the player isn't your own
 				Player.drawPerson(OnlinePlayers[coords][0][0], OnlinePlayers[coords][0][1]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
