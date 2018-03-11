@@ -15,6 +15,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		Player.self_uuid = data.uuid;
     	when "get_players"
     		Game.players = eval(data.players);
+    	when "player_died"
+    		@perform 'unsubscribed'
+    		Player.die();
 
   start_game: (name) ->
     @perform 'start_game', name: name

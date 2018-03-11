@@ -74,6 +74,9 @@ $.ajax({
 
 var Player = { // just player data and draw player function
   size: 40,
+  speed: 3,
+  sneakSpeed: 1,
+  sprintSpeed: 4,
   name: "",
   self_uuid: null,
   nameSize: 35,
@@ -192,6 +195,28 @@ var Player = { // just player data and draw player function
     }
 
     return [this.x, this.y];
+  },
+
+  die: function () {
+    cancelAnimationFrame(drawContentAnimation);
+
+    //displays death screen
+    ctx.beginPath();
+    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+
+    //Title
+    ctx.beginPath(); //resets path that is being drawn.
+    ctx.fillStyle = 'red';
+    ctx.strokeStyle = 'darkred';
+    ctx.lineWidth = 1;
+
+    ctx.font = "100px Arial";
+    ctx.textAlign="center";
+
+    ctx.fillText("You Died", canvas.width / 2, canvas.height / 2 + 50);
+    ctx.strokeText("You Died", canvas.width / 2, canvas.height / 2 + 50); 
   }
 };
 

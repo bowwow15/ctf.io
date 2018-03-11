@@ -27,8 +27,11 @@ var Game = { // holds framerate and function to draw a frame
   draw: function () {
   	// drawGrid();
 
+  	App.game.move_player([Player.x, Player.y]); //tell server your coordinates
+
     drawContent(); //referenced below... somewhere.
 
+    // used for debugging: eval(prompt("function"));
   },
 
   drawCoords: function () {
@@ -97,13 +100,13 @@ function drawContent () {
 
 		//controls
 
-		playerSpeed = 3; //default setting sets the speed of player 
+		playerSpeed = Player.speed; //default setting sets the speed of player 
 
 		if (keyShift == true) {
-			playerSpeed = 4;
+			playerSpeed = Player.sprintSpeed;
 		}
 		if (keyAlt == true) { //sneaking
-			playerSpeed = 2;
+			playerSpeed = Player.sneakSpeed;
 		}
 
 		if (keyD == true) {
@@ -147,6 +150,7 @@ EndGame = function () {
 function startGame () {
 	var name = $("#name").val();
 
+	$("#name").blur();
 	$("#name").slideUp(500); //500 ms (1/2) of a second
 	$(".upper").fadeOut(500);
 
