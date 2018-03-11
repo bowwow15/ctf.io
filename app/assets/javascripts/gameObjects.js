@@ -16,6 +16,8 @@ var canvasHeightCenter;
 var Map;
 var Hud;
 
+var OnlinePlayers;
+
 var ServerGameObject = {
 	x: 50,
 	y: 50,
@@ -47,6 +49,10 @@ Hud = {
   }
 };
 
+OnlinePlayers = {
+
+}; 
+
 // GETS MAP DATA FROM SERVER
 
 $.ajax({
@@ -69,6 +75,7 @@ $.ajax({
 var Player = { // just player data and draw player function
   size: 40,
   name: "",
+  self_uuid: null,
   nameSize: 35,
   nameFont: "Helvetica",
   nameMargin: 10,
@@ -78,6 +85,9 @@ var Player = { // just player data and draw player function
   y: Map.spawnPoint[1],
 
   drawPerson: function (x, y) {
+    x = x - Map.translateView[0];
+    y = y - Map.translateView[1];
+
     ctx.beginPath(); //resets path that is being drawn.
 
     ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
@@ -94,18 +104,21 @@ var Player = { // just player data and draw player function
     ctx.fill();
   },
 
-  drawName: function (x, y) {
+  drawName: function (x, y, name) {
+    x = x - Map.translateView[0];
+    y = y - Map.translateView[1];
+
     ctx.beginPath(); //resets path that is being drawn.
     ctx.fillStyle = 'black';
     ctx.textAlign="center";
 
-    calculatedNameSize = (this.size*3 / (this.name.length / 2)).toString();
+    calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
     if (calculatedNameSize < this.nameSize) {
       this.nameSize = calculatedNameSize;
     }
 
     ctx.font = this.nameSize + "px " + this.nameFont;
-    ctx.fillText(this.name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
+    ctx.fillText(name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
   },
 
   mapEdgeDetect: function (x, y) {
@@ -147,7 +160,9 @@ var Player = { // just player data and draw player function
       this.y += y;
 
       //tell server that you moved
-      App.game.move_player([this.x, this.y]);
+      if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
+        App.game.move_player([this.x, this.y]);
+      }
     }
 
     //detect canvas edge, and edit translateView[]

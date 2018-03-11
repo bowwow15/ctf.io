@@ -11,6 +11,10 @@ App.game = App.cable.subscriptions.create "GameChannel",
     switch data.action
     	when "get_name"
     		Player.name = data.name;
+    	when "get_self_uuid"
+    		Player.self_uuid = data.uuid;
+    	when "get_players"
+    		Game.players = eval(data.players);
 
   start_game: (name) ->
     @perform 'start_game', name: name
@@ -21,3 +25,12 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
   get_name: () ->
   	@perform 'get_name'
+
+  get_self_uuid: () ->
+  	@perform 'get_self_uuid'
+
+  get_players: () ->
+  	@perform 'get_players'
+
+  get_player_coords: (targetUuid) ->
+  	@perform 'get_player_coords', targetUuid: targetUuid

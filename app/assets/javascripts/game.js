@@ -22,17 +22,27 @@ resizeCanvas();
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
   running: false,
+  players: [null],
 
   draw: function () {
   	// drawGrid();
 
     drawContent(); //referenced below... somewhere.
+
+ //    window.setInterval(function() {
+	//     var playerIndex = 0;
+	// 	Game.players.forEach(function (element) { //gets player coordinates, and adds to object
+	// 		App.game.get_player_coords(Game.players[playerIndex]);
+	// 		playerIndex += 1;
+	// 	});
+	// }, 1000 / 30);
   },
 
   drawCoords: function () {
 
   }
 };
+
 
 HudItem = {
 	slot_1: null,
@@ -69,18 +79,26 @@ var drawContentAnimation;
 function drawContent () {
 	// window.setTimeout(function() {
 
+		App.game.get_players(); //gets all players from server
+
 		drawContentAnimation = requestAnimationFrame(drawContent);
 		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
 		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
 
-		//below variables defined in gameObjects.js
-		playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
-		playerY = Player.y - Map.translateView[1]; // 0 = x, 1 = y.
 
-		Player.drawPerson(playerX, playerY);
+		//below methods defined in gameObjects.js
 
-		Player.drawName(playerX, playerY);
+		Player.drawPerson(Player.x, Player.y);
+
+		Player.drawName(Player.x, Player.y, Player.name);
+
+		Object.keys(OnlinePlayers).forEach(function (coords) { //draws all players on server
+			if (coords != Player.self_uuid) { // if the player isn't your own
+				Player.drawPerson(OnlinePlayers[coords][0][0], OnlinePlayers[coords][0][1]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
+				Player.drawName(OnlinePlayers[coords][0][0], OnlinePlayers[coords][0][1], OnlinePlayers[coords][1]); //draws Multiplayer user name
+			}
+		});
 
 		//controls
 
@@ -122,6 +140,8 @@ Start = function () {
 	window.setTimeout(function() {
 		App.game.get_name(); //just in case it doesn't show up
 	}, 1000);
+
+	App.game.get_self_uuid();
 }
 
 EndGame = function () {
