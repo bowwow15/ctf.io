@@ -16,10 +16,74 @@ var ctx;
 ctx = Context.context; //important shorthand notice
 
 
+var boxesX;
+var boxesY;
+var drawGrid = function(w, h, maxX, maxY) {
+
+  w = w; //this sets the grid proportional to the zoom...
+  h = h;
+
+  maxX = maxX;
+  maxY = maxY;
+  
+
+  //first, lets draw a square that is as big as the map dimentions...
+  ctx.strokeStyle = '#547a40'; // dark green
+  ctx.fillStyle = '#72a958'; // same as backrgound
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.rect((0 - Map.translateView[0] - ctx.lineWidth), (0 - Map.translateView[1] - ctx.lineWidth), (Math.round(maxX) + (ctx.lineWidth*2)), (Math.round(maxY) + (ctx.lineWidth*2))); //always implement translateView[]
+  ctx.shadowColor = '#547a40';
+  ctx.shadowBlur = 1000;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.stroke();
+  ctx.fill();
+
+  //reset once done
+  ctx.shadowBlur = 0;
+
+  ctx.strokeStyle = '#629953';
+  ctx.lineWidth = 1;
+
+  for (boxesX = 0; (boxesX*w / 2) < maxX; boxesX++) { //draws horizontal squares...
+    let mapGridXZeroHorizontal = (0 - Map.translateView[0]) + (boxesX*w / 2); //calculations for grid boxes horizontally
+    let mapGridYZeroHorizontal = (0 - Map.translateView[1]) + (boxesY*h / 2);
+
+    ctx.beginPath();
+
+    ctx.rect(mapGridXZeroHorizontal, mapGridYZeroHorizontal, w, h); // implementing translateView to effect the movement
+    ctx.stroke();
+
+    for (boxesY = 0; (boxesY*h / 2) < maxY - w; boxesY++) { //then vertical squares.
+      let mapGridXZeroVertical = (0 - Map.translateView[0]) + (boxesX*w / 2); //calculations for grid boxes vertically
+      let mapGridYZeroVertical = (0 - Map.translateView[1]) + (boxesY*h / 2);
+
+      ctx.beginPath();
+
+      ctx.rect(mapGridXZeroVertical, mapGridYZeroVertical, w, h); // implementing translateView to effect the movement
+      ctx.stroke();
+      boxesY += 1;
+    }
+
+    boxesX += 1;
+  }
+};
+
+
 // resize the canvas to fill browser window dynamically
 window.addEventListener('resize', resizeCanvas, false);
 
+var SplashScreen = {
+	draw: function () {
+		ctx.beginPath();
+	    ctx.fillStyle = '#72a958';
+	    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+	    ctx.fill();
 
+	    drawGrid(200, 200, window.innerWidth, window.innerHeight);
+	}
+}
 
 function resizeCanvas () { //resizes canvas to browser window
         canvas.width = window.innerWidth;
@@ -31,11 +95,6 @@ function resizeCanvas () { //resizes canvas to browser window
         	ctx = Context.context;
         }
 
-        // ctx.beginPath();
-        // ctx.fillStyle = '#72a958';
-        // ctx.rect(0, 0, window.innerWidth, window.innerHeight);
-        // ctx.fill();
-        // Not using above code because it was decided to use HTML adn CSS to create a background.
 
 
         GameCanvas = {
@@ -45,6 +104,8 @@ function resizeCanvas () { //resizes canvas to browser window
 
 		canvasWidthCenter = canvas.width;
   		canvasHeightCenter = canvas.height / 2;
+
+  		SplashScreen.draw();
 }
 
 GameCanvas = {
@@ -52,8 +113,11 @@ GameCanvas = {
 	height: document.getElementById('canvas').height
 };
 
+
 //spread HUD items 5px (css animation)
 $(document).ready(function () {
+	//initial canvas color
+
 	for (i = 0; i < 8; i++) {
 		document.getElementById("hudSlot" + i).classList.add('spread5px');
 	}

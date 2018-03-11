@@ -72,7 +72,7 @@ function drawContent () {
 		drawContentAnimation = requestAnimationFrame(drawContent);
 		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
-		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects
+		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
 
 		//below variables defined in gameObjects.js
 		playerX = Player.x - Map.translateView[0]; //(translateView[x, y])
