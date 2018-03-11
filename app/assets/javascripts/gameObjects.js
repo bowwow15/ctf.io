@@ -50,7 +50,7 @@ Hud = {
 };
 
 OnlinePlayers = {
-
+  //see global.coffee and game.coffee
 }; 
 
 // GETS MAP DATA FROM SERVER
@@ -189,8 +189,8 @@ var Player = { // just player data and draw player function
     y = y - Map.translateView[1];
 
     this.drawPerson(x, y);
-    this.drawName(x, y, name);
     this.drawHands(x, y, rotation);
+    this.drawName(x, y, name);
   },
 
   mapEdgeDetect: function (x, y) {
@@ -300,7 +300,8 @@ var Player = { // just player data and draw player function
   window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-//event listener
+//event listeners...
+
 function addKeyEventListeners () { //calls this function after username is entered
   window.addEventListener("keydown", onKeyDown, false);
   window.addEventListener("keyup", onKeyUp, false);
