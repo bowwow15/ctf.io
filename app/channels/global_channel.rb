@@ -5,5 +5,6 @@ class GlobalChannel < ApplicationCable::Channel
 
   def unsubscribed
     # Any cleanup needed when channel is unsubscribed
+    Game.delete_user(uuid)
   end
 end

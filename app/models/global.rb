@@ -4,6 +4,8 @@ class Global < ApplicationRecord
 
 		REDIS.set("player_name_#{uuid}", name)
 
+		REDIS.set("coords_for_#{uuid}", coords)
+
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}
 
 		#sends list of players
@@ -21,8 +23,10 @@ class Global < ApplicationRecord
 		#sets player location in database
 
 		ActionCable.server.broadcast "global", {action: "send_player_coords", uuid: uuid, coords: coords}
-	
-		REDIS.set("coords_for_#{uuid}", coords) #only move if coordinates aren't equal to last coorinates
+		
+		if REDIS.get("player_name_#{uuid}") #only move is player exists
+			REDIS.set("coords_for_#{uuid}", coords) #only move if coordinates aren't equal to last coorinates
+		end
 	end
 
 	def self.broadcast_name (uuid, name)
