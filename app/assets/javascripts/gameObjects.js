@@ -100,7 +100,7 @@ var Player = { // just player data and draw player function
   sneakSpeed: 1,
   sprintSpeed: 4,
   name: "",
-  skinTone: '#ffe0bd',
+  skinTone: '#fcc875',
   self_uuid: null,
   nameSize: 35,
   nameFont: "Helvetica",
