@@ -27,10 +27,10 @@ This game uses no game libraries. The only library used in the making of CTF.io 
 ## In-Game
 CTF.io controls:
 
-Move: **W**,**A**,**S**,**D**.
-Sprint: Hold **shift** key.
-Crouch/Sneak: Hold **alt** key on Windows/Linux, or **option** on Mac.
-Select Item from inventory: numbers **1**-**8** (no numpad).
+Move: **W**,**A**,**S**,**D**.<br>
+Sprint: Hold **shift** key.<br>
+Crouch/Sneak: Hold **alt** key on Windows/Linux, or **option** on Mac.<br>
+Select Item from inventory: numbers **1**-**8** (no numpad).<br>
 
 ----------
 Copyright 2018 Brooks Jeremiah Wibberding, 
