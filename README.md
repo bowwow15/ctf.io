@@ -1,4 +1,5 @@
 
+
 # CTF.io
 
 This project is not finished. Please contribute!
@@ -25,7 +26,7 @@ CTF.io uses HTML5 canvas, controlled by JavaScript, and minimalistic jQuery, spl
 This game uses no game libraries. The only library used in the making of CTF.io is jQuery, which is not a canvas game library, and is used very -   minimalistically in the development of the game itself.
 
 ## In-Game
-CTF.io controls:
+**CTF.io controls:**
 
 Move: **W**,**A**,**S**,**D**.<br>
 Sprint: Hold **shift** key.<br>
