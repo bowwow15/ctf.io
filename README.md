@@ -1,8 +1,9 @@
 
 
+
 # CTF.io
 
-This project is not finished. Please contribute!
+*This project is not finished. Please contribute!*
 
 The main goals of this project are to:
 
@@ -10,7 +11,7 @@ The main goals of this project are to:
 * Make an API capable of enabling people to easily create their own ctf.io server.
 * Create a mobile client for iOS and Android.
 
-Depenencies:<br>
+**Depenencies:**<br>
 Ruby on Rails server - http://rubyonrails.org/<br>
 REDIS server - https://redis.io/topics/quickstart<br><br>
 ## Server
