@@ -1,3 +1,4 @@
+
 # CTF.io
 
 This project is not finished. Please contribute!
@@ -22,3 +23,15 @@ CTF.io uses HTML5 canvas, controlled by JavaScript, and minimalistic jQuery, spl
  3. [gameObjects.js](https://github.com/bowwow15/ctf.io/blob/master/app/assets/javascripts/gameObjects.js) - Self explanatory. Declares objects and methods used in game.
 
 This game uses no game libraries. The only library used in the making of CTF.io is jQuery, which is not a canvas game library, and is used very -   minimalistically in the development of the game itself.
+
+## In-Game
+CTF.io controls:
+
+Move: **W**,**A**,**S**,**D**.
+Sprint: Hold **shift** key.
+Crouch/Sneak: Hold **alt** key on Windows/Linux, or **option** on Mac.
+Select Item from inventory: numbers **1**-**8** (no numpad).
+
+----------
+Copyright 2018 Brooks Jeremiah Wibberding, 
+All rights reserved.
