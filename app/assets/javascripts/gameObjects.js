@@ -75,6 +75,7 @@ $.ajax({
 var Player = { // just player data and draw player function
   size: 40,
   speed: 3,
+  center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
   name: "",
@@ -165,6 +166,10 @@ var Player = { // just player data and draw player function
       //tell server that you moved
       if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
         App.game.move_player([this.x, this.y]);
+        if (Player.center === true) {
+          Map.translateView[0] += x;
+          Map.translateView[1] += y;
+        }
       }
     }
 
@@ -273,14 +278,9 @@ function onKeyDown(event) {
     HudItem.select(keyCode - 49); //49 - 49 = 0.
   }
 
- //  if (keyC == true) {
-	// 	if (Player.color != true) {
-	// 		Player.color = true;
-	// 	}
-	// 	else {
-	// 		Player.color = false;
-	// 	}
-	// }
+  if (keyC == true) {
+		Player.center = !Player.center; //toggles Player.center
+	}
 
   if (keyH == true) {
     Hud.toggle();

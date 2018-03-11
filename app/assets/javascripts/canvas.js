@@ -28,8 +28,8 @@ var drawGrid = function(w, h, maxX, maxY) {
   
 
   //first, lets draw a square that is as big as the map dimentions...
-  ctx.strokeStyle = '#547a40'; // dark green
-  ctx.fillStyle = '#72a958'; // same as backrgound
+  ctx.strokeStyle = '#6d953e'; // dark green
+  ctx.fillStyle = '#80af49'; // same as backrgound
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.rect((0 - Map.translateView[0] - ctx.lineWidth), (0 - Map.translateView[1] - ctx.lineWidth), (Math.round(maxX) + (ctx.lineWidth*2)), (Math.round(maxY) + (ctx.lineWidth*2))); //always implement translateView[]
@@ -76,13 +76,17 @@ window.addEventListener('resize', resizeCanvas, false);
 
 var SplashScreen = {
 	draw: function () {
+		ctx.beginPath();
+	    ctx.fillStyle = '#72a958';
+	    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+	    ctx.fill();
 
 	    drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]);
 
 	    //Title
 	    ctx.beginPath(); //resets path that is being drawn.
-	    ctx.fillStyle = '#527a3f';
-	    ctx.strokeStyle = '#456736';
+	    ctx.fillStyle = '#4f6d2c';
+	    ctx.strokeStyle = '#31441b';
 
 	    ctx.font = "100px Arial";
 	    ctx.textAlign="center";
