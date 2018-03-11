@@ -71,14 +71,36 @@ $.ajax({
 });
 
 
+var Game = { // holds framerate and function to draw a frame
+  fps: 60, // frames per second
+  running: false,
+  players: [null],
+  mousePos: [0, 0],
+
+  draw: function () {
+    // drawGrid();
+
+    App.game.move_player([Player.x, Player.y]); //tell server your coordinates
+
+    drawContent(); //referenced below... somewhere.
+
+    // used for debugging: eval(prompt("function"));
+  },
+
+  drawCoords: function () {
+
+  }
+};
 
 var Player = { // just player data and draw player function
   size: 40,
+  rotation: 0,
   speed: 3,
   center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
   name: "",
+  skinTone: '#ffe0bd',
   self_uuid: null,
   nameSize: 35,
   nameFont: "Helvetica",
@@ -89,15 +111,12 @@ var Player = { // just player data and draw player function
   y: Map.spawnPoint[1],
 
   drawPerson: function (x, y) {
-    x = x - Map.translateView[0];
-    y = y - Map.translateView[1];
-
     ctx.beginPath(); //resets path that is being drawn.
 
     ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 
     if (this.color != true) {
-      ctx.fillStyle = '#ffe0bd'; //skin tone
+      ctx.fillStyle = Player.skinTone; //skin tone
     }
     else {
       ctx.fillStyle = 'blue';
@@ -110,8 +129,6 @@ var Player = { // just player data and draw player function
 
   drawName: function (x, y, name) {
     if (name) { // name might be undifined?
-      x = x - Map.translateView[0];
-      y = y - Map.translateView[1];
 
       ctx.beginPath(); //resets path that is being drawn.
       ctx.fillStyle = 'black';
@@ -127,9 +144,55 @@ var Player = { // just player data and draw player function
     }
   },
 
+  drawHands: function (x, y) {
+    //draws two circles to represent hands on a player.
+    ctx.fillStyle = this.skinTone;
+
+    ctx.strokeStyle = '#274729';
+    ctx.lineWidth = 7;
+
+    leftHand = [-(Player.size / 2 + 15), -(Player.size / 2 + 15)];
+    rightHand = [(Player.size / 2 + 15), -(Player.size / 2 + 15)];
+
+    //left hand
+    ctx.translate(x, y);
+    ctx.rotate(this.rotation * Math.PI / 180);
+    ctx.translate(-x, -y);
+    ctx.beginPath();
+    ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
+
+    ctx.stroke();
+    ctx.fill();
+    ctx.resetTransform();
+
+    //right hand
+    ctx.translate(x, y);
+    ctx.rotate(this.rotation * Math.PI / 180);
+    ctx.translate(-x, -y);
+    ctx.beginPath();
+    ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
+
+    ctx.stroke();
+    ctx.fill();
+    ctx.resetTransform();
+
+    if (this.color != true) {
+      ctx.fillStyle = Player.skinTone; //skin tone
+    }
+    else {
+      ctx.fillStyle = 'blue';
+    }
+  },
+
   drawAll: function (x, y, name) {
+    x = x - Map.translateView[0]; //augmented by player's view
+    y = y - Map.translateView[1];
+
+    Player.rotation = Math.atan2(Game.mousePos[0] - x, - (Game.mousePos[1] - y) )*(180/Math.PI);
+
     this.drawPerson(x, y);
     this.drawName(x, y, name);
+    this.drawHands(x, y);
   },
 
   mapEdgeDetect: function (x, y) {
@@ -244,6 +307,11 @@ function addKeyEventListeners () { //calls this function after username is enter
   window.addEventListener("keydown", onKeyDown, false);
   window.addEventListener("keyup", onKeyUp, false);
 }
+
+$("body").mousemove(function(e) {
+    Game.mousePos[0] = e.pageX;
+    Game.mousePos[1] = e.pageY;
+})
 
 function onKeyDown(event) {
   var keyCode = event.keyCode;

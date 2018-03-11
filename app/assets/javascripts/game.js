@@ -19,26 +19,6 @@ App.cable.subscriptions.create({
 Context.create("canvas");
 resizeCanvas();
 
-var Game = { // holds framerate and function to draw a frame
-  fps: 60, // frames per second
-  running: false,
-  players: [null],
-
-  draw: function () {
-  	// drawGrid();
-
-  	App.game.move_player([Player.x, Player.y]); //tell server your coordinates
-
-    drawContent(); //referenced below... somewhere.
-
-    // used for debugging: eval(prompt("function"));
-  },
-
-  drawCoords: function () {
-
-  }
-};
-
 
 HudItem = {
 	slot_1: null,
