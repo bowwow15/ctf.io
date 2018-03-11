@@ -84,15 +84,12 @@ function drawContent () {
 		//below methods defined in gameObjects.js
 
 		//local players...
-		Player.drawPerson(Player.x, Player.y);
-
-		Player.drawName(Player.x, Player.y, Player.name);
+		Player.drawAll(Player.x, Player.y, Player.name)
 
 		//server players...
 		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
 			if (uuid != Player.self_uuid) { // if the player isn't your own
-				Player.drawPerson(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
-				Player.drawName(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid + "_name"]); //draws Multiplayer user name
+				Player.drawAll(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid + "_name"]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
 			}
 		});
 

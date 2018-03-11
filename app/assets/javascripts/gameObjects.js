@@ -127,6 +127,11 @@ var Player = { // just player data and draw player function
     }
   },
 
+  drawAll: function (x, y, name) {
+    this.drawPerson(x, y);
+    this.drawName(x, y, name);
+  },
+
   mapEdgeDetect: function (x, y) {
     var move = true; //sets default
     var edgeStop = 25; //margin that player stops from edge of map
