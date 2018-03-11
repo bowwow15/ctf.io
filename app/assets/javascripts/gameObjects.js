@@ -144,7 +144,7 @@ var Player = { // just player data and draw player function
     }
   },
 
-  drawHands: function (x, y) {
+  drawHands: function (x, y, rotation) {
     //draws two circles to represent hands on a player.
     ctx.fillStyle = this.skinTone;
 
@@ -156,7 +156,7 @@ var Player = { // just player data and draw player function
 
     //left hand
     ctx.translate(x, y);
-    ctx.rotate(this.rotation * Math.PI / 180);
+    ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
     ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
@@ -167,7 +167,7 @@ var Player = { // just player data and draw player function
 
     //right hand
     ctx.translate(x, y);
-    ctx.rotate(this.rotation * Math.PI / 180);
+    ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
     ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
@@ -184,15 +184,13 @@ var Player = { // just player data and draw player function
     }
   },
 
-  drawAll: function (x, y, name) {
+  drawAll: function (x, y, rotation, name) {
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
 
-    Player.rotation = Math.atan2(Game.mousePos[0] - x, - (Game.mousePos[1] - y) )*(180/Math.PI);
-
     this.drawPerson(x, y);
     this.drawName(x, y, name);
-    this.drawHands(x, y);
+    this.drawHands(x, y, rotation);
   },
 
   mapEdgeDetect: function (x, y) {
@@ -235,7 +233,7 @@ var Player = { // just player data and draw player function
 
       //tell server that you moved
       if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
-        App.game.move_player([this.x, this.y]);
+        App.game.move_player([this.x, this.y, this.rotation]);
 
         if (Player.center === true) {
           Map.translateView[0] += x;
@@ -309,6 +307,8 @@ function addKeyEventListeners () { //calls this function after username is enter
 }
 
 $("body").mousemove(function(e) {
+    App.game.move_player([Player.x, Player.y, Player.rotation]); //tells the server that you "moved"
+
     Game.mousePos[0] = e.pageX;
     Game.mousePos[1] = e.pageY;
 })

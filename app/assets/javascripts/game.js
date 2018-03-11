@@ -64,12 +64,15 @@ function drawContent () {
 		//below methods defined in gameObjects.js
 
 		//local players...
-		Player.drawAll(Player.x, Player.y, Player.name)
+
+		Player.rotation = Math.atan2(Game.mousePos[0] - (Player.x - Map.translateView[0]), - (Game.mousePos[1] - (Player.y - Map.translateView[1])) )*(180/Math.PI);
+
+		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name)
 
 		//server players...
 		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
 			if (uuid != Player.self_uuid) { // if the player isn't your own
-				Player.drawAll(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid + "_name"]); //OnlinePlayers["(uuid)"] = [coordinates, player name]
+				Player.drawAll(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name]
 			}
 		});
 
