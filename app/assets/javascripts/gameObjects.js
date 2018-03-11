@@ -97,6 +97,7 @@ var Player = { // just player data and draw player function
   drawName: function (x, y) {
     ctx.beginPath(); //resets path that is being drawn.
     ctx.fillStyle = 'black';
+    ctx.textAlign="center";
 
     calculatedNameSize = (this.size*3 / (this.name.length / 2)).toString();
     if (calculatedNameSize < this.nameSize) {
@@ -104,7 +105,7 @@ var Player = { // just player data and draw player function
     }
 
     ctx.font = this.nameSize + "px " + this.nameFont;
-    ctx.fillText(this.name, x - this.size, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
+    ctx.fillText(this.name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
   },
 
   mapEdgeDetect: function (x, y) {

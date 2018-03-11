@@ -82,7 +82,16 @@ var SplashScreen = {
 	    ctx.fill();
 
 	    drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]);
-	}
+
+	    //Title
+	    ctx.beginPath(); //resets path that is being drawn.
+	    ctx.fillStyle = '#527a3f';
+
+	    ctx.font = "100px Arial";
+	    ctx.textAlign="center";
+
+	    ctx.fillText("CTF.io", canvas.width / 2, canvas.height / 2 + 50); 
+		}
 }
 
 function resizeCanvas () { //resizes canvas to browser window
