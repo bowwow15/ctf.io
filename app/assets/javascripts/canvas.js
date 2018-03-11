@@ -86,11 +86,13 @@ var SplashScreen = {
 	    //Title
 	    ctx.beginPath(); //resets path that is being drawn.
 	    ctx.fillStyle = '#527a3f';
+	    ctx.strokeStyle = '#456736';
 
 	    ctx.font = "100px Arial";
 	    ctx.textAlign="center";
 
-	    ctx.fillText("CTF.io", canvas.width / 2, canvas.height / 2 + 50); 
+	    ctx.fillText("CTF.io", canvas.width / 2, canvas.height / 2 + 50);
+	    ctx.strokeText("CTF.io", canvas.width / 2, canvas.height / 2 + 50); 
 		}
 }
 
