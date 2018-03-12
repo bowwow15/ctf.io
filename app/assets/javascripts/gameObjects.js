@@ -291,7 +291,7 @@ var Player = { // just player data and draw player function
 
     this.drawHands(x, y, rotation, gun);
 
-    this.drawName(x, y, name);
+    if (name != Player.name) { this.drawName(x, y, name); }
   },
 
   updateInventory: function () {
