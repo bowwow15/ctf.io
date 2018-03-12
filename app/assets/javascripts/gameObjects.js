@@ -264,7 +264,7 @@ var Player = { // just player data and draw player function
           ctx.translate(-x, -y);
 
           ctx.beginPath();
-          ctx.rect(x + 10, y - 50, 5, -45);
+          ctx.rect(x + 10, y - 50, 5, -45); //glock 19 is squared.
 
           ctx.stroke();
           ctx.fill();
@@ -274,6 +274,25 @@ var Player = { // just player data and draw player function
         case "ar_15":
           ctx.beginPath();
           ctx.ellipse(x + 10, y - 75, 5, 45, -5 * Math.PI/180, 0, 2 * Math.PI);
+
+          ctx.stroke();
+          ctx.fill();
+          ctx.resetTransform();
+        break;
+
+        case "remington_870":
+          ctx.beginPath();
+          ctx.ellipse(x + 6, y - 75, 7, 30, -5 * Math.PI/180, 0, 2 * Math.PI);
+
+          ctx.stroke();
+          ctx.fill();
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          ctx.beginPath();
+          ctx.rect(x + 10, y - 50, 5, -75); //glock 19 is squared.
 
           ctx.stroke();
           ctx.fill();
@@ -409,6 +428,10 @@ var Player = { // just player data and draw player function
 
     ctx.fillText("You Died", canvas.width / 2, canvas.height / 2 + 50);
     ctx.strokeText("You Died", canvas.width / 2, canvas.height / 2 + 50); 
+  },
+
+  shoot: function (x, y, rotation) {
+    
   }
 };
 

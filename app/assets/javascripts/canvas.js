@@ -30,6 +30,7 @@ var drawGrid = function(w, h, maxX, maxY) {
   //first, lets draw a square that is as big as the map dimentions...
   ctx.strokeStyle = '#6d953e'; // dark green
   ctx.fillStyle = '#80af49'; // same as backrgound
+  ctx.lineJoin="round";
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.rect((0 - Map.translateView[0] - ctx.lineWidth), (0 - Map.translateView[1] - ctx.lineWidth), (Math.round(maxX) + (ctx.lineWidth*2)), (Math.round(maxY) + (ctx.lineWidth*2))); //always implement translateView[]

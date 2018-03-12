@@ -1,7 +1,7 @@
 class Inventory < ApplicationRecord
-	$default_inventory = ["empty", "glock_19", "ar_15", "empty", "empty", "empty", "empty", "empty"]
+	$default_inventory = ["empty", "glock_19", "ar_15", "remington_870", "empty", "empty", "empty", "empty"]
 
-	$all_guns = ["glock_19", "ar_15"]
+	$all_guns = ["glock_19", "ar_15", "remington_870"]
 
 	def get_inventory
 		$default_inventory
