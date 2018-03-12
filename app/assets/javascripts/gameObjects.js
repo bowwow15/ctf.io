@@ -563,7 +563,7 @@ var Player = {
           ammoAmount = 5;
           expires = 200;
 
-          if (Player.ammo > ammoAmount) {
+          if (Player.ammo >= ammoAmount) {
             let bullets = 0;
             while (bullets < 10) {
               var randomRotation = Math.random() * 3 - 1;
