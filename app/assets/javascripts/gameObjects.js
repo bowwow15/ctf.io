@@ -577,7 +577,7 @@ $("body").mousemove(function(e) {
     Game.mousePos[1] = e.pageY;
 });
 
-$("body").click(function () {
+$("#canvas").click(function () {
     Player.shoot(Player.rotation, 25);
 });
 
