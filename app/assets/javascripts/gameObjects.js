@@ -535,12 +535,12 @@ var Player = {
           break;
 
         case "rifle":
-          expires = 300;
+          expires = 400;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
           break;
 
         case "shotgun":
-          expires = 60;
+          expires = 200;
           let bullets = 0;
           while (bullets < 10) {
             var randomRotation = Math.random() * 2 - 2;
