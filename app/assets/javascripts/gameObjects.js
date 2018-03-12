@@ -69,7 +69,9 @@ var Game = { // holds framerate and function to draw a frame
     this.rotation = rotation;
 
     App.game.shoot([x, y, rotation, velocity, expires]);
+
     //Game.bullets.push([x, y, rotation, velocity, expires]);
+    //not using above code because it is already declared in global.coffee
   },
 
   drawBullets: function () {
@@ -94,7 +96,7 @@ var Game = { // holds framerate and function to draw a frame
         ctx.beginPath();
 
         ctx.fillStyle = "black";
-        ctx.rect(x_augmented, y_augmented, 5, 5); //glock 19 is squared.
+        ctx.arc(x_augmented, y_augmented, 2, 0, 2 * Math.PI);
 
         ctx.fill();
       }
@@ -336,7 +338,7 @@ var Player = {
 
       switch (gunType) {
         case "glock_19":
-          Gun.spawnPoint = [0, -110];
+          Gun.spawnPoint = [5, -110];
           Gun.type = "pistol";
 
           ctx.translate(x, y);
@@ -352,7 +354,7 @@ var Player = {
         break;
 
         case "ar_15":
-          Gun.spawnPoint = [6, -125];
+          Gun.spawnPoint = [5, -125];
           Gun.type = "rifle";
 
           ctx.beginPath();
@@ -541,7 +543,7 @@ var Player = {
           expires = 60;
           let bullets = 0;
           while (bullets < 10) {
-            var randomRotation = Math.random() * 1 - 1;
+            var randomRotation = Math.random() * 2 - 2;
             new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
             bullets++;
           }
