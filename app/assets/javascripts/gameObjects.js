@@ -224,6 +224,7 @@ var Player = {
   rotation: 0,
   speed: 3,
   handPos: [0, 0],
+  ammo: 25,
   center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
@@ -392,6 +393,16 @@ var Player = {
     }
   },
 
+  drawAmmoAmount: function () {
+    let text = "PELLETS LEFT: " + Player.ammo;
+    ctx.font = "15px Helvetica";
+    ctx.textAlign = "end";
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.fillText(text, canvas.width - 15, 25);
+  },
+
   drawAll: function (x, y, rotation, name, inventoryItem) {
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
@@ -403,6 +414,8 @@ var Player = {
     this.drawPerson(x, y);
 
     this.drawHands(x, y, rotation, gun);
+
+    this.drawAmmoAmount();
 
     if (name != Player.name) { this.drawName(x, y, name); }
   },
@@ -528,30 +541,44 @@ var Player = {
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
-    if (HudItem.determineGun(Player.inventory[HudItem.selectedItem]).bool === true) {
+    if (HudItem.determineGun(Player.inventory[HudItem.selectedItem]).bool === true && Player.ammo > 0) {
+
+      let ammoAmount = 1; //the ammount of ammo used by each gun
+      let shot = false;
 
       switch (Gun.type) {
         case "pistol":
           expires = 70;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          shot = true;
           break;
 
         case "rifle":
           expires = 400;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          shot = true;
           break;
 
         case "shotgun":
+          ammoAmount = 5;
           expires = 200;
-          let bullets = 0;
-          while (bullets < 10) {
-            var randomRotation = Math.random() * 3 - 1;
-            new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
-            bullets++;
+
+          if (Player.ammo > ammoAmount) {
+            let bullets = 0;
+            while (bullets < 10) {
+              var randomRotation = Math.random() * 3 - 1;
+              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
+              bullets++;
+            }
+
+            shot = true;
           }
           break;
       }
 
+      if (shot === true) {
+        Player.ammo -= ammoAmount;
+      }
     }
   }
 };
