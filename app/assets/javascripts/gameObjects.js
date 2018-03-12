@@ -260,7 +260,7 @@ var Player = { // just player data and draw player function
       switch (gunType) {
         case "glock_19":
           ctx.beginPath();
-          ctx.ellipse(x + 10, y - 50, 5, 45, 0 * Math.PI/180, 0, 2 * Math.PI);
+          ctx.ellipse(x + 10, y - 50, 5, 45, -5 * Math.PI/180, 0, 2 * Math.PI);
 
           ctx.stroke();
           ctx.fill();
@@ -269,7 +269,7 @@ var Player = { // just player data and draw player function
 
         case "ar_15":
           ctx.beginPath();
-          ctx.ellipse(x + 10, y - 75, 5, 45, 0 * Math.PI/180, 0, 2 * Math.PI);
+          ctx.ellipse(x + 10, y - 75, 5, 45, -5 * Math.PI/180, 0, 2 * Math.PI);
 
           ctx.stroke();
           ctx.fill();
