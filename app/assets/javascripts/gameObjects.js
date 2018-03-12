@@ -563,7 +563,7 @@ var Player = {
     let y = this.y;
 
     let expires = 50; //default settings..
-    let velocity = 25;
+    let velocity = 35;
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
