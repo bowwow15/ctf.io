@@ -96,7 +96,7 @@ var Game = { // holds framerate and function to draw a frame
         ctx.beginPath();
 
         ctx.fillStyle = "black";
-        ctx.arc(x_augmented, y_augmented, 2, 0, 2 * Math.PI);
+        ctx.arc(x_augmented, y_augmented, 3, 0, 2 * Math.PI);
 
         ctx.fill();
       }
