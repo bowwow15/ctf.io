@@ -544,11 +544,12 @@ var Player = {
     ctx.strokeText("You Died", canvas.width / 2, canvas.height / 2 + 50); 
   },
 
-  shoot: function (rotation, velocity) {
+  shoot: function (rotation) {
     let x = this.x;
     let y = this.y;
 
-    let expires = 50; //default setting
+    let expires = 50; //default settings..
+    let velocity = 25;
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
@@ -616,7 +617,7 @@ $("body").mousemove(function(e) {
 });
 
 $("#canvas").click(function () {
-    Player.shoot(Player.rotation, 25);
+    Player.shoot(Player.rotation);
 });
 
 function onKeyDown(event) {
