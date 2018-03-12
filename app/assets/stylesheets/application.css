@@ -14,10 +14,9 @@
  *= require_self
  */
 
-* {
-	/* animate everything... */
-	transition: all 0.2s ease-out;
-}
+ * {
+ 	transition: all 0.2s ease-out;
+ }
 
 .fullScreenCanvas {
 	position:absolute;
@@ -29,7 +28,9 @@
 
 .hudSlot {
 	border-radius: 50%;
-	padding: 30px;
+	width: 60px;
+	height: 60px;
+	padding: 0px !important;
 	margin: 5px;
 	opacity: 0;
 	border: none;
@@ -47,7 +48,6 @@
 	transition: margin 1s ease-out;
 	transition: padding 1s ease-out;
 	margin: 5px !important;
-	padding: 30px !important;
 }
 
 .hudSlot:hover {
@@ -78,20 +78,40 @@
 	padding: 5px;
 }
 
+.hudSlotImage {
+	width: auto;
+	width: -webkit-fill-available;
+	width: -moz-available;
+	height: auto;
+	display: inline-block;
+	position: inherit;
+}
 
-@media (max-width: 700px) {
+.inventoryText {
+	white-space: nowrap;
+	width: -webkit-fill-available;
+	display: inline-block;
+	position: fixed;
+}
+
+
+@media (max-width: 750px) {
 	.hud {
 
 	}
 
 	.hudSlot {
-		padding: 20px !important;
+		width: 45px !important;
+		height: 45px !important;
+		padding: 0px !important;
 		margin: 2px !important;
 	}
 }
 
-@media (max-width: 450px) {
+@media (max-width: 650px) {
 	.hudSlot {
-		padding: 15px !important;
+		width: 30px !important;
+		height: 30px !important;
+		padding: 0px !important;
 	}
 }

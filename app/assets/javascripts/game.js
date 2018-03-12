@@ -20,36 +20,6 @@ Context.create("canvas");
 resizeCanvas();
 
 
-HudItem = {
-	slot_1: null,
-	slot_2: null,
-	slot_3: null,
-	slot_4: null,
-	slot_5: null,
-	slot_6: null,
-	slot_7: null,
-	slot_8: null,
-
-	selectedItem: 0, //default index selected
-
-	drawItems: function () {
-		//draws the items in your HUD (HTML HUD!)
-		//ajax get request to get HUD
-		$.get( "getHUD", function( data ) {
-		  
-		});
-	},
-
-	select: function (id) {
-		//selects item from HTML HUD
-		if (id != this.selectedItem) { //that would deselect the HUD item... don't do that
-			document.getElementById("hudSlot" + id).classList.add('hudSelected');
-			document.getElementById("hudSlot" + this.selectedItem).classList.remove('hudSelected'); //removes class from deselected item
-			this.selectedItem = id;
-		}
-	}
-};
-
 
 var drawContentAnimation;
 function drawContent () {
@@ -63,16 +33,16 @@ function drawContent () {
 
 		//below methods defined in gameObjects.js
 
-		//local players...
+		//loads local players...
 
 		Player.rotation = Math.atan2(Game.mousePos[0] - (Player.x - Map.translateView[0]), - (Game.mousePos[1] - (Player.y - Map.translateView[1])) )*(180/Math.PI);
 
-		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name)
+		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name, Player.inventory[HudItem.selectedItem])
 
-		//server players...
+		//loads server players...
 		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
 			if (uuid != Player.self_uuid) { // if the player isn't your own
-				Player.drawAll(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name]
+				Player.drawAll(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"], OnlinePlayers[uuid][3]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name, inventory item]
 			}
 		});
 
@@ -122,7 +92,7 @@ Start = function () {
 
 EndGame = function () {
 	cancelAnimationFrame(drawContentAnimation);
-	$("#status").html("<span style='color: red'>connection lost</span>");
+	$("#status").html("<span style='color: red'>Lost connection to server :-(</span>");
 }
 
 function startGame () {

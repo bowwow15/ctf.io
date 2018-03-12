@@ -18,6 +18,80 @@ var Hud;
 
 var OnlinePlayers;
 
+
+var Game = { // holds framerate and function to draw a frame
+  fps: 60, // frames per second
+  running: false,
+  players: [null],
+  guns: [],
+  mousePos: [0, 0],
+
+  draw: function () {
+    // drawGrid();
+
+    App.game.move_player([Player.x, Player.y]); //tell server your coordinates
+
+    drawContent(); //referenced below... somewhere.
+
+    // used for debugging: eval(prompt("function"));
+  },
+
+  drawCoords: function () {
+
+  }
+};
+
+HudItem = {
+  slot_1: null,
+  slot_2: null,
+  slot_3: null,
+  slot_4: null,
+  slot_5: null,
+  slot_6: null,
+  slot_7: null,
+  slot_8: null,
+
+  selectedItem: 0, //default index selected
+
+  drawItems: function () {
+    //draws the items in your HUD (HTML HUD!)
+    //ajax get request to get HUD
+    $.get( "getHUD", function( data ) {
+      
+    });
+  },
+
+  select: function (id) {
+    //selects item from HTML HUD
+    if (id != this.selectedItem) { //that would deselect the HUD item... don't do that
+      document.getElementById("hudSlot" + id).classList.add('hudSelected');
+      document.getElementById("hudSlot" + this.selectedItem).classList.remove('hudSelected'); //removes class from deselected item
+      this.selectedItem = id;
+    }
+  },
+
+  //determines weather the selected item is a gun or not.
+  determineGun: function (inventoryItem) {
+    var bool = false;
+    var hands = 2;
+
+    if (Game.guns.indexOf(inventoryItem) >= 0) {
+      bool = true;
+    }
+
+    switch (inventoryItem) {
+      case "glock_19":
+        hands = 1;
+        break;
+    }
+
+    return {
+      bool: bool,
+      hands: hands
+    };
+  }
+};
+
 var ServerGameObject = {
 	x: 50,
 	y: 50,
@@ -71,27 +145,6 @@ $.ajax({
 });
 
 
-var Game = { // holds framerate and function to draw a frame
-  fps: 60, // frames per second
-  running: false,
-  players: [null],
-  mousePos: [0, 0],
-
-  draw: function () {
-    // drawGrid();
-
-    App.game.move_player([Player.x, Player.y]); //tell server your coordinates
-
-    drawContent(); //referenced below... somewhere.
-
-    // used for debugging: eval(prompt("function"));
-  },
-
-  drawCoords: function () {
-
-  }
-};
-
 var Player = { // just player data and draw player function
   size: 40,
   rotation: 0,
@@ -100,6 +153,7 @@ var Player = { // just player data and draw player function
   sneakSpeed: 1,
   sprintSpeed: 4,
   name: "",
+  inventory: ["empty","empty","empty","empty","empty","empty","empty","empty"],
   skinTone: '#fcc875',
   self_uuid: null,
   nameSize: 35,
@@ -111,27 +165,27 @@ var Player = { // just player data and draw player function
   y: Map.spawnPoint[1],
 
   drawPerson: function (x, y) {
-    ctx.beginPath(); //resets path that is being drawn.
+      ctx.beginPath(); //resets path that is being drawn.
 
-    ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
+      ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 
-    if (this.color != true) {
-      ctx.fillStyle = Player.skinTone; //skin tone
-    }
-    else {
-      ctx.fillStyle = 'blue';
-    }
-    ctx.strokeStyle = '#274729';
-    ctx.lineWidth = 7;
-    // ctx.stroke();
-    ctx.fill();
+      if (this.color != true) {
+        ctx.fillStyle = Player.skinTone; //skin tone
+      }
+      else {
+        ctx.fillStyle = 'blue';
+      }
+      ctx.strokeStyle = '#274729';
+      ctx.lineWidth = 7;
+      // ctx.stroke();
+      ctx.fill();
   },
 
   drawName: function (x, y, name) {
     if (name) { // name might be undifined?
 
       ctx.beginPath(); //resets path that is being drawn.
-      ctx.fillStyle = 'black';
+      ctx.fillStyle = 'white';
       ctx.textAlign="center";
 
       calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
@@ -144,15 +198,22 @@ var Player = { // just player data and draw player function
     }
   },
 
-  drawHands: function (x, y, rotation) {
+  drawHands: function (x, y, rotation, gun) {
     //draws two circles to represent hands on a player.
     ctx.fillStyle = this.skinTone;
 
     ctx.strokeStyle = '#274729';
     ctx.lineWidth = 7;
-
-    leftHand = [-(Player.size / 2 + 15), -(Player.size / 2 + 15)];
+      
+    leftHand = [-(Player.size / 2 + 15), -(Player.size / 2 + 15)]; //default hand settings
     rightHand = [(Player.size / 2 + 15), -(Player.size / 2 + 15)];
+
+    if (gun.bool === true) {
+      if (gun.hands == 2) { //only draws left hand if there are two hands required for the gun
+        leftHand = [-(Player.size / 2 - 15), -(Player.size / 2 + 60)]; //places hands to hold a
+      }
+      rightHand = [(Player.size / 2 - 10), -(Player.size / 2 + 30)];
+    }
 
     //left hand
     ctx.translate(x, y);
@@ -184,13 +245,61 @@ var Player = { // just player data and draw player function
     }
   },
 
-  drawAll: function (x, y, rotation, name) {
+  drawGun: function (x, y, rotation, gunType) {
+    if (gunType != "empty") {
+      ctx.fillStyle = 'black';
+
+      ctx.strokeStyle = '#212121';
+      ctx.lineWidth = 7;
+
+      ctx.translate(x, y);
+      ctx.rotate(rotation * Math.PI / 180);
+      ctx.translate(-x, -y);
+
+      switch (gunType) {
+        case "glock_19":
+          ctx.beginPath();
+          ctx.ellipse(x + 10, y - 50, 5, 45, 0 * Math.PI/180, 0, 2 * Math.PI);
+
+          ctx.stroke();
+          ctx.fill();
+          ctx.resetTransform();
+        break;
+
+        case "ar_15":
+          ctx.beginPath();
+          ctx.ellipse(x + 10, y - 75, 5, 45, 0 * Math.PI/180, 0, 2 * Math.PI);
+
+          ctx.stroke();
+          ctx.fill();
+          ctx.resetTransform();
+        break;
+      }
+    }
+  },
+
+  drawAll: function (x, y, rotation, name, inventoryItem) {
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
 
+    var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
+
+    this.drawGun(x, y, rotation, inventoryItem);
+
     this.drawPerson(x, y);
-    this.drawHands(x, y, rotation);
+
+    this.drawHands(x, y, rotation, gun);
+
     this.drawName(x, y, name);
+  },
+
+  updateInventory: function () {
+    $(".hudSlot").each(function( index ) {
+      if (Player.inventory[index] != "empty") {
+        //$("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".ico' class='hudSlotImage'>");
+        $("#hudSlot" + index).html("<span class='inventoryText'>(" + Player.inventory[index] + ")</span>");
+      }
+    });
   },
 
   mapEdgeDetect: function (x, y) {
@@ -222,6 +331,10 @@ var Player = { // just player data and draw player function
     return move;
   },
 
+  moveServerPlayer: function () {
+    App.game.move_player([this.x, this.y, this.rotation, this.inventory[HudItem.selectedItem]]);
+  },
+
   move: function (x, y) {
     var move = true; //sets default
 
@@ -233,7 +346,7 @@ var Player = { // just player data and draw player function
 
       //tell server that you moved
       if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
-        App.game.move_player([this.x, this.y, this.rotation]);
+        this.moveServerPlayer();
 
         if (Player.center === true) {
           Map.translateView[0] += x;
@@ -294,7 +407,7 @@ var Player = { // just player data and draw player function
   }
 };
 
-(function() {
+(function() { //request animation frame
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   window.requestAnimationFrame = requestAnimationFrame;
@@ -308,7 +421,8 @@ function addKeyEventListeners () { //calls this function after username is enter
 }
 
 $("body").mousemove(function(e) {
-    App.game.move_player([Player.x, Player.y, Player.rotation]); //tells the server that you "moved"
+    //tells the server that you "moved"
+    Player.moveServerPlayer();
 
     Game.mousePos[0] = e.pageX;
     Game.mousePos[1] = e.pageY;

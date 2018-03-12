@@ -19,7 +19,7 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def move_player (data)
-  	Global.move_player(uuid, data['coords'])
+  	Global.move_player(uuid, data['playerData'])
   end
 
   def get_name

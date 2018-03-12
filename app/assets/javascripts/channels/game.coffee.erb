@@ -1,3 +1,5 @@
+<% @inventory = Inventory.new %>
+
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
@@ -15,19 +17,24 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		Player.self_uuid = data.uuid;
     	when "get_players"
     		Game.players = eval(data.players);
+    	when "send_player_inventory"
+    		Player.inventory = eval(data.inventory);
+    		Player.updateInventory();
+
     	when "player_died"
     		@perform 'unsubscribed'
     		Player.die();
 
   start_game: (name, coords) ->
     @perform 'start_game', name: name, coords: coords
+    Game.guns = <%= @inventory.get_all_guns %>;
     Start();
 
   broadcast_name: (name) ->
   	@perform 'broadcast_name', name: name
 
-  move_player: (coords) ->
-  	@perform 'move_player', coords: coords
+  move_player: (playerData) ->
+  	@perform 'move_player', playerData: playerData
 
   get_name: () ->
   	@perform 'get_name'
