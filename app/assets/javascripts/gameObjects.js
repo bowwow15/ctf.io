@@ -259,8 +259,12 @@ var Player = { // just player data and draw player function
 
       switch (gunType) {
         case "glock_19":
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
           ctx.beginPath();
-          ctx.ellipse(x + 10, y - 50, 5, 45, -5 * Math.PI/180, 0, 2 * Math.PI);
+          ctx.rect(x + 10, y - 50, 5, -45);
 
           ctx.stroke();
           ctx.fill();
@@ -468,6 +472,8 @@ function onKeyDown(event) {
 
   if (keyCode >= 49 && keyCode <= 56) {
     HudItem.select(keyCode - 49); //49 - 49 = 0.
+
+    Player.moveServerPlayer();
   }
 
   if (keyC == true) {
