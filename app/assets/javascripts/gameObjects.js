@@ -156,9 +156,9 @@ var Player = { // just player data and draw player function
   inventory: ["empty","empty","empty","empty","empty","empty","empty","empty"],
   skinTone: '#fcc875',
   self_uuid: null,
-  nameSize: 35,
+  nameSize: 20,
   nameFont: "Helvetica",
-  nameMargin: 10,
+  nameMargin: 50,
   turnRadius: 0,
   color: false,
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
@@ -195,6 +195,7 @@ var Player = { // just player data and draw player function
 
       ctx.font = this.nameSize + "px " + this.nameFont;
       ctx.fillText(name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
+      //ctx.strokeText(name, x, y - this.size - this.nameMargin);
     }
   },
 
@@ -209,7 +210,7 @@ var Player = { // just player data and draw player function
     rightHand = [(Player.size / 2 + 15), -(Player.size / 2 + 15)];
 
     if (gun.bool === true) {
-      if (gun.hands == 2) { //only draws left hand if there are two hands required for the gun
+      if (gun.hands == 2) { //only moves left hand if there are two hands required for the gun
         leftHand = [-(Player.size / 2 - 15), -(Player.size / 2 + 60)]; //places hands to hold a
       }
       rightHand = [(Player.size / 2 - 10), -(Player.size / 2 + 30)];
