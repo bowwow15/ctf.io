@@ -52,6 +52,8 @@ function drawContent () {
 
 		playerSpeed = Player.speed; //default setting sets the speed of player 
 
+		let playerMovementArray = [0, 0];
+
 		if (keyShift == true) {
 			playerSpeed = Player.sprintSpeed;
 		}
@@ -60,19 +62,19 @@ function drawContent () {
 		}
 
 		if (keyD == true) {
-		  Player.move(playerSpeed, 0);
+		  playerMovementArray[0] = playerSpeed;
 		}
 		if (keyS == true) {
-		  Player.move(0, playerSpeed);
+		  playerMovementArray[1] = playerSpeed;
 		}
 		if (keyA == true) {
-		  Player.move(-playerSpeed, 0);
+		  playerMovementArray[0] = -playerSpeed;
 		}
 		if (keyW == true) {
-		  Player.move(0, -playerSpeed);
+		  playerMovementArray[1] = -playerSpeed;
 		}
 
-		Player.move(0, 0); //Important for formatting canvas view...
+		Player.move(playerMovementArray[0], playerMovementArray[1]); //Important for formatting canvas view...
 
 	// }, 1000 / Game.fps);
 }

@@ -224,7 +224,8 @@ var Player = {
   rotation: 0,
   speed: 3,
   handPos: [0, 0],
-  ammo: 25,
+  ammo: 100,
+  health: 100,
   center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
@@ -394,13 +395,21 @@ var Player = {
   },
 
   drawAmmoAmount: function () {
-    let text = "PELLETS LEFT: " + Player.ammo;
-    ctx.font = "15px Helvetica";
+    let text = "AIRSOFT PELLETS LEFT: " + Player.ammo;
+    ctx.font = "15px Courier";
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
-    ctx.strokeStyle = "white";
     ctx.beginPath();
     ctx.fillText(text, canvas.width - 15, 25);
+  },
+
+  drawHealth: function () {
+    let text = "HEALTH: " + Player.health + "%";
+    ctx.font = "15px Courier";
+    ctx.textAlign = "start";
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.fillText(text, 15, 25);
   },
 
   drawAll: function (x, y, rotation, name, inventoryItem) {
@@ -416,6 +425,8 @@ var Player = {
     this.drawHands(x, y, rotation, gun);
 
     this.drawAmmoAmount();
+
+    this.drawHealth();
 
     if (name != Player.name) { this.drawName(x, y, name); }
   },
