@@ -37,7 +37,7 @@ Keep player fixed in one spot in the screen: **C**.<br>
 
 ![In-game screenshot](https://github.com/bowwow15/ctf.io/blob/master/public/images/example.png?raw=true)
 
-![enter image description here](https://github.com/bowwow15/ctf.io/blob/master/public/images/example1.png?raw=true)
+![enter image description here](https://github.com/bowwow15/ctf.io/blob/master/public/images/example2.png?raw=true)
 
 ----------
 Copyright 2018 Brooks Jeremiah Wibberding, 
