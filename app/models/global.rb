@@ -42,6 +42,10 @@ class Global < ApplicationRecord
 		end
 	end
 
+	def self.shoot (uuid, bullets)
+		ActionCable.server.broadcast "global", {action: "send_bullets", uuid: uuid, bullets: bullets}
+	end
+
 	def self.broadcast_name (uuid, name)
 
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}

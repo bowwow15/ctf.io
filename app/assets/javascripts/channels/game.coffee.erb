@@ -34,6 +34,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
   move_player: (playerData) ->
   	@perform 'move_player', playerData: playerData
 
+  shoot: (bullets) ->
+  	@perform 'shoot', bullets: bullets
+
   get_name: () ->
   	@perform 'get_name'
 

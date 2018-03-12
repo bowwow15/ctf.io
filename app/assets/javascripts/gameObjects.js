@@ -1,3 +1,25 @@
+//Math functions
+function getPoint(mx, my, cx, cy, angle) {
+
+    var x, y, dist, diffX, diffY, ca, na;
+
+    diffX = cx - mx;
+    diffY = cy - my;
+    dist = Math.sqrt(diffX * diffX + diffY * diffY);
+    
+    /// find angle from pivot to corner
+    ca = Math.atan2(diffY, diffX) * 180 / Math.PI;
+  
+    /// get new angle based on old + current delta angle
+    na = ((ca + angle) % 360) * Math.PI / 180;
+    
+    /// get new x and y and round it off to integer
+    x = (mx + dist * Math.cos(na) + 0.5)|0;
+    y = (my + dist * Math.sin(na) + 0.5)|0;
+
+    return {x:x, y:y};
+}
+
 //this file contains JavaScript canvas objects used in game.js, or other places...
 
 //set variables for html dom use and reference
@@ -24,6 +46,7 @@ var Game = { // holds framerate and function to draw a frame
   running: false,
   players: [null],
   guns: [],
+  bullets: [],
   mousePos: [0, 0],
 
   draw: function () {
@@ -38,7 +61,56 @@ var Game = { // holds framerate and function to draw a frame
 
   drawCoords: function () {
 
+  },
+
+  bullet: function (x, y, rotation, velocity, expires) {
+    this.x = x;
+    this.y = y;
+    this.rotation = rotation;
+
+    App.game.shoot([x, y, rotation, velocity, expires]);
+    //Game.bullets.push([x, y, rotation, velocity, expires]);
+  },
+
+  drawBullets: function () {
+    Game.bullets.forEach(function (element, index) {
+      var expires = element[4];
+      var velocity = element[3];
+
+      if (expires > 0) {
+        Game.bullets[index][4] -= velocity / 10;
+
+        x = element[0];
+        y = element[1];
+        rotation = element[2] - 90;
+
+        Game.bullets[index][0] += velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
+        Game.bullets[index][1] += velocity * Math.sin(rotation * Math.PI / 180);
+
+        x_augmented = x - Map.translateView[0]; //augmented by player's view
+        y_augmented = y - Map.translateView[1];
+
+        //draws bullet
+        ctx.beginPath();
+
+        ctx.fillStyle = "black";
+        ctx.rect(x_augmented, y_augmented, 5, 5); //glock 19 is squared.
+
+        ctx.fill();
+      }
+      else {
+        Game.bullets.splice(index, 1); //deletes bullet
+      }
+
+    });
   }
+};
+
+var Gun = {
+  isGun: false,
+  bulletExpires: 50,
+  spawnPoint: [0, 0],
+  type: "pistol"
 };
 
 HudItem = {
@@ -145,10 +217,11 @@ $.ajax({
 });
 
 
-var Player = { // just player data and draw player function
+var Player = {
   size: 40,
   rotation: 0,
   speed: 3,
+  handPos: [0, 0],
   center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
@@ -213,7 +286,11 @@ var Player = { // just player data and draw player function
       if (gun.hands == 2) { //only moves left hand if there are two hands required for the gun
         leftHand = [-(Player.size / 2 - 15), -(Player.size / 2 + 60)]; //places hands to hold a
       }
+
       rightHand = [(Player.size / 2 - 10), -(Player.size / 2 + 30)];
+
+      Player.handPos[0] = rightHand[0];
+      Player.handPos[1] = rightHand[1];
     }
 
     //left hand
@@ -259,6 +336,9 @@ var Player = { // just player data and draw player function
 
       switch (gunType) {
         case "glock_19":
+          Gun.spawnPoint = [0, -110];
+          Gun.type = "pistol";
+
           ctx.translate(x, y);
           ctx.rotate(-5 * Math.PI / 180);
           ctx.translate(-x, -y);
@@ -272,6 +352,9 @@ var Player = { // just player data and draw player function
         break;
 
         case "ar_15":
+          Gun.spawnPoint = [6, -125];
+          Gun.type = "rifle";
+
           ctx.beginPath();
           ctx.ellipse(x + 10, y - 75, 5, 45, -5 * Math.PI/180, 0, 2 * Math.PI);
 
@@ -281,6 +364,9 @@ var Player = { // just player data and draw player function
         break;
 
         case "remington_870":
+          Gun.spawnPoint = [0, -125];
+          Gun.type = "shotgun";
+
           ctx.beginPath();
           ctx.ellipse(x + 6, y - 75, 7, 30, -5 * Math.PI/180, 0, 2 * Math.PI);
 
@@ -430,8 +516,39 @@ var Player = { // just player data and draw player function
     ctx.strokeText("You Died", canvas.width / 2, canvas.height / 2 + 50); 
   },
 
-  shoot: function (x, y, rotation) {
-    
+  shoot: function (rotation, velocity) {
+    let x = this.x;
+    let y = this.y;
+
+    let expires = 50; //default setting
+
+    let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
+
+    if (HudItem.determineGun(Player.inventory[HudItem.selectedItem]).bool === true) {
+
+      switch (Gun.type) {
+        case "pistol":
+          expires = 70;
+          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          break;
+
+        case "rifle":
+          expires = 300;
+          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          break;
+
+        case "shotgun":
+          expires = 60;
+          let bullets = 0;
+          while (bullets < 10) {
+            var randomRotation = Math.random() * 1 - 1;
+            new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
+            bullets++;
+          }
+          break;
+      }
+
+    }
   }
 };
 
@@ -454,7 +571,11 @@ $("body").mousemove(function(e) {
 
     Game.mousePos[0] = e.pageX;
     Game.mousePos[1] = e.pageY;
-})
+});
+
+$("body").click(function () {
+    Player.shoot(Player.rotation, 25);
+});
 
 function onKeyDown(event) {
   var keyCode = event.keyCode;

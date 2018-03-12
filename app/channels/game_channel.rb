@@ -22,6 +22,10 @@ class GameChannel < ApplicationCable::Channel
   	Global.move_player(uuid, data['playerData'])
   end
 
+  def shoot (data)
+  	Global.shoot(uuid, data['bullets'])
+  end
+
   def get_name
   	Game.get_name(uuid)
   end

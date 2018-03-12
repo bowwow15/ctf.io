@@ -15,5 +15,8 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     		#send the player's name to all online players
     		OnlinePlayers[data.uuid + "_name"] = data.name;
 
+    	when "send_bullets"
+    		Game.bullets.push(eval(data.bullets));
+
     	when "delete_player"
     		delete OnlinePlayers[data.uuid]; #deletes user from local object
