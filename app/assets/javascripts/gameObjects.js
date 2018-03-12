@@ -63,12 +63,12 @@ var Game = { // holds framerate and function to draw a frame
 
   },
 
-  bullet: function (x, y, rotation, velocity, expires) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
 
-    App.game.shoot([x, y, rotation, velocity, expires]);
+    App.game.shoot([x, y, rotation, velocity, expires, blur]);
 
     //Game.bullets.push([x, y, rotation, velocity, expires]);
     //not using above code because it is already declared in global.coffee
@@ -78,6 +78,8 @@ var Game = { // holds framerate and function to draw a frame
     Game.bullets.forEach(function (element, index) {
       var expires = element[4];
       var velocity = element[3];
+      var rotation = element[2];
+      var blur = element[5];
 
       if (expires > 0) {
         Game.bullets[index][4] -= velocity / 10;
@@ -99,6 +101,18 @@ var Game = { // holds framerate and function to draw a frame
         ctx.arc(x_augmented, y_augmented, 3, 0, 2 * Math.PI);
 
         ctx.fill();
+
+        if (blur === true) {
+          //draw blur after bullet
+          ctx.beginPath();
+          ctx.filter = 'blur(2px)';
+          ctx.strokeStyle = 'black'
+          ctx.lineWidth = 2;
+          ctx.moveTo(x_augmented, y_augmented);
+          ctx.lineTo(x_augmented - (35 * Math.cos(rotation * Math.PI / 180)), y_augmented - (35 * Math.sin(rotation * Math.PI / 180)));
+          ctx.stroke();
+          ctx.filter = 'none'; //reset after drawing
+        }
       }
       else {
         Game.bullets.splice(index, 1); //deletes bullet
@@ -579,7 +593,7 @@ var Player = {
             let bullets = 0;
             while (bullets < 10) {
               var randomRotation = Math.random() * 3 - 1;
-              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
+              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires, false); //single bullet
               bullets++;
             }
 
