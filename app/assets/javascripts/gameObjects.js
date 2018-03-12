@@ -84,7 +84,7 @@ var Game = { // holds framerate and function to draw a frame
 
         x = element[0];
         y = element[1];
-        rotation = element[2] - 90;
+        rotation = element[2] - 91;
 
         Game.bullets[index][0] += velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
         Game.bullets[index][1] += velocity * Math.sin(rotation * Math.PI / 180);
@@ -264,7 +264,7 @@ var Player = {
       ctx.textAlign="center";
 
       var newNameSize = this.nameSize;
-      
+
       calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
       if (calculatedNameSize < this.nameSize) {
         newNameSize = calculatedNameSize;
@@ -545,7 +545,7 @@ var Player = {
           expires = 200;
           let bullets = 0;
           while (bullets < 10) {
-            var randomRotation = Math.random() * 2 - 2;
+            var randomRotation = Math.random() * 3 - 1;
             new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
             bullets++;
           }
