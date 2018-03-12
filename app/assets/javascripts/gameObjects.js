@@ -285,8 +285,8 @@ var Player = {
     ctx.strokeStyle = '#274729';
     ctx.lineWidth = 7;
       
-    leftHand = [-(Player.size / 2 + 15), -(Player.size / 2 + 15)]; //default hand settings
-    rightHand = [(Player.size / 2 + 15), -(Player.size / 2 + 15)];
+    leftHand = [-(Player.size / 2 + 10), -(Player.size / 2 + 15)]; //default hand settings
+    rightHand = [(Player.size / 2 + 10), -(Player.size / 2 + 15)];
 
     if (gun.bool === true) {
       if (gun.hands == 2) { //only moves left hand if there are two hands required for the gun
