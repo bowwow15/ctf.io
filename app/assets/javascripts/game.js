@@ -31,7 +31,7 @@ function drawContent () {
 		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
 
 
-		//below methods defined in gameObjects.js
+		//below methods defined in gameObjects.js...
 
 		//loads server players...
 		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
