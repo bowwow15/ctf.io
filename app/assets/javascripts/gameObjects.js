@@ -574,7 +574,7 @@ var Player = {
 
       switch (Gun.type) {
         case "pistol":
-          expires = 70;
+          expires = 100;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
           shot = true;
           break;
