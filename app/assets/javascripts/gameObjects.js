@@ -263,12 +263,14 @@ var Player = {
       ctx.fillStyle = 'white';
       ctx.textAlign="center";
 
+      var newNameSize = this.nameSize;
+      
       calculatedNameSize = (this.size*3 / (name.length / 2)).toString();
       if (calculatedNameSize < this.nameSize) {
-        this.nameSize = calculatedNameSize;
+        newNameSize = calculatedNameSize;
       }
 
-      ctx.font = this.nameSize + "px " + this.nameFont;
+      ctx.font = newNameSize + "px " + this.nameFont;
       ctx.fillText(name, x, y - this.size - this.nameMargin);         //math for formatting... subtract from y axis to draw name above player
       //ctx.strokeText(name, x, y - this.size - this.nameMargin);
     }
