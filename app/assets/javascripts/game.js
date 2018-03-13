@@ -62,8 +62,6 @@ function drawContent () {
 
 		//loads local players...
 
-		Game.drawBullets();
-
 		Player.rotation = Math.atan2(Game.mousePos[0] - (Player.x - Map.translateView[0]), - (Game.mousePos[1] - (Player.y - Map.translateView[1])) )*(180/Math.PI);
 
 		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name, Player.inventory[HudItem.selectedItem])

@@ -468,6 +468,8 @@ var Player = {
 
     this.drawGun(x, y, rotation, inventoryItem);
 
+    Game.drawBullets();
+
     this.drawPerson(x, y);
 
     this.drawHands(x, y, rotation, gun);
@@ -597,7 +599,7 @@ var Player = {
     let y = this.y;
 
     let expires = 50; //default settings..
-    let velocity = 35;
+    let velocity = 5;
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
@@ -615,7 +617,7 @@ var Player = {
 
         case "rifle":
           expires = 400;
-          velocity = 45;
+          velocity = 10;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
           shot = true;
           break;
