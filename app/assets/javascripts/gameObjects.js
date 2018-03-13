@@ -515,7 +515,7 @@ var Player = {
     $(".hudSlot").each(function( index ) {
       if (Player.inventory[index] != "empty") {
         //$("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".ico' class='hudSlotImage'>");
-        $("#hudSlot" + index).html("<span class='inventoryText'>(" + Player.inventory[index] + ")</span>");
+        $("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".png' class='hudSlotImage' />");
       }
     });
   },

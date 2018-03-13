@@ -37,7 +37,7 @@
 	opacity: 0;
 	border: none;
 	background-color: #d3d3d336;
-	display: inline-block;
+	display: inline-flex;
 	-webkit-box-shadow: inset 0px 0px 6px 1px #00000096; 
 	box-shadow: inset 0px 0px 6px 1px #00000096;
 }
