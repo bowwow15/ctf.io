@@ -96,9 +96,8 @@ var SplashScreen = {
 function resizeCanvas () { //resizes canvas to browser window
         var aspectRatio = window.innerWidth / window.innerHeight;
 
-        var canvas = document.getElementById('canvas');
-
-        fullscreenify(canvas);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
         //draws background
         if (ctx === null) {
