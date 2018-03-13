@@ -29,4 +29,12 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "player_#{uuid}", {action: "get_players", players: "#{players}"}
 	end
 
+	def self.send_player_health (uuid, amount)
+		if amount <= 0
+			ActionCable.server.broadcast "player_#{uuid}", {action: "you_died", health: amount}
+
+			REDIS.del("coords_for_#{uuid}")
+			REDIS.del("player_name_#{uuid}") #deletes user when dead
+		end
+	end
 end

@@ -85,19 +85,26 @@ var Game = { // holds framerate and function to draw a frame
     //not using above code because it is already declared in global.coffee
   },
 
+  deleteBullet: function (index) {
+    x = Game.bullets[index][0];
+    y = Game.bullets[index][1];
+
+    Game.bullets.splice(index, 1); //deletes bullet
+
+    //to do: draw bullet splash
+  },
+
   drawBullets: function () {
     Game.bullets.forEach(function (element, index) {
       var expires = element[4];
       var velocity = element[3];
-      var rotation = element[2];
+      var rotation = element[2] - 91;
+      let x = element[0];
+      let y = element[1];
       var blur = element[5];
 
       if (expires > 0) {
         Game.bullets[index][4] -= velocity / 10;
-
-        x = element[0];
-        y = element[1];
-        rotation = element[2] - 91;
 
         Game.bullets[index][0] += velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
         Game.bullets[index][1] += velocity * Math.sin(rotation * Math.PI / 180);
@@ -131,6 +138,15 @@ var Game = { // holds framerate and function to draw a frame
       else {
         Game.bullets.splice(index, 1); //deletes bullet
       }
+
+    //detect bullet collisions
+    let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, Player.size, 5 * velocity / 10, Player.size);
+
+    if (bulletCollision === true) {
+      App.global.delete_bullet(index); //tells server to delete bullet
+
+      Player.gotShot(velocity);
+    }
 
     });
   }
@@ -227,6 +243,10 @@ Hud = {
 
 OnlinePlayers = {
   //see global.coffee and game.coffee
+
+  die: function (x, y) {
+
+  }
 }; 
 
 // GETS MAP DATA FROM SERVER
@@ -621,6 +641,23 @@ var Player = {
         Player.ammo -= ammoAmount;
       }
     }
+  },
+
+  gotShot: function (velocityOfBullet) {
+    this.health -= velocityOfBullet / 2;
+
+    App.game.send_player_health(this.health);
+  },
+
+  detectCollision: function (object1, object2, object1Width, object2Width, object1Height, object2Height) {
+    let touching = false;
+
+    if (object1[0] < object2[0] + object2Width  && object1[0] + object1Width  > object2[0] &&
+    object1[1] < object2[1] + object2Height && object1[1] + object1Height > object2[1]) {
+      touching = true;
+    }
+
+    return touching;
   }
 };
 

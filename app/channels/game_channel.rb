@@ -26,6 +26,10 @@ class GameChannel < ApplicationCable::Channel
   	Global.shoot(uuid, data['bullets'])
   end
 
+  def send_player_health (data)
+  	Game.send_player_health(uuid, data['amount'])
+  end
+
   def get_name
   	Game.get_name(uuid)
   end

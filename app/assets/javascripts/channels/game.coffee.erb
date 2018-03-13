@@ -19,9 +19,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		Player.inventory = eval(data.inventory);
     		Player.updateInventory();
 
-    	when "player_died"
-    		@perform 'unsubscribed'
+    	when "you_died"
     		Player.die();
+    		@perform 'unsubscribed'
 
   start_game: (name, coords) ->
     @perform 'start_game', name: name, coords: coords
@@ -36,6 +36,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
   shoot: (bullets) ->
   	@perform 'shoot', bullets: bullets
+
+  send_player_health: (amount) ->
+  	@perform 'send_player_health', amount: amount
 
   get_name: () ->
   	@perform 'get_name'

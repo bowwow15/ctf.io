@@ -46,6 +46,10 @@ class Global < ApplicationRecord
 		ActionCable.server.broadcast "global", {action: "send_bullets", uuid: uuid, bullets: bullets}
 	end
 
+	def self.delete_bullet (uuid, index)
+		ActionCable.server.broadcast "global", {action: "delete_bullet", uuid: uuid, index: index}
+	end
+
 	def self.broadcast_name (uuid, name)
 
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}

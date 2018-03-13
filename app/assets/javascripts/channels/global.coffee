@@ -18,5 +18,13 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "send_bullets"
     		Game.bullets.push(eval(data.bullets));
 
+    	when "delete_bullet"
+    		Game.deleteBullet(data.index);
+
     	when "delete_player"
     		delete OnlinePlayers[data.uuid]; #deletes user from local object
+
+
+  delete_bullet: (index) ->
+  	#Game.bullets.splice(index, 1); #deletes bullet from all the clients
+  	@perform 'delete_bullet', index: index
