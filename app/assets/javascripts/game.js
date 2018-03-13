@@ -66,6 +66,8 @@ function drawContent () {
 
 		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name, Player.inventory[HudItem.selectedItem])
 
+		//draws all queued animations
+		Animation.drawAll();
 
 		//controls
 

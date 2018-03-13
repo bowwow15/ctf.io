@@ -48,6 +48,34 @@ var fps, fpsInterval, startTime, now, then, elapsed;
 var bullet_trail_img = new Image();   // Create new img element
 bullet_trail_img.src = '/images/sprites/bullet_trail.png'; // Set source path
 
+var Animation = {
+  hurtDraw: false,
+  hurtFrames: 0,
+
+  hurt: function (frames) {
+    if (this.hurtDraw === true && frames > this.hurtFrames) {
+      this.hurtDraw = true;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(209,0,0,.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      this.hurtFrames += 1;
+    }
+    else {
+      this.hurtDraw = false,
+      this.hurtFrames = 0;
+    }
+  },
+
+  startHurt: function (frames) {
+    this.hurtDraw = true;
+  },
+
+  drawAll: function () {
+    this.hurt(20);
+  }
+};
+
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
   running: false,
@@ -649,6 +677,8 @@ var Player = {
     this.health -= velocityOfBullet / 2;
 
     App.game.send_player_health(this.health);
+
+    Animation.hurtDraw = true;
   },
 
   detectCollision: function (object1, object2, object1Width, object1Height, object2Width, object2Height) {
