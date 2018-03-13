@@ -299,6 +299,7 @@ var Player = {
   size: 40,
   rotation: 0,
   speed: 3,
+  lastMove: Date.now(),
   handPos: [0, 0],
   ammo: 100,
   health: 100,
@@ -557,17 +558,22 @@ var Player = {
     move = this.mapEdgeDetect(x, y);
 
     if (move === true) {
-      this.x += x; //changes coordinates on the client side. (absolute coords)
-      this.y += y;
+      if (this.lastMove < Date.now()) {
+        var moveMargin = (Date.now() - this.lastMove) / 10;
 
-      //tell server that you moved
-      if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
-        this.moveServerPlayer();
+        this.x += x * moveMargin; //changes coordinates on the client side. (absolute coords)
+        this.y += y * moveMargin;
 
-        if (Player.center === true) {
-          Map.translateView[0] += x;
-          Map.translateView[1] += y;
+        //tell server that you moved
+        if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
+          this.moveServerPlayer();
+
+          if (Player.center === true) {
+            Map.translateView[0] += x;
+            Map.translateView[1] += y;
+          }
         }
+        this.lastMove = Date.now();
       }
     }
 
