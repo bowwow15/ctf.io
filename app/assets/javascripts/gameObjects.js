@@ -599,7 +599,7 @@ var Player = {
     let y = this.y;
 
     let expires = 50; //default settings..
-    let velocity = 5;
+    let velocity = 10;
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
@@ -617,7 +617,7 @@ var Player = {
 
         case "rifle":
           expires = 400;
-          velocity = 10;
+          velocity = 20;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
           shot = true;
           break;
