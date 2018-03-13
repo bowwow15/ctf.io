@@ -658,7 +658,8 @@ var Player = {
             let bullets = 0;
             while (bullets < 10) {
               var randomRotation = Math.random() * 7 - 3;
-              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomRotation, expires); //single bullet
+              var randomVelocity = Math.random() * 5;
+              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires); //single bullet
               bullets++;
             }
 
