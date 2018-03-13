@@ -300,6 +300,7 @@ var Player = {
   rotation: 0,
   speed: 3,
   lastMove: Date.now(),
+  moveMargin: 0,
   handPos: [0, 0],
   ammo: 100,
   health: 100,
@@ -559,18 +560,18 @@ var Player = {
 
     if (move === true) {
       if (this.lastMove < Date.now()) {
-        var moveMargin = (Date.now() - this.lastMove) / 10;
+        this.moveMargin = (Date.now() - this.lastMove) / 16;
 
-        this.x += x * moveMargin; //changes coordinates on the client side. (absolute coords)
-        this.y += y * moveMargin;
+        this.x += x * this.moveMargin; //changes coordinates on the client side. (absolute coords)
+        this.y += y * this.moveMargin;
 
         //tell server that you moved
         if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
           this.moveServerPlayer();
 
           if (Player.center === true) {
-            Map.translateView[0] += x;
-            Map.translateView[1] += y;
+            Map.translateView[0] += x * this.moveMargin;
+            Map.translateView[1] += y * this.moveMargin;
           }
         }
         this.lastMove = Date.now();
@@ -588,19 +589,19 @@ var Player = {
     var canvasEdge = [(canvas.height - AugmentedPlayer.size - marginOfMovement), (canvas.width - Player.size - marginOfMovement), (0 + Player.size + marginOfMovement), (0 + Player.size + marginOfMovement)]; // [top, right, bottom, left] ... detects the edge of canvas
 
     if (AugmentedPlayer.coords[1] > canvasEdge[0]) { // stops at top edge
-      Map.translateView[1] += playerSpeed; //decleared in game.js
+      Map.translateView[1] += playerSpeed * this.moveMargin; //decleared in game.js
     }
 
     if (AugmentedPlayer.coords[0] > canvasEdge[1]) { // stops at right edge
-      Map.translateView[0] += playerSpeed;
+      Map.translateView[0] += playerSpeed * this.moveMargin;
     }
 
     if (AugmentedPlayer.coords[1] < canvasEdge[2]) { // stops at bottom edge
-      Map.translateView[1] -= playerSpeed;
+      Map.translateView[1] -= playerSpeed * this.moveMargin;
     }
 
     if (AugmentedPlayer.coords[0] < canvasEdge[3]) { // stops at left edge
-      Map.translateView[0] -= playerSpeed;
+      Map.translateView[0] -= playerSpeed * this.moveMargin;
     }
 
     return [this.x, this.y];
