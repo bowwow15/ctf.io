@@ -726,6 +726,8 @@ $("#canvas").click(function () {
     Player.shoot(Player.rotation);
 });
 
+element.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+
 function onKeyDown(event) {
   var keyCode = event.keyCode;
   switch (keyCode) {

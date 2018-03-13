@@ -49,5 +49,8 @@ App.game = App.cable.subscriptions.create "GameChannel",
   get_players: () ->
   	@perform 'get_players'
 
+  add_to_inventory: (item) ->
+  	@perform 'add_to_inventory', item: item
+
   get_player_coords: (targetUuid) ->
   	@perform 'get_player_coords', targetUuid: targetUuid

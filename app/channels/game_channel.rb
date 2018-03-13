@@ -41,4 +41,8 @@ class GameChannel < ApplicationCable::Channel
   def get_players
   	Game.get_players(uuid)
   end
+
+  def add_to_inventory (data)
+  	Game.add_to_inventory(uuid, data['item'])
+  end
 end

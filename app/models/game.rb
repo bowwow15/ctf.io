@@ -29,6 +29,22 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "player_#{uuid}", {action: "get_players", players: "#{players}"}
 	end
 
+	def self.add_to_inventory (uuid, item)
+		playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
+
+		emptySlot = playerInventory.index{|x|x=="empty"}
+
+		playerInventory[emptySlot] = item
+
+		REDIS.set("player_inventory_#{uuid}", playerInventory)
+
+		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory}
+	end
+
+	def self.get_inventory (uuid, playerInventory)
+		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory} #private stream to player specified by uuid
+	end
+
 	def self.send_player_health (uuid, amount)
 		if amount <= 0
 			ActionCable.server.broadcast "player_#{uuid}", {action: "you_died", health: amount}
