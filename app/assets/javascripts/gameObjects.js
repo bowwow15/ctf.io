@@ -45,6 +45,9 @@ var stop = false;
 var frameCount = 0;
 var fps, fpsInterval, startTime, now, then, elapsed;
 
+var bullet_trail_img = new Image();   // Create new img element
+bullet_trail_img.src = '/images/sprites/bullet_trail.png'; // Set source path
+
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
   running: false,
@@ -61,7 +64,7 @@ var Game = { // holds framerate and function to draw a frame
     fpsInterval = 1000 / fps;
     then = Date.now();
     startTime = then;
-    
+
     drawContent(); //referenced below... somewhere.
 
     // used for debugging: eval(prompt("function"));
@@ -113,13 +116,16 @@ var Game = { // holds framerate and function to draw a frame
         if (blur === true) {
           //draw blur after bullet
           ctx.beginPath();
-          ctx.filter = 'blur(2px)';
-          ctx.strokeStyle = 'black'
-          ctx.lineWidth = 2;
-          ctx.moveTo(x_augmented, y_augmented);
-          ctx.lineTo(x_augmented - (35 * Math.cos(rotation * Math.PI / 180)), y_augmented - (35 * Math.sin(rotation * Math.PI / 180)));
-          ctx.stroke();
-          ctx.filter = 'none'; //reset after drawing
+
+          //img variable declared before game object
+
+          ctx.translate(x_augmented, y_augmented);
+          ctx.rotate(rotation * Math.PI / 180);
+          ctx.translate(-x_augmented, -y_augmented);
+
+          ctx.drawImage(bullet_trail_img, x_augmented - bullet_trail_img.width, y_augmented - 2.5); // draws bullet trail image
+
+          ctx.resetTransform();
         }
       }
       else {
@@ -602,7 +608,7 @@ var Player = {
             let bullets = 0;
             while (bullets < 10) {
               var randomRotation = Math.random() * 7 - 3;
-              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires, false); //single bullet
+              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires); //single bullet
               bullets++;
             }
 
