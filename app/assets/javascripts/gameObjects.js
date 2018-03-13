@@ -140,7 +140,7 @@ var Game = { // holds framerate and function to draw a frame
       }
 
     //detect bullet collisions
-    let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, Player.size, 5 * velocity / 10, Player.size);
+    let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.size, Player.size);
 
     if (bulletCollision === true) {
       App.global.delete_bullet(index); //tells server to delete bullet
@@ -649,7 +649,7 @@ var Player = {
     App.game.send_player_health(this.health);
   },
 
-  detectCollision: function (object1, object2, object1Width, object2Width, object1Height, object2Height) {
+  detectCollision: function (object1, object2, object1Width, object1Height, object2Width, object2Height) {
     let touching = false;
 
     if (object1[0] < object2[0] + object2Width  && object1[0] + object1Width  > object2[0] &&
