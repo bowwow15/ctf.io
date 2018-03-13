@@ -94,6 +94,8 @@ var SplashScreen = {
 }
 
 function resizeCanvas () { //resizes canvas to browser window
+        var aspectRatio = window.innerWidth / window.innerHeight;
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
