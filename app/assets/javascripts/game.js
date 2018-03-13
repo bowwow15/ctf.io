@@ -20,12 +20,32 @@ Context.create("canvas");
 resizeCanvas();
 
 
-
 var drawContentAnimation;
 function drawContent () {
-	// window.setTimeout(function() {
 
-		drawContentAnimation = requestAnimationFrame(drawContent);
+	// stop
+    if (stop) {
+        return;
+    }
+
+    // request another frame
+
+    drawContentAnimation = requestAnimationFrame(drawContent);
+
+    // calc elapsed time since last loop
+
+    now = Date.now();
+    elapsed = now - then;
+
+    // if enough time has elapsed, draw the next frame
+
+    if (elapsed > fpsInterval) {
+
+        // Get ready for next frame by setting then=now, but...
+        // Also, adjust for fpsInterval not being multiple of 16.67
+        then = now - (elapsed % fpsInterval);
+
+
 		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
 
 		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
@@ -77,12 +97,12 @@ function drawContent () {
 
 		Player.move(playerMovementArray[0], playerMovementArray[1]); //Important for formatting canvas view...
 
-	// }, 1000 / Game.fps);
+	}
 }
 
 
 function startFrameCycle () {
-	Game.draw();
+	Game.draw(Game.fps);
 }
 
 Start = function () {

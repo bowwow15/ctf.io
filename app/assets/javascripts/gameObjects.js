@@ -40,6 +40,10 @@ var Hud;
 
 var OnlinePlayers;
 
+//fps drawing variables
+var stop = false;
+var frameCount = 0;
+var fps, fpsInterval, startTime, now, then, elapsed;
 
 var Game = { // holds framerate and function to draw a frame
   fps: 60, // frames per second
@@ -49,11 +53,15 @@ var Game = { // holds framerate and function to draw a frame
   bullets: [],
   mousePos: [0, 0],
 
-  draw: function () {
+  draw: function (fps) {
     // drawGrid();
 
     App.game.move_player([Player.x, Player.y]); //tell server your coordinates
 
+    fpsInterval = 1000 / fps;
+    then = Date.now();
+    startTime = then;
+    
     drawContent(); //referenced below... somewhere.
 
     // used for debugging: eval(prompt("function"));
@@ -581,18 +589,19 @@ var Player = {
 
         case "rifle":
           expires = 400;
+          velocity = 45;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
           shot = true;
           break;
 
         case "shotgun":
           ammoAmount = 5;
-          expires = 200;
+          expires = 100;
 
           if (Player.ammo >= ammoAmount) {
             let bullets = 0;
             while (bullets < 10) {
-              var randomRotation = Math.random() * 3 - 1;
+              var randomRotation = Math.random() * 7 - 3;
               new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity, expires, false); //single bullet
               bullets++;
             }
