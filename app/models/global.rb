@@ -1,6 +1,8 @@
 class Global < ApplicationRecord
 	@inventory = Inventory.new
 
+	@inventory.draw_dropped_items
+
 	def self.start_game (uuid, name, coords)
 		name.slice! 15..-1 #limits name length to 15 characters
 
@@ -13,6 +15,10 @@ class Global < ApplicationRecord
 		REDIS.set("player_inventory_#{uuid}", playerInventory) #your player's inventory
 
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}
+
+		droppedItems = REDIS.get("global_dropped_items")
+
+		ActionCable.server.broadcast "global", {action: "send_dropped_items", uuid: uuid, items: droppedItems}
 
 		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory} #private stream to player specified by uuid
 

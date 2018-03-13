@@ -53,6 +53,9 @@ function drawContent () {
 
 		//below methods defined in gameObjects.js...
 
+		//all dropped items
+		Map.drawDroppedItems();
+
 		//loads server players...
 		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
 			if (uuid != Player.self_uuid) { // if the player isn't your own

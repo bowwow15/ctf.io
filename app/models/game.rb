@@ -30,15 +30,29 @@ class Game < ApplicationRecord
 	end
 
 	def self.add_to_inventory (uuid, item)
+		itemName = item
+
 		playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
 
 		emptySlot = playerInventory.index{|x|x=="empty"}
 
-		playerInventory[emptySlot] = item
+		playerInventory[emptySlot] = itemName
 
 		REDIS.set("player_inventory_#{uuid}", playerInventory)
 
 		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory}
+	end
+
+	def self.pick_up_item (uuid, index)
+		droppedItems = eval(REDIS.get("global_dropped_items"))
+
+		itemToPickUp = droppedItems[index]
+
+		add_to_inventory(uuid, itemToPickUp[2])
+
+		droppedItems[index] = false
+
+		ActionCable.server.broadcast "global", {action: "send_dropped_items", uuid: uuid, items: droppedItems}
 	end
 
 	def self.get_inventory (uuid, playerInventory)

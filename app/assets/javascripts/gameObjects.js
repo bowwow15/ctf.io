@@ -255,11 +255,47 @@ Map = {
   translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
   spawnPoint: [0, 0], //default
   scope: 1,
+  droppedItems: [],
 
   zoom: function (scopeChange) {
     this.scope += scopeChange;
     // this.translateView[0] = this.translateView[0] / (this.scope);
     // this.translateView[1] = this.translateView[1] / (this.scope);
+  },
+
+  pickUpItem: function (index) {
+    App.game.pick_up_item(index);
+  },
+
+  drawDroppedItems: function () {
+    this.droppedItems.forEach(function (element, index) {
+      let x = element[0] - Map.translateView[0];
+      let y = element[1] - Map.translateView[1];
+      let name = element[2];
+
+      if (name != false) {
+        ctx.beginPath();
+        ctx.font="15px Courier";
+        ctx.fillStyle = 'black';
+        ctx.fillText(name, x, y);
+      }
+
+      let textCollision = Player.detectCollision([element[0], element[1]], [Player.x, Player.y], 100, 50, Player.size, Player.size);
+
+      if (textCollision === true) {
+        let x_augmented = Player.x - Map.translateView[0] + 50;
+        let y_augmented = Player.y - Map.translateView[1] - 50;
+
+        ctx.beginPath();
+        ctx.font="30px Courier";
+        ctx.fillText("Press F to pick up", x_augmented, y_augmented);
+
+        if (keyF === true) {
+          Map.pickUpItem(index);
+          keyF = false;
+        }
+      }
+    });
   }
 };
 
@@ -726,7 +762,7 @@ $("#canvas").click(function () {
     Player.shoot(Player.rotation);
 });
 
-element.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+canvas.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
 
 function onKeyDown(event) {
   var keyCode = event.keyCode;
@@ -754,6 +790,9 @@ function onKeyDown(event) {
       break;
     case 72:
       keyH = true;
+      break;
+    case 70:
+      keyF = true;
       break;
     case 189:
       //ZOOMS OUT
@@ -806,6 +845,9 @@ function onKeyUp(event) {
     case 67: //b
       keyC = false;
       break;
+    case 70:
+      keyF = false;
+      break;
     case 72:
       keyH = false;
       break;
@@ -824,6 +866,7 @@ var keyShift = false;
 var keyAlt = false;
 var keyC = false;
 var keyH = false;
+var keyF = false;
 
 //for HUD
 var key1 = false;

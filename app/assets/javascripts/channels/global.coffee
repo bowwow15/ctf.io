@@ -15,6 +15,9 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     		#send the player's name to all online players
     		OnlinePlayers[data.uuid + "_name"] = data.name;
 
+    	when "send_dropped_items"
+    		Map.droppedItems = eval(data.items)
+
     	when "send_bullets"
     		Game.bullets.push(eval(data.bullets));
 

@@ -45,4 +45,8 @@ class GameChannel < ApplicationCable::Channel
   def add_to_inventory (data)
   	Game.add_to_inventory(uuid, data['item'])
   end
+
+  def pick_up_item (data)
+  	Game.pick_up_item(uuid, data['index'])
+  end
 end
