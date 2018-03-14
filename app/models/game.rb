@@ -89,7 +89,7 @@ class Game < ApplicationRecord
 	end
 
 	def self.get_dropped_items
-		droppedItems = @inventory.draw_dropped_items
+		droppedItems = eval(REDIS.get("global_dropped_items"))
 
 		ActionCable.server.broadcast "global", {action: "send_dropped_items", items: droppedItems}
 	end
