@@ -355,7 +355,7 @@ var Player = {
   lastPlayerThatDeltDamage: null,
   moveMargin: 0,
   handPos: [0, 0],
-  ammo: 100,
+  ammo: 0,
   health: 100,
   dead: false,
   kills: 0,
