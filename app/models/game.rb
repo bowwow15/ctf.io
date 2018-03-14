@@ -110,7 +110,7 @@ class Game < ApplicationRecord
 
 		@playerInventory.each do |i|
 			if i != "empty"
-				Game.drop_from_inventory(uuid, [@playerCoords[0], @playerCoords[1], @playerInventory.index(i)])
+				Game.drop_from_inventory(uuid, [@playerCoords[0] + rand(-100..100), @playerCoords[1] + rand(-100..100), @playerInventory.index(i)])
 			end
 		end
 
