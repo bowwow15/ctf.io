@@ -52,10 +52,13 @@ var glock_19_img = new Image();
 glock_19_img.src = '/images/inventory/glock_19.png';
 var ar_15_img = new Image();
 ar_15_img.src = '/images/inventory/ar_15.png';
+var ak_47_img = new Image();
+ak_47_img.src = '/images/inventory/ak_47.png';
 var remington_870_img = new Image();
 remington_870_img.src = '/images/inventory/remington_870.png';
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
+
 
 var Animation = {
   hurtDraw: false,
@@ -356,6 +359,7 @@ var Player = {
   moveMargin: 0,
   handPos: [0, 0],
   ammo: 0,
+  shootAgain: [false, 0],
   health: 100,
   dead: false,
   kills: 0,
@@ -517,10 +521,45 @@ var Player = {
           ctx.translate(-x, -y);
 
           ctx.beginPath();
-          ctx.rect(x + 10, y - 50, 5, -75); //glock 19 is squared.
+          ctx.rect(x + 10, y - 50, 5, -75);
 
           ctx.stroke();
           ctx.fill();
+          ctx.resetTransform();
+        break;
+
+        case "ak_47":
+          Gun.spawnPoint = [0, -125];
+          Gun.type = "assault_rifle";
+
+          ctx.fillStyle = "#994d00";
+          ctx.strokeStyle = "#4d2600";
+          ctx.beginPath();
+          ctx.ellipse(x + 6, y - 75, 7, 30, -5 * Math.PI/180, 0, 2 * Math.PI);
+
+          ctx.stroke();
+          ctx.fill();
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          //barrel of ak
+          ctx.beginPath();
+          ctx.strokeStyle = "black";
+          ctx.fillStyle = "#262626";
+          ctx.rect(x + 11.5, y - 50, 3, -75);
+
+          ctx.stroke();
+          ctx.fill();
+
+          //iron sight
+          ctx.beginPath();
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 1;
+          ctx.rect(x + 12.5, y - 120, 0.5, -5);
+          ctx.stroke();
+
           ctx.resetTransform();
         break;
       }
@@ -552,29 +591,6 @@ var Player = {
     ctx.fillStyle = "black";
     ctx.beginPath();
     ctx.fillText(text, canvas.width - 15, 45);
-  },
-
-  drawAll: function (x, y, rotation, name, inventoryItem) {
-    x = x - Map.translateView[0]; //augmented by player's view
-    y = y - Map.translateView[1];
-
-    var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
-
-    this.drawGun(x, y, rotation, inventoryItem);
-
-    Game.drawBullets();
-
-    this.drawPerson(x, y);
-
-    this.drawHands(x, y, rotation, gun);
-
-    this.drawAmmoAmount();
-
-    this.drawHealth();
-
-    this.drawKills();
-
-    if (name != Player.name) { this.drawName(x, y, name); }
   },
 
   updateInventory: function () {
@@ -729,19 +745,43 @@ var Player = {
 
       switch (Gun.type) {
         case "pistol":
+          this.shootAgain = [false, 0];
           expires = 100;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
 
         case "rifle":
+          this.shootAgain = [false, 0];
           expires = 400;
           velocity = 20;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
 
+        case "assault_rifle":
+          expires = 400;
+          velocity = 20;
+          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
+          shot = true;
+          if (mouseDown == 1) {
+            if (Player.shootAgain[0] === false) {
+              Player.shootAgain = [true, Date.now() + 10, Gun.type]; // 10 milliseconds
+            }
+            else {
+              if (Player.shootAgain[1] < Date.now()) {
+                Player.shootAgain = [true, Date.now() + 10, Gun.type]; // 10 milliseconds
+                var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid);
+              }
+            }
+          }
+          else {
+            Player.shootAgain = [false, 0];
+          }
+          break;
+
         case "shotgun":
+          this.shootAgain = [false, 0];
           ammoAmount = 5;
           expires = 100;
 
@@ -765,6 +805,14 @@ var Player = {
     }
   },
 
+  shootAuto: function () {
+    if (mouseDown == 1 && Player.shootAgain[0] === true) {
+      if (Date.now() > Player.shootAgain[1]) {
+        Player.shoot(Player.rotation);
+      }
+    }
+  },
+
   gotShot: function (velocityOfBullet, player_uuid) {
     this.lastPlayerThatDeltDamage = player_uuid;
 
@@ -784,6 +832,31 @@ var Player = {
     }
 
     return touching;
+  },
+
+  drawAll: function (x, y, rotation, name, inventoryItem) {
+    x = x - Map.translateView[0]; //augmented by player's view
+    y = y - Map.translateView[1];
+
+    var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
+
+    this.drawGun(x, y, rotation, inventoryItem);
+
+    Game.drawBullets();
+
+    this.drawPerson(x, y);
+
+    this.drawHands(x, y, rotation, gun);
+
+    this.drawAmmoAmount();
+
+    this.drawHealth();
+
+    this.drawKills();
+
+    this.shootAuto();
+
+    if (name != Player.name) { this.drawName(x, y, name); }
   }
 };
 
@@ -808,9 +881,21 @@ $("body").mousemove(function(e) {
     Game.mousePos[1] = e.pageY;
 });
 
-$("#canvas").click(function () {
+
+var mouseDown = 0;
+document.getElementById('canvas').onmousedown = function() { 
+  mouseDown = 1;
+
+  if (Player.shootAgain[0] == true) {
+    Player.shoot(Player.rotation, true);
+  }
+  else {
     Player.shoot(Player.rotation);
-});
+  }
+}
+document.getElementById('canvas').onmouseup = function() {
+  mouseDown = 0;
+}
 
 canvas.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
 
@@ -913,6 +998,7 @@ function onKeyUp(event) {
       break;
   }
 }
+
 
 //neccessary variables
 var tickX = 10;

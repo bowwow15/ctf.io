@@ -1,3 +1,4 @@
+<% @inventory = Inventory.new %>
 App.game = App.cable.subscriptions.create "GameChannel",
   connected: ->
     # Called when the subscription is ready for use on the server
@@ -27,7 +28,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
   start_game: (name, coords) ->
     @perform 'start_game', name: name, coords: coords
-    Game.guns = <%= Inventory.new.get_all_guns %>;
+    Game.guns = <%= @inventory.get_all_guns %>;
     Start();
 
   broadcast_name: (name) ->

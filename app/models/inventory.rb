@@ -1,7 +1,7 @@
 class Inventory < ApplicationRecord
 	$default_inventory = ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"]
 
-	$all_guns = ["glock_19", "ar_15", "remington_870"]
+	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47"]
 
 	$droppedItems = []
 
@@ -11,6 +11,8 @@ class Inventory < ApplicationRecord
 
 	def get_all_guns
 		$all_guns
+
+		return $all_guns
 	end
 
 	def delete_expired_items
