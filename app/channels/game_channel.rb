@@ -30,6 +30,10 @@ class GameChannel < ApplicationCable::Channel
   	Game.send_player_health(uuid, data['amount'])
   end
 
+  def player_die (data)
+  	Game.player_die(uuid, data['killer_uuid'])
+  end
+
   def get_name
   	Game.get_name(uuid)
   end

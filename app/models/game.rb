@@ -98,4 +98,18 @@ class Game < ApplicationRecord
 			REDIS.del("player_name_#{uuid}") #deletes user when dead
 		end
 	end
+
+	def self.player_die (uuid, killer_uuid)
+		kills = eval(REDIS.get("player_kills_#{killer_uuid}"))
+
+		kills += 1
+
+		REDIS.set("player_kills_#{killer_uuid}", kills)
+
+		ActionCable.server.broadcast "player_#{killer_uuid}", {action: "send_player_kills", kills: kills}
+	end
+
+	def get_kills (uuid)
+		kills = eval(REDIS.get("player_kills_#{uuid}"))
+	end
 end

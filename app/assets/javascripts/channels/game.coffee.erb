@@ -18,6 +18,8 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		Game.players = eval(data.players);
     	when "send_player_inventory"
     		Player.addToInventory(eval(data.inventory));
+    	when "send_player_kills"
+    		Player.kills = data.kills
 
     	when "you_died"
     		Player.die();
@@ -39,6 +41,9 @@ App.game = App.cable.subscriptions.create "GameChannel",
 
   send_player_health: (amount) ->
   	@perform 'send_player_health', amount: amount
+
+  player_die: (killer_uuid) ->
+  	@perform 'player_die', killer_uuid: killer_uuid
 
   get_name: () ->
   	@perform 'get_name'

@@ -14,6 +14,8 @@ class Global < ApplicationRecord
 
 		REDIS.set("player_inventory_#{uuid}", playerInventory) #your player's inventory
 
+		REDIS.set("player_kills_#{uuid}", 0)
+
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}
 
 		droppedItems = REDIS.get("global_dropped_items")

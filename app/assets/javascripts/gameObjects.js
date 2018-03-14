@@ -182,7 +182,7 @@ var Game = { // holds framerate and function to draw a frame
     if (bulletCollision === true) {
       App.global.delete_bullet(index); //tells server to delete bullet
 
-      Player.gotShot(velocity);
+      Player.gotShot(velocity, element[6]);
     }
 
     });
@@ -293,7 +293,7 @@ Map = {
         ctx.drawImage(eval(name + "_img"), x - eval(name + "_img").width, y - 2.5);
       }
 
-      let textCollision = Player.detectCollision([element[0], element[1]], [Player.x, Player.y], 45, 45, Player.size, Player.size);
+      let textCollision = Player.detectCollision([element[0] - 30, element[1] + 15], [Player.x, Player.y], 60, 60, Player.size, Player.size);
 
       if (textCollision === true) {
         let x_augmented = Player.x - Map.translateView[0] + 50;
@@ -351,10 +351,13 @@ var Player = {
   rotation: 0,
   speed: 3,
   lastMove: Date.now(),
+  lastPlayerThatDeltDamage: null,
   moveMargin: 0,
   handPos: [0, 0],
   ammo: 100,
   health: 100,
+  dead: false,
+  kills: 0,
   center: false,
   sneakSpeed: 1,
   sprintSpeed: 4,
@@ -541,6 +544,15 @@ var Player = {
     ctx.fillText(text, 15, 25);
   },
 
+  drawKills: function () {
+    let text = "KILLS: " + Player.kills;
+    ctx.font = "15px Courier";
+    ctx.textAlign = "end";
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.fillText(text, canvas.width - 15, 45);
+  },
+
   drawAll: function (x, y, rotation, name, inventoryItem) {
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
@@ -558,6 +570,8 @@ var Player = {
     this.drawAmmoAmount();
 
     this.drawHealth();
+
+    this.drawKills();
 
     if (name != Player.name) { this.drawName(x, y, name); }
   },
@@ -684,25 +698,31 @@ var Player = {
   },
 
   die: function () {
-    cancelAnimationFrame(drawContentAnimation);
+    if (this.dead != true) { //don't die if you're already dead
+      this.dead = true;
 
-    //displays death screen
-    ctx.beginPath();
-    ctx.rect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.fillStyle = 'black';
-    ctx.fill();
+      App.game.player_die(Player.lastPlayerThatDeltDamage);
 
-    //Title
-    ctx.beginPath(); //resets path that is being drawn.
-    ctx.fillStyle = 'red';
-    ctx.strokeStyle = 'darkred';
-    ctx.lineWidth = 1;
+      cancelAnimationFrame(drawContentAnimation);
 
-    ctx.font = "100px Arial";
-    ctx.textAlign="center";
+      //displays death screen
+      ctx.beginPath();
+      ctx.rect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.fillStyle = 'black';
+      ctx.fill();
 
-    ctx.fillText("You haven't died", canvas.width / 2, canvas.height / 2 + 50);
-    ctx.strokeText("You haven't died", canvas.width / 2, canvas.height / 2 + 50); 
+      //Title
+      ctx.beginPath(); //resets path that is being drawn.
+      ctx.fillStyle = 'red';
+      ctx.strokeStyle = 'darkred';
+      ctx.lineWidth = 1;
+
+      ctx.font = "100px Arial";
+      ctx.textAlign="center";
+
+      ctx.fillText("You haven't died", canvas.width / 2, canvas.height / 2 + 50);
+      ctx.strokeText("You haven't died", canvas.width / 2, canvas.height / 2 + 50); 
+    }
   },
 
   shoot: function (rotation) {
@@ -757,7 +777,9 @@ var Player = {
     }
   },
 
-  gotShot: function (velocityOfBullet) {
+  gotShot: function (velocityOfBullet, player_uuid) {
+    this.lastPlayerThatDeltDamage = player_uuid;
+
     this.health -= velocityOfBullet / 2;
 
     App.game.send_player_health(this.health);
