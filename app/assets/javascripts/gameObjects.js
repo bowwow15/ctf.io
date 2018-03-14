@@ -707,22 +707,9 @@ var Player = {
       cancelAnimationFrame(drawContentAnimation);
 
       //displays death screen
-      ctx.beginPath();
-      ctx.rect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.fillStyle = 'black';
-      ctx.fill();
+      $("#deathscreen").fadeIn(1000);
 
-      //Title
-      ctx.beginPath(); //resets path that is being drawn.
-      ctx.fillStyle = 'red';
-      ctx.strokeStyle = 'darkred';
-      ctx.lineWidth = 1;
-
-      ctx.font = "100px Arial";
-      ctx.textAlign="center";
-
-      ctx.fillText("You haven't died", canvas.width / 2, canvas.height / 2 + 50);
-      ctx.strokeText("You haven't died", canvas.width / 2, canvas.height / 2 + 50); 
+      document.getElementById('deathscreen').style.backgroundColor = "black";
     }
   },
 
