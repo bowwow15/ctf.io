@@ -1,7 +1,7 @@
 class Inventory < ApplicationRecord
 	$default_inventory = ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"]
 
-	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47"]
+	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47", "mac_11"]
 
 	$droppedItems = []
 

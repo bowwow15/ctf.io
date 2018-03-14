@@ -14,6 +14,10 @@ class GameChannel < ApplicationCable::Channel
     Global.start_game(uuid, data['name'], data['coords'])
   end
 
+  def get_guns
+  	Game.get_guns(uuid)
+  end
+
   def broadcast_name (data)
   	Global.broadcast_name(uuid, data['name'])
   end

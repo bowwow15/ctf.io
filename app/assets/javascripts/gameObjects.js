@@ -56,6 +56,8 @@ var ak_47_img = new Image();
 ak_47_img.src = '/images/inventory/ak_47.png';
 var remington_870_img = new Image();
 remington_870_img.src = '/images/inventory/remington_870.png';
+var mac_11_img = new Image();
+mac_11_img.src = '/images/inventory/mac_11.png';
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
 
@@ -239,6 +241,9 @@ HudItem = {
 
     switch (inventoryItem) {
       case "glock_19":
+        hands = 1;
+        break;
+      case "mac_11":
         hands = 1;
         break;
     }
@@ -494,6 +499,33 @@ var Player = {
           ctx.resetTransform();
         break;
 
+        case "mac_11":
+          Gun.spawnPoint = [5, -110];
+          Gun.type = "assault_rifle";
+
+          ctx.strokeStyle = "black";
+          ctx.fillStyle = "#262626";
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          //silencer
+          ctx.beginPath();
+          ctx.strokeStyle = "black";
+          ctx.lineWidth = 7;
+          ctx.rect(x + 12.5, y - 90, 0.5, -30);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.rect(x + 10, y - 50, 5, -45); //mac 11 is squared.
+
+          ctx.stroke();
+          ctx.fill();
+
+          ctx.resetTransform();
+        break;
+
         case "ar_15":
           Gun.spawnPoint = [5, -125];
           Gun.type = "rifle";
@@ -729,7 +761,7 @@ var Player = {
     }
   },
 
-  shoot: function (rotation) {
+  shoot: function (rotation, bulletIncrementFrequency = 50) {
     let x = this.x;
     let y = this.y;
 
@@ -761,16 +793,16 @@ var Player = {
 
         case "assault_rifle":
           expires = 400;
-          velocity = 20;
+          velocity = 15;
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           if (mouseDown == 1) {
             if (Player.shootAgain[0] === false) {
-              Player.shootAgain = [true, Date.now() + 50, Gun.type]; // 10 milliseconds
+              Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
             }
             else {
               if (Player.shootAgain[1] < Date.now()) {
-                Player.shootAgain = [true, Date.now() + 50, Gun.type]; // 10 milliseconds
+                Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
                 var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid);
               }
             }
