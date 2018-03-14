@@ -577,6 +577,8 @@ var Player = {
       if (inventory[index] == "ammo") {
         Player.ammo += 25;
         inventory[index] = "empty";
+
+        App.game.drop_from_inventory(index);
       }
     });
 

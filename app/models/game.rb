@@ -31,6 +31,16 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "player_#{uuid}", {action: "get_players", players: "#{players}"}
 	end
 
+	def self.drop_from_inventory (uuid, itemIndex)
+		playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
+
+		playerInventory[itemIndex] = "empty"
+
+		REDIS.set("player_inventory_#{uuid}", playerInventory)
+
+		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory}
+	end
+
 	def self.add_to_inventory (uuid, item)
 		itemName = item
 
