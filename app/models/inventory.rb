@@ -13,13 +13,35 @@ class Inventory < ApplicationRecord
 		$all_guns
 	end
 
+	def delete_expired_items
+		droppedItemsFromDatabase = eval(REDIS.get("global_dropped_items"))
+
+		droppedItemsFromDatabase.each do |i|
+			expiration = i[3]
+			if expiration != "infinite"
+				if expiration < Time.now.to_i #if item has expired
+					droppedItemsFromDatabase.delete_at(droppedItemsFromDatabase.index(i))
+				end
+			end
+		end
+
+		REDIS.set("global_dropped_items", droppedItemsFromDatabase)
+
+		$dropped_items = droppedItemsFromDatabase
+		return $dropped_items
+	end
+
 	def generate_new_item
 		x = rand($mapLimit[0])
 		y = rand($mapLimit[1])
 
-		item_id = $all_guns[rand($all_guns.length)]
+		if rand(3) > 1
+			item_id = $all_guns[rand($all_guns.length)]
+		else
+			item_id = "ammo"
+		end
 
-		$newItem = [x, y, item_id]
+		$newItem = [x, y, item_id, "infinite"]
 		return $newItem
 	end
 
@@ -37,7 +59,7 @@ class Inventory < ApplicationRecord
 				item_id = "ammo"
 			end
 
-			$droppedItems.push([x, y, item_id])
+			$droppedItems.push([x, y, item_id, "infinite"])
 			itemCount += 1
 		end
 

@@ -47,7 +47,7 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def drop_from_inventory (data)
-  	Game.drop_from_inventory(uuid, data['itemIndex'])
+  	Game.drop_from_inventory(uuid, data['item'])
   end
 
   def add_to_inventory (data)

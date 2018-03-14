@@ -568,6 +568,9 @@ var Player = {
         //$("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".ico' class='hudSlotImage'>");
         $("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".png' class='hudSlotImage' />");
       }
+      else {
+        $("#hudSlot" + index).html("");
+      }
     });
   },
 
@@ -578,12 +581,19 @@ var Player = {
         Player.ammo += 25;
         inventory[index] = "empty";
 
-        App.game.drop_from_inventory(index);
+        App.game.drop_from_inventory([Player.x, Player.y, index]);
       }
     });
 
     Player.inventory = inventory;
     Player.updateInventory();
+  },
+
+  dropItem: function () {
+    if (HudItem.selectedItem != "empty") {
+      App.game.drop_from_inventory([Player.x, Player.y, HudItem.selectedItem]);
+      this.updateInventory();
+    }
   },
 
   mapEdgeDetect: function (x, y) {
@@ -824,6 +834,9 @@ function onKeyDown(event) {
     case 70:
       keyF = true;
       break;
+    case 81:
+      keyQ = true;
+      break;
     case 189:
       //ZOOMS OUT
       Map.zoom(0.1);
@@ -846,6 +859,10 @@ function onKeyDown(event) {
 
   if (keyH == true) {
     Hud.toggle();
+  }
+
+  if (keyQ === true) {
+    Player.dropItem();
   }
 
 }
@@ -878,6 +895,9 @@ function onKeyUp(event) {
     case 70:
       keyF = false;
       break;
+    case 81:
+      keyQ = false;
+      break;
     case 72:
       keyH = false;
       break;
@@ -897,6 +917,7 @@ var keyAlt = false;
 var keyC = false;
 var keyH = false;
 var keyF = false;
+var keyQ = false;
 
 //for HUD
 var key1 = false;

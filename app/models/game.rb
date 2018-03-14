@@ -31,14 +31,23 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "player_#{uuid}", {action: "get_players", players: "#{players}"}
 	end
 
-	def self.drop_from_inventory (uuid, itemIndex)
-		playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
+	def self.drop_from_inventory (uuid, item)
+		@playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
 
-		playerInventory[itemIndex] = "empty"
+		if @playerInventory[item[2]] != "ammo" && @playerInventory[item[2]] != "empty"
+			droppedItemsFromDatabase = eval(REDIS.get("global_dropped_items"))
 
-		REDIS.set("player_inventory_#{uuid}", playerInventory)
+			droppedItemsFromDatabase.push([item[0], item[1], @playerInventory[item[2]], Time.now.to_i + 120]) # (x, y, name, expiration (120 seconds in advance))
 
-		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory}
+			REDIS.set("global_dropped_items", droppedItemsFromDatabase)
+			ActionCable.server.broadcast "global", {action: "send_dropped_items", items: droppedItemsFromDatabase}
+		end
+
+		@playerInventory[item[2]] = "empty"
+
+		REDIS.set("player_inventory_#{uuid}", @playerInventory)
+
+		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: @playerInventory}
 	end
 
 	def self.add_to_inventory (uuid, item)
@@ -65,6 +74,8 @@ class Game < ApplicationRecord
 		droppedItems[index] = @inventory.generate_new_item #so that we don't run out of items
 
 		REDIS.set("global_dropped_items", droppedItems)
+
+		droppedItems = @inventory.delete_expired_items
 
 		ActionCable.server.broadcast "global", {action: "send_dropped_items", uuid: uuid, items: droppedItems}
 	end

@@ -49,8 +49,8 @@ App.game = App.cable.subscriptions.create "GameChannel",
   get_players: () ->
   	@perform 'get_players'
 
-  drop_from_inventory: (itemIndex) ->
-  	@perform 'drop_from_inventory', itemIndex: itemIndex
+  drop_from_inventory: (item) ->
+  	@perform 'drop_from_inventory', item: item
 
   add_to_inventory: (item) ->
   	@perform 'add_to_inventory', item: item
