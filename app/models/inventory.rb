@@ -24,14 +24,18 @@ class Inventory < ApplicationRecord
 	end
 
 	def draw_dropped_items
-		itemsToDraw = 5
+		itemsToDraw = 10
 		itemCount = 0
 
 		while itemCount <= itemsToDraw
 			x = rand($mapLimit[0])
 			y = rand($mapLimit[1])
 
-			item_id = $all_guns[rand($all_guns.length)]
+			if rand(3) > 1
+				item_id = $all_guns[rand($all_guns.length)]
+			else
+				item_id = "ammo"
+			end
 
 			$droppedItems.push([x, y, item_id])
 			itemCount += 1

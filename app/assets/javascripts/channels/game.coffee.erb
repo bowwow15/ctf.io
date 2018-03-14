@@ -17,8 +17,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
     	when "get_players"
     		Game.players = eval(data.players);
     	when "send_player_inventory"
-    		Player.inventory = eval(data.inventory);
-    		Player.updateInventory();
+    		Player.addToInventory(eval(data.inventory));
 
     	when "you_died"
     		Player.die();

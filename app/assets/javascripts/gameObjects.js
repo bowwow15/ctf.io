@@ -54,6 +54,8 @@ var ar_15_img = new Image();
 ar_15_img.src = '/images/inventory/ar_15.png';
 var remington_870_img = new Image();
 remington_870_img.src = '/images/inventory/remington_870.png';
+var ammo_img = new Image();
+ammo_img.src = '/images/inventory/ammo.png';
 
 var Animation = {
   hurtDraw: false,
@@ -114,7 +116,7 @@ var Game = { // holds framerate and function to draw a frame
     this.y = y;
     this.rotation = rotation;
 
-    App.game.shoot([x, y, rotation, velocity, expires, blur]);
+    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid]);
 
     //Game.bullets.push([x, y, rotation, velocity, expires]);
     //not using above code because it is already declared in global.coffee
@@ -567,6 +569,19 @@ var Player = {
         $("#hudSlot" + index).html("<img src='/images/inventory/" + Player.inventory[index] + ".png' class='hudSlotImage' />");
       }
     });
+  },
+
+  addToInventory: function (inventory) {
+
+    inventory.forEach(function (element, index) { //automatically adds ammo to ammo count
+      if (inventory[index] == "ammo") {
+        Player.ammo += 25;
+        inventory[index] = "empty";
+      }
+    });
+
+    Player.inventory = inventory;
+    Player.updateInventory();
   },
 
   mapEdgeDetect: function (x, y) {
