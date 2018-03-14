@@ -109,7 +109,7 @@ var Game = { // holds framerate and function to draw a frame
 
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
@@ -674,8 +674,8 @@ var Player = {
     ctx.font = "100px Arial";
     ctx.textAlign="center";
 
-    ctx.fillText("You Died", canvas.width / 2, canvas.height / 2 + 50);
-    ctx.strokeText("You Died", canvas.width / 2, canvas.height / 2 + 50); 
+    ctx.fillText("You haven't died", canvas.width / 2, canvas.height / 2 + 50);
+    ctx.strokeText("You haven't died", canvas.width / 2, canvas.height / 2 + 50); 
   },
 
   shoot: function (rotation) {
@@ -695,14 +695,14 @@ var Player = {
       switch (Gun.type) {
         case "pistol":
           expires = 100;
-          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
 
         case "rifle":
           expires = 400;
           velocity = 20;
-          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires); //single bullet
+          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
 
@@ -715,7 +715,7 @@ var Player = {
             while (bullets < 10) {
               var randomRotation = Math.random() * 7 - 3;
               var randomVelocity = Math.random() * 5;
-              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires); //single bullet
+              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires, true, this.self_uuid); //single bullet
               bullets++;
             }
 

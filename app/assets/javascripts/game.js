@@ -116,6 +116,8 @@ Start = function () {
 	}, 1000);
 
 	App.game.get_self_uuid();
+
+	Player.lastMove = Date.now();
 }
 
 EndGame = function () {
