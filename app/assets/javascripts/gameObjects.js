@@ -277,6 +277,7 @@ Map = {
   },
 
   drawDroppedItems: function () {
+    ctx.textAlign="start";
     this.droppedItems.forEach(function (element, index) {
       let x = element[0] - Map.translateView[0];
       let y = element[1] - Map.translateView[1];
