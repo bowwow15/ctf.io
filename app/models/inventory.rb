@@ -34,8 +34,8 @@ class Inventory < ApplicationRecord
 	end
 
 	def generate_new_item
-		x = rand($mapLimit[0])
-		y = rand($mapLimit[1])
+		x = rand(150..($mapLimit[0]-150))
+		y = rand(150..($mapLimit[1]-150))
 
 		if rand(3) > 1
 			item_id = $all_guns[rand($all_guns.length)]
@@ -52,8 +52,8 @@ class Inventory < ApplicationRecord
 		itemCount = 0
 
 		while itemCount <= itemsToDraw
-			x = rand($mapLimit[0])
-			y = rand($mapLimit[1])
+			x = rand(150..($mapLimit[0]-150))
+			y = rand(150..($mapLimit[1]-150))
 
 			if rand(3) > 1
 				item_id = $all_guns[rand($all_guns.length)]
