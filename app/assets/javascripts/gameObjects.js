@@ -766,11 +766,11 @@ var Player = {
           shot = true;
           if (mouseDown == 1) {
             if (Player.shootAgain[0] === false) {
-              Player.shootAgain = [true, Date.now() + 10, Gun.type]; // 10 milliseconds
+              Player.shootAgain = [true, Date.now() + 50, Gun.type]; // 10 milliseconds
             }
             else {
               if (Player.shootAgain[1] < Date.now()) {
-                Player.shootAgain = [true, Date.now() + 10, Gun.type]; // 10 milliseconds
+                Player.shootAgain = [true, Date.now() + 50, Gun.type]; // 10 milliseconds
                 var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid);
               }
             }
