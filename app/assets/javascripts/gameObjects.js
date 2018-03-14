@@ -45,8 +45,15 @@ var stop = false;
 var frameCount = 0;
 var fps, fpsInterval, startTime, now, then, elapsed;
 
+//images
 var bullet_trail_img = new Image();   // Create new img element
 bullet_trail_img.src = '/images/sprites/bullet_trail.png'; // Set source path
+var glock_19_img = new Image();
+glock_19_img.src = '/images/inventory/glock_19.png';
+var ar_15_img = new Image();
+ar_15_img.src = '/images/inventory/ar_15.png';
+var remington_870_img = new Image();
+remington_870_img.src = '/images/inventory/remington_870.png';
 
 var Animation = {
   hurtDraw: false,
@@ -275,12 +282,16 @@ Map = {
 
       if (name != false) {
         ctx.beginPath();
-        ctx.font="15px Courier";
-        ctx.fillStyle = 'black';
-        ctx.fillText(name, x, y);
+        ctx.arc(x - (45 / 2), y + (45 / 2), (30), 0, 2*Math.PI);
+        ctx.strokeStyle = 'white';
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.drawImage(eval(name + "_img"), x - eval(name + "_img").width, y - 2.5);
       }
 
-      let textCollision = Player.detectCollision([element[0], element[1]], [Player.x, Player.y], 100, 50, Player.size, Player.size);
+      let textCollision = Player.detectCollision([element[0], element[1]], [Player.x, Player.y], 45, 45, Player.size, Player.size);
 
       if (textCollision === true) {
         let x_augmented = Player.x - Map.translateView[0] + 50;
@@ -288,6 +299,8 @@ Map = {
 
         ctx.beginPath();
         ctx.font="30px Courier";
+        ctx.fillStyle='black';
+        ctx.fillText(name, x_augmented, y_augmented - 50);
         ctx.fillText("Press F to pick up", x_augmented, y_augmented);
 
         if (keyF === true) {
