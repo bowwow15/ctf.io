@@ -3,6 +3,8 @@ class Inventory < ApplicationRecord
 
 	$all_guns = ["glock_19", "ar_15", "remington_870"]
 
+	$droppedItems = []
+
 	def get_inventory
 		$default_inventory
 	end
@@ -11,11 +13,19 @@ class Inventory < ApplicationRecord
 		$all_guns
 	end
 
-	def draw_dropped_items
-		itemsToDraw = 15
-		itemCount = 0
+	def generate_new_item
+		x = rand($mapLimit[0])
+		y = rand($mapLimit[1])
 
-		$droppedItems = []
+		item_id = $all_guns[rand($all_guns.length)]
+
+		$newItem = [x, y, item_id]
+		return $newItem
+	end
+
+	def draw_dropped_items
+		itemsToDraw = 5
+		itemCount = 0
 
 		while itemCount <= itemsToDraw
 			x = rand($mapLimit[0])

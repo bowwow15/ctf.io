@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+	@inventory = Inventory.new
+	
 	def self.delete_user (uuid)
 		REDIS.del("coords_for_#{uuid}")
 		REDIS.del("player_name_#{uuid}") #deletes user when disconects
@@ -50,7 +52,9 @@ class Game < ApplicationRecord
 
 		add_to_inventory(uuid, itemToPickUp[2])
 
-		droppedItems[index] = false
+		droppedItems[index] = @inventory.generate_new_item #so that we don't run out of items
+
+		REDIS.set("global_dropped_items", droppedItems)
 
 		ActionCable.server.broadcast "global", {action: "send_dropped_items", uuid: uuid, items: droppedItems}
 	end
