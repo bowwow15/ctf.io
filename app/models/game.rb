@@ -75,6 +75,10 @@ class Game < ApplicationRecord
 
 			droppedItems[index] = @inventory.generate_new_item #so that we don't run out of items
 
+		else
+
+			droppedItems.delete_at(index)
+
 		end
 
 		REDIS.set("global_dropped_items", droppedItems)
