@@ -400,6 +400,8 @@ var Player = {
   ammo: 0,
   shootAgain: [false, 0],
   health: 100,
+  maxHealth: 100,
+  lastRegen: 0,
   dead: false,
   kills: 0,
   center: false,
@@ -648,6 +650,16 @@ var Player = {
     ctx.fillStyle = "black";
     ctx.beginPath();
     ctx.fillText(text, 15, 25);
+  },
+
+  healthRegen: function (rateOfRegeneration) {
+    if (Date.now() - rateOfRegeneration > this.lastRegen) {
+      this.lastRegen = Date.now();
+
+      if (this.health < this.maxHealth) {
+        this.health += 1;
+      }
+    }
   },
 
   drawKills: function () {
@@ -953,6 +965,8 @@ var Player = {
     this.drawKills();
 
     this.shootAuto();
+
+    this.healthRegen(2000);
 
     if (name != Player.name) { this.drawName(x, y, name); }
   }
