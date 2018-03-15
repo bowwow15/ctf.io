@@ -795,7 +795,7 @@ var Player = {
     }
   },
 
-  shoot: function (rotation, bulletIncrementFrequency = 50) {
+  shoot: function (rotation, bulletIncrementFrequency = 100) {
     let x = this.x;
     let y = this.y;
 
