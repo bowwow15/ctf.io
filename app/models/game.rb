@@ -113,6 +113,7 @@ class Game < ApplicationRecord
 	def self.player_die (uuid, killer_uuid)
 		@playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
 		@playerCoords = eval(REDIS.get("coords_for_#{uuid}"))
+		player = REDIS.get("player_name_#{uuid}")
 
 		@playerInventory.each do |i|
 			if i != "empty"
@@ -127,6 +128,8 @@ class Game < ApplicationRecord
 		REDIS.set("player_kills_#{killer_uuid}", kills)
 
 		ActionCable.server.broadcast "player_#{killer_uuid}", {action: "send_player_kills", kills: kills}
+
+		ActionCable.server.broadcast "global", {action: "player_died", player: [@playerCoords[0], @playerCoords[1], player]}
 
 		REDIS.del("coords_for_#{uuid}")
 		REDIS.del("player_name_#{uuid}") #deletes user when dead

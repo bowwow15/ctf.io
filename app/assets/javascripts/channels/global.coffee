@@ -27,6 +27,9 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "delete_player"
     		delete OnlinePlayers[data.uuid]; #deletes user from local object
 
+    	when "player_died"
+    		Game.addGraveStone(data.player);
+
 
   delete_bullet: (index) ->
   	#Game.bullets.splice(index, 1); #deletes bullet from all the clients

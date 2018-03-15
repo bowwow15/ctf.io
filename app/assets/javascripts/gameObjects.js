@@ -61,6 +61,12 @@ mac_11_img.src = '/images/inventory/mac_11.png';
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
 
+//audio
+var gunshot_rifle_audio = new Audio('/audio/rifle.mp3');
+var gunshot_shotgun_audio = new Audio('/audio/shotgun.mp3');
+var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
+var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
+
 
 var Animation = {
   hurtDraw: false,
@@ -112,8 +118,19 @@ var Game = { // holds framerate and function to draw a frame
     // used for debugging: eval(prompt("function"));
   },
 
-  drawCoords: function () {
+  playAudio: function (audio) {
+    if (window.chrome) audio.load();
 
+    audio.cloneNode(true).play();
+  },
+
+  drawCoords: function () {
+    //draw coordinates here...
+  },
+
+  addGraveStone: function (player) {
+    x = player[0] - Map.translateView[0];
+    y = player[1] - Map.translateView[1];
   },
 
   bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid) {
@@ -779,6 +796,9 @@ var Player = {
         case "pistol":
           this.shootAgain = [false, 0];
           expires = 100;
+
+          Game.playAudio(gunshot_pistol_audio);
+
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
@@ -787,6 +807,9 @@ var Player = {
           this.shootAgain = [false, 0];
           expires = 400;
           velocity = 20;
+          
+          Game.playAudio(gunshot_rifle_audio);
+
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           break;
@@ -794,6 +817,9 @@ var Player = {
         case "assault_rifle":
           expires = 400;
           velocity = 15;
+
+          Game.playAudio(gunshot_assault_rifle_audio);
+
           var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
           shot = true;
           if (mouseDown == 1) {
@@ -816,6 +842,8 @@ var Player = {
           this.shootAgain = [false, 0];
           ammoAmount = 5;
           expires = 100;
+
+          Game.playAudio(gunshot_shotgun_audio);
 
           if (Player.ammo >= ammoAmount) {
             let bullets = 0;
