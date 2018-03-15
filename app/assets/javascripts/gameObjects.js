@@ -67,6 +67,8 @@ var gunshot_shotgun_audio = new Audio('/audio/shotgun.mp3');
 var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
 var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
 
+var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
+
 
 var Animation = {
   hurtDraw: false,
@@ -118,10 +120,17 @@ var Game = { // holds framerate and function to draw a frame
     // used for debugging: eval(prompt("function"));
   },
 
-  playAudio: function (audio) {
-    if (window.chrome) audio.load();
+  playAudio: function (audio, audioFromServer = false) {
+    if (audioFromServer === false) {
+      App.game.play_audio(audio);
+    }
+    else {
+      audio = eval(audio); //turns string into variable
 
-    audio.cloneNode(true).play();
+      if (window.chrome) audio.load();
+
+      audio.cloneNode(true).play();
+    }
   },
 
   drawCoords: function () {
@@ -215,7 +224,7 @@ var Gun = {
   isGun: false,
   bulletExpires: 50,
   spawnPoint: [0, 0],
-  type: "pistol"
+    type: "pistol"
 };
 
 HudItem = {
@@ -787,76 +796,84 @@ var Player = {
 
     let pos = getPoint(x, y, x + Gun.spawnPoint[0], y + Gun.spawnPoint[1], rotation);
 
-    if (HudItem.determineGun(Player.inventory[HudItem.selectedItem]).bool === true && Player.ammo > 0) {
+    if (HudItem.determineGun(Player.inventory[HudItem.selectedItem]).bool) {
+      if (Player.ammo > 0) {
 
-      let ammoAmount = 1; //the ammount of ammo used by each gun
-      let shot = false;
+        var ammoAmount = 1; //the ammount of ammo used by each gun
+        var shot = false;
 
-      switch (Gun.type) {
-        case "pistol":
-          this.shootAgain = [false, 0];
-          expires = 100;
+        switch (Gun.type) {
+          case "pistol":
+            this.shootAgain = [false, 0];
+            expires = 100;
 
-          Game.playAudio(gunshot_pistol_audio);
+            Game.playAudio("gunshot_pistol_audio");
 
-          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
-          shot = true;
-          break;
+            var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
+            shot = true;
+            break;
 
-        case "rifle":
-          this.shootAgain = [false, 0];
-          expires = 400;
-          velocity = 20;
-          
-          Game.playAudio(gunshot_rifle_audio);
+          case "rifle":
+            this.shootAgain = [false, 0];
+            expires = 400;
+            velocity = 20;
+            
+            Game.playAudio("gunshot_rifle_audio");
 
-          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
-          shot = true;
-          break;
+            var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
+            shot = true;
+            break;
 
-        case "assault_rifle":
-          expires = 400;
-          velocity = 15;
+          case "assault_rifle":
+            expires = 400;
+            velocity = 15;
 
-          Game.playAudio(gunshot_assault_rifle_audio);
+            Game.playAudio("gunshot_assault_rifle_audio");
 
-          var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
-          shot = true;
-          if (mouseDown == 1) {
-            if (Player.shootAgain[0] === false) {
-              Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
-            }
-            else {
-              if (Player.shootAgain[1] < Date.now()) {
+            var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
+
+            if (mouseDown == 1) {
+              if (Player.shootAgain[0] === false) {
                 Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
-                var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid);
+              }
+              else {
+                if (Player.shootAgain[1] < Date.now()) {
+                  Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
+                  var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid);
+                }
               }
             }
-          }
-          else {
-            Player.shootAgain = [false, 0];
-          }
-          break;
-
-        case "shotgun":
-          this.shootAgain = [false, 0];
-          ammoAmount = 5;
-          expires = 100;
-
-          Game.playAudio(gunshot_shotgun_audio);
-
-          if (Player.ammo >= ammoAmount) {
-            let bullets = 0;
-            while (bullets < 10) {
-              var randomRotation = Math.random() * 7 - 3;
-              var randomVelocity = Math.random() * 5;
-              new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires, true, this.self_uuid); //single bullet
-              bullets++;
+            else {
+              Player.shootAgain = [false, 0];
             }
 
             shot = true;
-          }
-          break;
+            break;
+
+          case "shotgun":
+            this.shootAgain = [false, 0];
+            ammoAmount = 5;
+            expires = 100;
+
+            Game.playAudio("gunshot_shotgun_audio");
+
+            if (Player.ammo >= ammoAmount) {
+              let bullets = 0;
+              while (bullets < 10) {
+                var randomRotation = Math.random() * 7 - 3;
+                var randomVelocity = Math.random() * 5;
+                new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires, true, this.self_uuid); //single bullet
+                bullets++;
+              }
+
+              shot = true;
+            }
+            break;
+        }
+      }
+
+      else {
+        Game.playAudio("dry_fire_audio", true);
       }
 
       if (shot === true) {

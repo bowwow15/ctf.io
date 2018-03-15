@@ -30,6 +30,9 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "player_died"
     		Game.addGraveStone(data.player);
 
+    	when "play_audio"
+    		Game.playAudio(data.audio, true);
+
 
   delete_bullet: (index) ->
   	#Game.bullets.splice(index, 1); #deletes bullet from all the clients

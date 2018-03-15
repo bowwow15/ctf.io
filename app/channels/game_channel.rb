@@ -65,4 +65,8 @@ class GameChannel < ApplicationCable::Channel
   def pick_up_item (data)
   	Game.pick_up_item(uuid, data['index'])
   end
+
+  def play_audio (data)
+  	Game.play_audio(uuid, data['audio'])
+  end
 end

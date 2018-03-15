@@ -138,4 +138,8 @@ class Game < ApplicationRecord
 	def self.get_kills (uuid)
 		kills = eval(REDIS.get("player_kills_#{uuid}"))
 	end
+
+	def self.play_audio (uuid, audio)
+		ActionCable.server.broadcast "global", {action: "play_audio", audio: audio}
+	end
 end
