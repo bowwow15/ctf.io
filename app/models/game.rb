@@ -140,6 +140,6 @@ class Game < ApplicationRecord
 	end
 
 	def self.play_audio (uuid, audio)
-		ActionCable.server.broadcast "global", {action: "play_audio", audio: audio}
+		ActionCable.server.broadcast "global", {action: "play_audio", audio: audio[0], x: audio[1], y: audio[2]}
 	end
 end

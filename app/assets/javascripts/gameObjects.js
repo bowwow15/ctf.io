@@ -120,12 +120,19 @@ var Game = { // holds framerate and function to draw a frame
     // used for debugging: eval(prompt("function"));
   },
 
-  playAudio: function (audio, audioFromServer = false) {
+  playAudio: function (audio, x, y, audioFromServer = false) {
     if (audioFromServer === false) {
-      App.game.play_audio(audio);
+      App.game.play_audio([audio, x, y]);
     }
     else {
       audio = eval(audio); //turns string into variable
+
+      //calculate distance from sound to player
+      let audioDistance = (x / Player.x) + (y / Player.y) / 2;
+
+      if (audioDistance > 1) audioDistance = 1;
+
+      audio.volume = audioDistance;
 
       if (window.chrome) audio.load();
 
@@ -807,7 +814,7 @@ var Player = {
             this.shootAgain = [false, 0];
             expires = 100;
 
-            Game.playAudio("gunshot_pistol_audio");
+            Game.playAudio("gunshot_pistol_audio", Player.x, Player.y);
 
             var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
             shot = true;
@@ -818,7 +825,7 @@ var Player = {
             expires = 400;
             velocity = 20;
             
-            Game.playAudio("gunshot_rifle_audio");
+            Game.playAudio("gunshot_rifle_audio", Player.x, Player.y);
 
             var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
             shot = true;
@@ -828,7 +835,7 @@ var Player = {
             expires = 400;
             velocity = 15;
 
-            Game.playAudio("gunshot_assault_rifle_audio");
+            Game.playAudio("gunshot_assault_rifle_audio", Player.x, Player.y);
 
             var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
 
@@ -855,7 +862,7 @@ var Player = {
             ammoAmount = 5;
             expires = 100;
 
-            Game.playAudio("gunshot_shotgun_audio");
+            Game.playAudio("gunshot_shotgun_audio", Player.x, Player.y);
 
             if (Player.ammo >= ammoAmount) {
               let bullets = 0;
@@ -872,8 +879,10 @@ var Player = {
         }
       }
 
-      else {
-        Game.playAudio("dry_fire_audio", true);
+      else { //dry fire
+        Game.playAudio("dry_fire_audio", Player.x, Player.y, true);
+
+        Player.shootAgain[0] = false;
       }
 
       if (shot === true) {
@@ -970,6 +979,7 @@ document.getElementById('canvas').onmousedown = function() {
     Player.shoot(Player.rotation);
   }
 }
+
 document.getElementById('canvas').onmouseup = function() {
   mouseDown = 0;
 }

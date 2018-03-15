@@ -31,7 +31,7 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     		Game.addGraveStone(data.player);
 
     	when "play_audio"
-    		Game.playAudio(data.audio, true);
+    		Game.playAudio(data.audio, data.x, data.y, true);
 
 
   delete_bullet: (index) ->
