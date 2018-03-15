@@ -676,6 +676,10 @@ var Player = {
     inventory.forEach(function (element, index) { //automatically adds ammo to ammo count
       if (inventory[index] == "ammo") {
         Player.ammo += 25;
+
+        //plays ammo sound effect
+
+
         inventory[index] = "empty";
 
         App.game.drop_from_inventory([Player.x, Player.y, index]);
@@ -796,6 +800,12 @@ var Player = {
   },
 
   shoot: function (rotation, bulletIncrementFrequency = 100) {
+
+    function dryFire () {
+        Game.playAudio("dry_fire_audio", Player.x, Player.y, true);
+        Player.shootAgain[0] = false;
+    }
+
     let x = this.x;
     let y = this.y;
 
@@ -863,8 +873,6 @@ var Player = {
             ammoAmount = 5;
             expires = 100;
 
-            Game.playAudio("gunshot_shotgun_audio", Player.x, Player.y);
-
             if (Player.ammo >= ammoAmount) {
               let bullets = 0;
               while (bullets < 10) {
@@ -874,6 +882,7 @@ var Player = {
                 bullets++;
               }
 
+              Game.playAudio("gunshot_shotgun_audio", Player.x, Player.y);
               shot = true;
             }
             break;
@@ -881,9 +890,11 @@ var Player = {
       }
 
       else { //dry fire
-        Game.playAudio("dry_fire_audio", Player.x, Player.y, true);
+        dryFire();
+      }
 
-        Player.shootAgain[0] = false;
+      if (shot === false) {
+        dryFire();
       }
 
       if (shot === true) {
