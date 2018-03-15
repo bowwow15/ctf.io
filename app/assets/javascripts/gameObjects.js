@@ -70,6 +70,78 @@ var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
 var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
 
+Map = {
+  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
+  spawnPoint: [0, 0], //default
+  scope: 1,
+  droppedItems: [],
+
+  zoom: function (scopeChange) {
+    this.scope += scopeChange;
+    // this.translateView[0] = this.translateView[0] / (this.scope);
+    // this.translateView[1] = this.translateView[1] / (this.scope);
+  },
+
+  pickUpItem: function (index) {
+    App.game.pick_up_item(index);
+  },
+
+  drawDroppedItems: function () {
+    ctx.textAlign="start";
+    this.droppedItems.forEach(function (element, index) {
+      let x = element[0] - Map.translateView[0];
+      let y = element[1] - Map.translateView[1];
+      let name = element[2];
+
+      if (name != false) {
+        ctx.beginPath();
+        ctx.arc(x - (45 / 2), y + (45 / 2), (30), 0, 2*Math.PI);
+        ctx.strokeStyle = 'white';
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.drawImage(eval(name + "_img"), x - eval(name + "_img").width, y - 2.5);
+      }
+
+      let textCollision = Player.detectCollision([element[0] - 30, element[1] + 15], [Player.x, Player.y], 60, 60, Player.size, Player.size);
+
+      if (textCollision === true) {
+        let x_augmented = Player.x - Map.translateView[0] + 50;
+        let y_augmented = Player.y - Map.translateView[1] - 50;
+
+        ctx.beginPath();
+        ctx.font="30px Courier";
+        ctx.fillStyle='black';
+        ctx.fillText(name, x_augmented, y_augmented - 50);
+        ctx.fillText("Press F to pick up", x_augmented, y_augmented);
+
+        if (keyF === true) {
+          Map.pickUpItem(index);
+          keyF = false;
+        }
+      }
+    });
+  }
+};
+
+// GETS MAP DATA FROM SERVER
+
+$.ajax({
+  url: "getMap",
+  async: false,
+}).done(function( data ) {
+
+  Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct (MAP OBJECT DECLARED IN CANVAS.JS)
+
+  canvasWidthCenter = GameCanvas.width;
+  canvasHeightCenter = GameCanvas.height / 2;
+
+  Map.translateView[0] = Map.spawnPoint[0] - canvasWidthCenter;
+  Map.translateView[1] = Map.spawnPoint[1] - canvasHeightCenter;
+
+});
+
 var Animation = {
   hurtDraw: false,
   hurtFrames: 0,
@@ -128,7 +200,7 @@ var Game = { // holds framerate and function to draw a frame
       audio = eval(audio); //turns string into variable
 
       //calculate distance from sound to player
-      let audioDistance = (x / Player.x) + (y / Player.y) / 2;
+      let audioDistance = eval(1 - (Math.abs(x - Player.x) / (500 / 2)) + (Math.abs(y - Player.y) / (500 / 2)));
 
       if (audioDistance > 1) audioDistance = 1;
 
@@ -301,60 +373,6 @@ var ServerGameObject = {
 	}
 };
 
-Map = {
-  translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
-  spawnPoint: [0, 0], //default
-  scope: 1,
-  droppedItems: [],
-
-  zoom: function (scopeChange) {
-    this.scope += scopeChange;
-    // this.translateView[0] = this.translateView[0] / (this.scope);
-    // this.translateView[1] = this.translateView[1] / (this.scope);
-  },
-
-  pickUpItem: function (index) {
-    App.game.pick_up_item(index);
-  },
-
-  drawDroppedItems: function () {
-    ctx.textAlign="start";
-    this.droppedItems.forEach(function (element, index) {
-      let x = element[0] - Map.translateView[0];
-      let y = element[1] - Map.translateView[1];
-      let name = element[2];
-
-      if (name != false) {
-        ctx.beginPath();
-        ctx.arc(x - (45 / 2), y + (45 / 2), (30), 0, 2*Math.PI);
-        ctx.strokeStyle = 'white';
-        ctx.fillStyle = 'rgba(255,255,255,0.2)';
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.drawImage(eval(name + "_img"), x - eval(name + "_img").width, y - 2.5);
-      }
-
-      let textCollision = Player.detectCollision([element[0] - 30, element[1] + 15], [Player.x, Player.y], 60, 60, Player.size, Player.size);
-
-      if (textCollision === true) {
-        let x_augmented = Player.x - Map.translateView[0] + 50;
-        let y_augmented = Player.y - Map.translateView[1] - 50;
-
-        ctx.beginPath();
-        ctx.font="30px Courier";
-        ctx.fillStyle='black';
-        ctx.fillText(name, x_augmented, y_augmented - 50);
-        ctx.fillText("Press F to pick up", x_augmented, y_augmented);
-
-        if (keyF === true) {
-          Map.pickUpItem(index);
-          keyF = false;
-        }
-      }
-    });
-  }
-};
 
 Hud = {
   toggle: function () {
@@ -369,23 +387,6 @@ OnlinePlayers = {
 
   }
 }; 
-
-// GETS MAP DATA FROM SERVER
-
-$.ajax({
-  url: "getMap",
-  async: false,
-}).done(function( data ) {
-
-  Map = $.extend(Map, JSON.parse(data)); //extends existing map obejct (MAP OBJECT DECLARED IN CANVAS.JS)
-
-  canvasWidthCenter = GameCanvas.width;
-  canvasHeightCenter = GameCanvas.height / 2;
-
-  Map.translateView[0] = Map.spawnPoint[0] - canvasWidthCenter;
-  Map.translateView[1] = Map.spawnPoint[1] - canvasHeightCenter;
-
-});
 
 
 var Player = {
