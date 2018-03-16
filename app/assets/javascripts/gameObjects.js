@@ -40,9 +40,14 @@ var mac_11_img = new Image();
 mac_11_img.src = '/images/inventory/mac_11.png';
 var barrett_m82a1_img = new Image();
 barrett_m82a1_img.src = '/images/inventory/barrett_m82a1.png';
+var the_orion_img = new Image();
+the_orion_img.src = '/images/inventory/the_orion.png';
 
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
+
+var the_orion_top_img = new Image();
+the_orion_top_img.src = '/images/guns/the_orion_top.png';
 
 //audio
 var gunshot_rifle_audio = new Audio('/audio/rifle.mp3');
@@ -50,6 +55,7 @@ var gunshot_50_bmg_audio = new Audio('/audio/50_bmg.mp3');
 var gunshot_shotgun_audio = new Audio('/audio/shotgun.mp3');
 var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
 var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
+var gunshot_the_orion_audio = new Audio('/audio/the_orion.mp3');
 
 var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
@@ -702,6 +708,21 @@ var Player = {
           ctx.fill();
           ctx.resetTransform();
         break;
+
+        case "the_orion":
+          Gun.spawnPoint = [5, -108];
+          Gun.type = "the_orion";
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          ctx.beginPath();
+          ctx.drawImage(the_orion_top_img, x + 9, y - 150); 
+
+          //the_orion_top_img
+          ctx.resetTransform();
+        break;
       }
     }
   },
@@ -741,6 +762,12 @@ var Player = {
     ctx.fillStyle = "black";
     ctx.beginPath();
     ctx.fillText(text, canvas.width - 15, 45);
+  },
+
+  registerPoint: function () {
+    if (Player.kills == 10) {
+      App.game.add_to_inventory("the_orion");
+    }
   },
 
   updateInventory: function () {
@@ -1032,6 +1059,32 @@ var Player = {
                 }
               }
               this.shootAgain[1] = Date.now() + 100;
+              break;
+
+            case "the_orion":
+              expires = 800;
+              velocity = 50;
+              damage = 10;
+              Game.playAudio("gunshot_the_orion_audio", Player.x, Player.y);
+
+              var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid, damage); //single bullet
+
+              if (mouseDown == 1) {
+                if (Player.shootAgain[0] === false) {
+                  Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
+                }
+                else {
+                  if (Player.shootAgain[1] < Date.now()) {
+                    Player.shootAgain = [true, Date.now() + bulletIncrementFrequency, Gun.type]; // 10 milliseconds
+                    var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid, damage);
+                  }
+                }
+              }
+              else {
+                Player.shootAgain = [false, 0];
+              }
+
+              shot = true;
               break;
         }
       }

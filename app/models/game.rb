@@ -63,9 +63,21 @@ class Game < ApplicationRecord
 
 		emptySlot = playerInventory.index{|x|x=="empty"}
 
-		playerInventory[emptySlot] = itemName
+		kills = eval(REDIS.get("player_kills_#{uuid}"))
 
-		REDIS.set("player_inventory_#{uuid}", playerInventory)
+		if itemName == "the_orion"
+			if kills == 10
+				playerInventory[emptySlot] = itemName
+
+				REDIS.set("player_inventory_#{uuid}", playerInventory)
+			end
+		else
+
+			playerInventory[emptySlot] = itemName
+
+			REDIS.set("player_inventory_#{uuid}", playerInventory)
+
+		end
 
 		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: playerInventory}
 	end

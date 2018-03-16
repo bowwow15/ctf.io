@@ -1,9 +1,9 @@
 class Inventory < ApplicationRecord
 	$default_inventory = ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"]
 
-	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47", "mac_11", "barrett_m82a1"]
+	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47", "mac_11", "barrett_m82a1", "the_orion"]
 
-	$op_guns = ["barrett_m82a1"]
+	$op_guns = ["barrett_m82a1", "the_orion"]
 
 	$droppedItems = []
 
@@ -40,13 +40,7 @@ class Inventory < ApplicationRecord
 		y = rand(150..($mapLimit[1]-150))
 
 		if rand(3) > 1
-			@item_id = $all_guns[rand($all_guns.length)]
-
-			# if $op_guns.index(item_id) <= 0 #if gun is OP,
-			# 	if rand(4) < 3 # 1 out of 4 chance of keeping item
-			# 		@item_id = $all_guns[rand($all_guns.length)] #chooses again
-			# 	end
-			# end
+			@item_id = $all_guns[rand($all_guns.length - 1)] # subtract one because the orion is at the end
 		else
 			@item_id = "ammo"
 		end

@@ -20,6 +20,7 @@ App.game = App.cable.subscriptions.create "GameChannel",
     		Player.addToInventory(eval(data.inventory));
     	when "send_player_kills"
     		Player.kills = data.kills
+    		Player.registerPoint();
     	when "send_guns"
     		Game.guns = data.guns;
 
