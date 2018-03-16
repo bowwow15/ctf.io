@@ -963,10 +963,11 @@ var Player = {
             this.shootAgain = [false, 0];
             expires = 400;
             velocity = 20;
+            let damage = 2;
             
             Game.playAudio("gunshot_rifle_audio", Player.x, Player.y);
 
-            var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid); //single bullet
+            var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid, damage); //single bullet
             shot = true;
             break;
 
