@@ -729,39 +729,83 @@ var Player = {
     //check if near the edge of map
     if (x < 0) { //moving left
       if (this.x < 0 + this.size + edgeStop) {
-        move = false;
+        x = 0;
       }
     }
     if (x > 0) { //moving right
       if (this.x > Map.mapLimit[0] - this.size - edgeStop) {
-        move = false;
+        x = 0;
       }
     }
     if (y < 0) { //moving up
       if (this.y < 0 + this.size + edgeStop) {
-        move = false;
+        y = 0;
       }
     }
     if (y > 0) { //moving down
       if (this.y > Map.mapLimit[1] - this.size - edgeStop) {
-        move = false;
+        y = 0;
       }
     }
 
-    return move;
+    return {
+      x: x,
+      y: y
+    };
   },
 
   moveServerPlayer: function () {
     App.game.move_player([this.x, this.y, this.rotation, this.inventory[HudItem.selectedItem]]);
   },
 
+  detectCollision: function (object1, object2, object1Width, object1Height, object2Width, object2Height) {
+    let touching = false;
+
+    if (object1[0] < object2[0] + object2Width  && object1[0] + object1Width  > object2[0] &&
+    object1[1] < object2[1] + object2Height && object1[1] + object1Height > object2[1]) {
+      touching = true;
+    }
+
+    return touching;
+  },
+
+  objectCollisionDetect: function (x, y) {
+    var BreakException = {};
+    let playerBunkerCollision = {};
+
+    try { //detects bullet collisions for each bunker
+      bunkers.forEach(function (element, index) {
+        playerBunkerCollision = {
+          bool: Player.detectCollision([x, y], [bunkers[index].x, bunkers[index].y], Player.size, Player.size, bunkers[index].width, bunkers[index].height),
+          alignment: bunkers[index].alignment
+        };
+
+        if (playerBunkerCollision.bool === true) throw BreakException;
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+
+    return playerBunkerCollision.bool;
+  },
+
   move: function (x, y) {
+    this.lastCoordinates = [this.x, this.y]; //in case we need to go back
     var move = true; //sets default
 
-    move = this.mapEdgeDetect(x, y);
+    x = this.mapEdgeDetect(x, y).x; //map edge detection first...
+    y = this.mapEdgeDetect(x, y).y;
 
-    if (move === true) {
-      if (this.lastMove < Date.now()) {
+    if (this.objectCollisionDetect(Player.x + x, Player.y) === true) { //then object detection
+      x = 0;
+    }
+
+    if (this.objectCollisionDetect(Player.x, Player.y + y) === true) {
+      y = 0;
+    }
+
+    if (this.lastMove < Date.now()) {
+      if (move === true) {
         this.moveMargin = (Date.now() - this.lastMove) / 16;
 
         this.x += x * this.moveMargin; //changes coordinates on the client side. (absolute coords)
@@ -771,13 +815,13 @@ var Player = {
         if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
           this.moveServerPlayer();
 
-          if (Player.center === true) {
+          if (Player.center === true && move === true) {
             Map.translateView[0] += x * this.moveMargin;
             Map.translateView[1] += y * this.moveMargin;
           }
         }
-        this.lastMove = Date.now();
       }
+      this.lastMove = Date.now();
     }
 
     //detect canvas edge, and edit translateView[]
@@ -946,17 +990,6 @@ var Player = {
     Animation.hurtDraw = true;
   },
 
-  detectCollision: function (object1, object2, object1Width, object1Height, object2Width, object2Height) {
-    let touching = false;
-
-    if (object1[0] < object2[0] + object2Width  && object1[0] + object1Width  > object2[0] &&
-    object1[1] < object2[1] + object2Height && object1[1] + object1Height > object2[1]) {
-      touching = true;
-    }
-
-    return touching;
-  },
-
   drawAll: function (x, y, rotation, name, inventoryItem) {
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
@@ -981,15 +1014,7 @@ var Player = {
 
     this.healthRegen(2000);
 
-    //TESTING (DELETE)
-    bunkers.forEach(function (element, index) {
-      ctx.beginPath();
-      ctx.fillStyle = "black";
-      ctx.rect(bunkers[index].x - Map.translateView[0], bunkers[index].y - Map.translateView[1], bunkers[index].width, bunkers[index].height);
-      ctx.fill();
-    });
-
-    if (name != Player.name) { this.drawName(x, y, name); }
+    Bunker.drawAll();
   }
 };
 

@@ -20,24 +20,7 @@ function getPoint(mx, my, cx, cy, angle) {
     return {x:x, y:y};
 }
 
-var bunkers = [
-{
-	x: 500,
-	y: 500,
-	width: 5,
-	height: 250,
-	alignment: "vertical"
-},
-
-{
-	x: 500,
-	y: 500,
-	width: 250,
-	height: 5,
-	alignment: "horizontal"
-},
-
-];
+var bunkers = [];
 
 function calculateBulletRicochetAngle (angleOfBullet, angleOfObject) {
 	if (angleOfObject == "vertical") {
@@ -50,3 +33,68 @@ function calculateBulletRicochetAngle (angleOfBullet, angleOfObject) {
 
 	return angleOfBullet;
 }
+
+bunker_texture = new Image();
+bunker_texture.src = '/images/bunker_texture.png';
+
+var Bunker = {
+	test: true,
+	square: function (x, y) {
+		bunkers.push({
+			x: x,
+			y: y,
+			width: 15,
+			height: 250,
+			alignment: "vertical"
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 250,
+			height: 15,
+			alignment: "horizontal"
+		},
+		
+		{
+			x: x + 250,
+			y: y,
+			width: 15,
+			height: 250,
+			alignment: "vertical"
+		},
+
+		{
+			x: x,
+			y: y + 250,
+			width: 70,
+			height: 15,
+			alignment: "horizontal"
+		},
+
+		{
+			x: x + 265 - 70,
+			y: y + 250,
+			width: 70,
+			height: 15,
+			alignment: "horizontal"
+		});
+	},
+
+	drawAll: function () {
+		bunkers.forEach(function (element, index) {
+			ctx.beginPath();
+			ctx.fillStyle = "black";
+			let x_augmented = element.x - Map.translateView[0];
+			let y_augmented = element.y - Map.translateView[1];
+
+			var pattern = ctx.createPattern(bunker_texture,"repeat");
+			ctx.fillStyle = pattern;
+
+			ctx.rect(x_augmented, y_augmented, element.width, element.height);
+			ctx.fill();
+		});
+	}
+};
+
+Bunker.square(10, 10);
