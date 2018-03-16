@@ -404,6 +404,10 @@ OnlinePlayers = {
 
 var Player = {
   size: 40,
+  hitBox: {
+    width: 80,
+    height: 80
+  },
   rotation: 0,
   speed: 3,
   lastMove: Date.now(),
@@ -776,7 +780,7 @@ var Player = {
     try { //detects bullet collisions for each bunker
       bunkers.forEach(function (element, index) {
         playerBunkerCollision = {
-          bool: Player.detectCollision([x, y], [bunkers[index].x, bunkers[index].y], Player.size, Player.size, bunkers[index].width, bunkers[index].height),
+          bool: Player.detectCollision([x - Player.size, y - Player.size], [bunkers[index].x, bunkers[index].y], Player.hitBox.width, Player.hitBox.height, bunkers[index].width, bunkers[index].height),
           alignment: bunkers[index].alignment
         };
 
