@@ -206,7 +206,7 @@ var Game = { // holds framerate and function to draw a frame
     y = player[1] - Map.translateView[1];
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0, dontShootYourselfTimer = 5, damage = 1) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, damage = 1, until_next_ricochet = 0, dontShootYourselfTimer = 5) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
@@ -1016,9 +1016,9 @@ var Player = {
             break;
 
             case "50_bmg":
-              expires = 400;
+              expires = 800;
               velocity = 50;
-              damage = 10;
+              let damage = 10;
               ammoAmount = 10; //takes 10 bullets to fire
 
               if (Player.shootAgain[1] < Date.now()) {
