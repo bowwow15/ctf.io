@@ -375,13 +375,19 @@ HudItem = {
     });
   },
 
-  select: function (id) {
+  select: function (index) {
     //selects item from HTML HUD
-    if (id != this.selectedItem) { //that would deselect the HUD item... don't do that
-      document.getElementById("hudSlot" + id).classList.add('hudSelected');
+    if (index != this.selectedItem) { //that would deselect the HUD item... don't do that
+      document.getElementById("hudSlot" + index).classList.add('hudSelected');
       document.getElementById("hudSlot" + this.selectedItem).classList.remove('hudSelected'); //removes class from deselected item
-      this.selectedItem = id;
+      this.selectedItem = index;
     }
+
+    $("#hudStatus").show();
+    $("#hudStatus").html(Player.inventory[index]);
+    window.setTimeout(function () {
+      $("#hudStatus").fadeOut(500);
+    }, 5000);
   },
 
   //determines weather the selected item is a gun or not.
