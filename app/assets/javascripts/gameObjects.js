@@ -274,7 +274,7 @@ var Game = { // holds framerate and function to draw a frame
           Game.ricoshetNoBlur = 2;
 
           Game.bullets[index][2] = calculateBulletRicochetAngle(Game.bullets[index][2], bunkerCollision.alignment);
-          Game.bullets[index][7] = 5; //5 frames until the next ricochet
+          Game.bullets[index][7] = 2; //5 frames until the next ricochet
 
           ricoshetDistanceToCompensateBlur = {
             x: 65,
