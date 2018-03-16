@@ -239,7 +239,7 @@ var Game = { // holds framerate and function to draw a frame
         y: 0
       }; //distance to remove the extra blur...
 
-      var rotation = element[2] - 91;
+      var rotation = element[2] - 90;
 
       x_velocity = (velocity - ricoshetDistanceToCompensateBlur.x) * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
       y_velocity = (velocity - ricoshetDistanceToCompensateBlur.y) * Math.sin(rotation * Math.PI / 180);
