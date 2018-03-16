@@ -225,7 +225,7 @@ var Game = { // holds framerate and function to draw a frame
   drawBullets: function () {
     Game.bullets.forEach(function (element, index) {
       var expires = element[4];
-      var velocity = element[3];
+      var velocity = element[3] * 3;
       let x = element[0];
       let y = element[1];
       var blur = element[5];
@@ -1039,6 +1039,21 @@ var Player = {
     this.healthRegen(2000);
 
     Bunker.drawAll();
+  },
+
+  drawAllOnline: function (x, y, rotation, name, inventoryItem) {
+    x = x - Map.translateView[0]; //augmented by player's view
+    y = y - Map.translateView[1];
+
+    var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
+
+    this.drawGun(x, y, rotation, inventoryItem);
+
+    this.drawPerson(x, y);
+
+    this.drawHands(x, y, rotation, gun);
+
+    this.drawName(x, y, name);
   }
 };
 
