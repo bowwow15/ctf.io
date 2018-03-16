@@ -947,6 +947,7 @@ var Player = {
 
         var ammoAmount = 1; //the ammount of ammo used by each gun
         var shot = false;
+        let damage = 1;
 
         switch (Gun.type) {
           case "pistol":
@@ -963,7 +964,7 @@ var Player = {
             this.shootAgain = [false, 0];
             expires = 400;
             velocity = 20;
-            let damage = 2;
+            damage = 2;
             
             Game.playAudio("gunshot_rifle_audio", Player.x, Player.y);
 
@@ -1019,7 +1020,7 @@ var Player = {
             case "50_bmg":
               expires = 800;
               velocity = 50;
-              let damage = 10;
+              damage = 10;
               ammoAmount = 10; //takes 10 bullets to fire
 
               if (Player.shootAgain[1] < Date.now()) {
