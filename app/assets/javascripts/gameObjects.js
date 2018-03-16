@@ -38,11 +38,15 @@ var remington_870_img = new Image();
 remington_870_img.src = '/images/inventory/remington_870.png';
 var mac_11_img = new Image();
 mac_11_img.src = '/images/inventory/mac_11.png';
+var barrett_m82a1_img = new Image();
+barrett_m82a1_img.src = '/images/inventory/barrett_m82a1.png';
+
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
 
 //audio
 var gunshot_rifle_audio = new Audio('/audio/rifle.mp3');
+var gunshot_50_bmg_audio = new Audio('/audio/50_bmg.mp3');
 var gunshot_shotgun_audio = new Audio('/audio/shotgun.mp3');
 var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
 var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
@@ -202,12 +206,12 @@ var Game = { // holds framerate and function to draw a frame
     y = player[1] - Map.translateView[1];
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0, dontShootYourselfTimer = 5) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0, dontShootYourselfTimer = 5, damage = 1) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
 
-    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid, until_next_ricochet, dontShootYourselfTimer]);
+    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid, until_next_ricochet, dontShootYourselfTimer, damage]);
 
     //Game.bullets.push([x, y, rotation, velocity, expires]);
     //not using above code because it is already declared in global.coffee
@@ -241,7 +245,7 @@ var Game = { // holds framerate and function to draw a frame
       y_velocity = (velocity - ricoshetDistanceToCompensateBlur.y) * Math.sin(rotation * Math.PI / 180);
 
       //detect bullet collisions
-      let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 50, 50, Player.hitBox.width, Player.hitBox.height);
+      let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], Math.abs(x_velocity), Math.abs(y_velocity), Player.hitBox.width, Player.hitBox.height);
         
       var bunkerCollision = {};
       var BreakException = {};
@@ -266,7 +270,7 @@ var Game = { // holds framerate and function to draw a frame
         if (bulletUuid != Player.self_uuid || element[8] < 1) { //element[4] is expires
           App.global.delete_bullet(index); //tells server to delete bullet
 
-          Player.gotShot(velocity, element[6]);
+          Player.gotShot(velocity, element[6], element[9]);
         }
       }
 
@@ -673,6 +677,31 @@ var Player = {
 
           ctx.resetTransform();
         break;
+
+        case "barrett_m82a1":
+          Gun.spawnPoint = [-2, -175];
+          Gun.type = "50_bmg";
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          ctx.beginPath();
+          ctx.rect(x + 9, y - 40, 7, -85); //barret is squared.
+
+          ctx.stroke();
+          ctx.fill();
+
+          //barrel of barret
+          ctx.beginPath();
+          ctx.strokeStyle = "#262626";
+          ctx.fillStyle = "#262626";
+          ctx.rect(x + 13, y - 50, 0, -135);
+
+          ctx.stroke();
+          ctx.fill();
+          ctx.resetTransform();
+        break;
       }
     }
   },
@@ -985,6 +1014,23 @@ var Player = {
               shot = true;
             }
             break;
+
+            case "50_bmg":
+              expires = 400;
+              velocity = 50;
+              damage = 10;
+              ammoAmount = 10; //takes 10 bullets to fire
+
+              if (Player.shootAgain[1] < Date.now()) {
+                if (Player.ammo >= ammoAmount) {
+                  Game.playAudio("gunshot_50_bmg_audio", Player.x, Player.y);
+
+                  var bullet = new Game.bullet(pos.x, pos.y, rotation, velocity, expires, true, this.self_uuid, damage); //single bullet
+                  shot = true;
+                }
+              }
+              this.shootAgain[1] = Date.now() + 100;
+              break;
         }
       }
 
@@ -1010,10 +1056,10 @@ var Player = {
     }
   },
 
-  gotShot: function (velocityOfBullet, player_uuid) {
+  gotShot: function (velocityOfBullet, player_uuid, damage) {
     this.lastPlayerThatDeltDamage = player_uuid;
 
-    this.health -= velocityOfBullet / 2;
+    this.health -= (velocityOfBullet / 10) * damage;
 
     App.game.send_player_health(this.health);
 

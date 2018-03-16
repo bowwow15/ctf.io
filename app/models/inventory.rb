@@ -1,7 +1,9 @@
 class Inventory < ApplicationRecord
 	$default_inventory = ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"]
 
-	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47", "mac_11"]
+	$all_guns = ["glock_19", "ar_15", "remington_870", "ak_47", "mac_11", "barrett_m82a1"]
+
+	$op_guns = ["barrett_m82a1"]
 
 	$droppedItems = []
 
@@ -38,12 +40,18 @@ class Inventory < ApplicationRecord
 		y = rand(150..($mapLimit[1]-150))
 
 		if rand(3) > 1
-			item_id = $all_guns[rand($all_guns.length)]
+			@item_id = $all_guns[rand($all_guns.length)]
+
+			# if $op_guns.index(item_id) <= 0 #if gun is OP,
+			# 	if rand(4) < 3 # 1 out of 4 chance of keeping item
+			# 		@item_id = $all_guns[rand($all_guns.length)] #chooses again
+			# 	end
+			# end
 		else
-			item_id = "ammo"
+			@item_id = "ammo"
 		end
 
-		$newItem = [x, y, item_id, "infinite"]
+		$newItem = [x, y, @item_id, "infinite"]
 		return $newItem
 	end
 
@@ -52,16 +60,9 @@ class Inventory < ApplicationRecord
 		itemCount = 0
 
 		while itemCount <= itemsToDraw
-			x = rand(150..($mapLimit[0]-150))
-			y = rand(150..($mapLimit[1]-150))
+			new_item = self.generate_new_item
 
-			if rand(3) > 1
-				item_id = $all_guns[rand($all_guns.length)]
-			else
-				item_id = "ammo"
-			end
-
-			$droppedItems.push([x, y, item_id, "infinite"])
+			$droppedItems.push(new_item)
 			itemCount += 1
 		end
 
