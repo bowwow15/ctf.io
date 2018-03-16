@@ -202,7 +202,7 @@ var Game = { // holds framerate and function to draw a frame
     y = player[1] - Map.translateView[1];
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 5) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
@@ -236,7 +236,7 @@ var Game = { // holds framerate and function to draw a frame
       }; //distance to remove the extra blur...
 
       //detect bullet collisions
-      let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.hitBox.width, Player.hitBox.height);
+      let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 50, 50, Player.hitBox.width, Player.hitBox.height);
         
       var bunkerCollision = {};
       var BreakException = {};
@@ -306,7 +306,7 @@ var Game = { // holds framerate and function to draw a frame
 
         ctx.fill();
 
-        if (blur === true && Game.ricoshetNoBlur <= 0) {
+        if (blur === true) {
           //draw blur after bullet
           ctx.beginPath();
 
