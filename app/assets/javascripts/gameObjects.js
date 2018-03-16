@@ -229,9 +229,10 @@ var Game = { // holds framerate and function to draw a frame
       let x = element[0];
       let y = element[1];
       var blur = element[5];
+      var bulletUuid = element[6];
 
       //detect bullet collisions
-      let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.size, Player.size);
+      let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.hitBox.width, Player.hitBox.height);
         
       var bunkerCollision = {};
       var BreakException = {};
@@ -250,9 +251,12 @@ var Game = { // holds framerate and function to draw a frame
       }
 
       if (bulletCollision === true) {
-        App.global.delete_bullet(index); //tells server to delete bullet
+        //if bullet isn't your own...
+        if (bulletUuid != Player.self_uuid) {
+          App.global.delete_bullet(index); //tells server to delete bullet
 
-        Player.gotShot(velocity, element[6]);
+          Player.gotShot(velocity, element[6]);
+        }
       }
 
       var rotation = element[2] - 91;
