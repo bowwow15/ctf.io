@@ -202,12 +202,12 @@ var Game = { // holds framerate and function to draw a frame
     y = player[1] - Map.translateView[1];
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 0, dontShootYourselfTimer = 5) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
 
-    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid, until_next_ricochet]);
+    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid, until_next_ricochet, dontShootYourselfTimer]);
 
     //Game.bullets.push([x, y, rotation, velocity, expires]);
     //not using above code because it is already declared in global.coffee
@@ -259,9 +259,11 @@ var Game = { // holds framerate and function to draw a frame
         if (e !== BreakException) throw e;
       }
 
+      element[8] -= 1; //DONTSHOOTYOURSELFTIMER
+
       if (bulletCollision === true) {
         //if bullet isn't your own...
-        if (bulletUuid != Player.self_uuid) {
+        if (bulletUuid != Player.self_uuid || element[8] < 1) { //element[4] is expires
           App.global.delete_bullet(index); //tells server to delete bullet
 
           Player.gotShot(velocity, element[6]);
