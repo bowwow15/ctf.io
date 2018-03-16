@@ -235,6 +235,11 @@ var Game = { // holds framerate and function to draw a frame
         y: 0
       }; //distance to remove the extra blur...
 
+      var rotation = element[2] - 91;
+
+      x_velocity = (velocity - ricoshetDistanceToCompensateBlur.x) * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
+      y_velocity = (velocity - ricoshetDistanceToCompensateBlur.y) * Math.sin(rotation * Math.PI / 180);
+
       //detect bullet collisions
       let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 50, 50, Player.hitBox.width, Player.hitBox.height);
         
@@ -244,7 +249,7 @@ var Game = { // holds framerate and function to draw a frame
       try { //detects bullet collisions for each bunker
         bunkers.forEach(function (element, index) {
           bunkerCollision = {
-            bool: Player.detectCollision([x, y], [bunkers[index].x, bunkers[index].y], 5 * velocity / 10, 5 * velocity / 10, bunkers[index].width, bunkers[index].height),
+            bool: Player.detectCollision([x + x_velocity, y + y_velocity], [bunkers[index].x, bunkers[index].y], Math.abs(x_velocity), Math.abs(y_velocity), bunkers[index].width, bunkers[index].height),
             alignment: bunkers[index].alignment
           };
 
@@ -263,8 +268,6 @@ var Game = { // holds framerate and function to draw a frame
         }
       }
 
-      var rotation = element[2] - 91;
-
       if (expires > 0) {
         Game.bullets[index][4] -= velocity / 10;
 
@@ -274,7 +277,7 @@ var Game = { // holds framerate and function to draw a frame
           Game.ricoshetNoBlur = 3;
 
           Game.bullets[index][2] = calculateBulletRicochetAngle(Game.bullets[index][2], bunkerCollision.alignment);
-          Game.bullets[index][7] = 2; //5 frames until the next ricochet
+          Game.bullets[index][7] = 0; //0 frames until the next ricochet
 
           ricoshetDistanceToCompensateBlur = {
             x: 65,
@@ -289,6 +292,7 @@ var Game = { // holds framerate and function to draw a frame
           }
         }
 
+        //reinstate variables below, augmented by (Object) ricoshetDistanceToCompensateBlur
         x_velocity = (velocity - ricoshetDistanceToCompensateBlur.x) * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
         y_velocity = (velocity - ricoshetDistanceToCompensateBlur.y) * Math.sin(rotation * Math.PI / 180);
 
