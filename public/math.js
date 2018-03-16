@@ -94,7 +94,24 @@ var Bunker = {
 			ctx.rect(x_augmented, y_augmented, element.width, element.height);
 			ctx.fill();
 		});
+	},
+
+	drawServerBunkers: function (bunkersArray) {
+		//coffeescript calls this function
+
+		bunkersArray.forEach(function (element, index) {
+			let x = bunkersArray[index][0];
+			let y = bunkersArray[index][1];
+
+			switch (bunkersArray[index][2]) {
+				case "square":
+				Bunker.square(x, y);
+				break;
+			}
+		});
 	}
 };
 
-Bunker.square(10, 10);
+
+
+

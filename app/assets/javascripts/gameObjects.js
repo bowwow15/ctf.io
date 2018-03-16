@@ -230,6 +230,10 @@ var Game = { // holds framerate and function to draw a frame
       let y = element[1];
       var blur = element[5];
       var bulletUuid = element[6];
+      var ricoshetDistanceToCompensateBlur = {
+        x: 0,
+        y: 0
+      }; //distance to remove the extra blur...
 
       //detect bullet collisions
       let bulletCollision = Player.detectCollision([x + Player.size, y + Player.size], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.hitBox.width, Player.hitBox.height);
@@ -264,9 +268,6 @@ var Game = { // holds framerate and function to draw a frame
       if (expires > 0) {
         Game.bullets[index][4] -= velocity / 10;
 
-        x_velocity = velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
-        y_velocity = velocity * Math.sin(rotation * Math.PI / 180);
-
         //if bullet is set to ricochet...
         if (bunkerCollision.bool === true && Game.bullets[index][7] <= 0) { //game.bullets[index][7] determines if the bullet already ricosheted.
           //bullet ricoshets
@@ -274,7 +275,22 @@ var Game = { // holds framerate and function to draw a frame
 
           Game.bullets[index][2] = calculateBulletRicochetAngle(Game.bullets[index][2], bunkerCollision.alignment);
           Game.bullets[index][7] = 5; //5 frames until the next ricochet
+
+          ricoshetDistanceToCompensateBlur = {
+            x: 65,
+            y: 65
+          }; //distance to remove the extra blur...
+
+          if (bunkerCollision.alignment == "vertical") {
+            ricoshetDistanceToCompensateBlur.y = 0;
+          }
+          else {
+            ricoshetDistanceToCompensateBlur.x = 0;
+          }
         }
+
+        x_velocity = (velocity - ricoshetDistanceToCompensateBlur.x) * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
+        y_velocity = (velocity - ricoshetDistanceToCompensateBlur.y) * Math.sin(rotation * Math.PI / 180);
 
         Game.bullets[index][0] += x_velocity;
         Game.bullets[index][1] += y_velocity;

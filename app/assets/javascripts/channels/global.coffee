@@ -18,6 +18,9 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "send_dropped_items"
     		Map.droppedItems = eval(data.items)
 
+    	when "send_map_bunkers"
+    		Bunker.drawServerBunkers(eval(data.bunkersArray));
+
     	when "send_bullets"
     		Game.bullets.push(eval(data.bullets));
 
