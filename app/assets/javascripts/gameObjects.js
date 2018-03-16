@@ -1,24 +1,4 @@
-//Math functions
-function getPoint(mx, my, cx, cy, angle) {
 
-    var x, y, dist, diffX, diffY, ca, na;
-
-    diffX = cx - mx;
-    diffY = cy - my;
-    dist = Math.sqrt(diffX * diffX + diffY * diffY);
-    
-    /// find angle from pivot to corner
-    ca = Math.atan2(diffY, diffX) * 180 / Math.PI;
-  
-    /// get new angle based on old + current delta angle
-    na = ((ca + angle) % 360) * Math.PI / 180;
-    
-    /// get new x and y and round it off to integer
-    x = (mx + dist * Math.cos(na) + 0.5)|0;
-    y = (my + dist * Math.sin(na) + 0.5)|0;
-
-    return {x:x, y:y};
-}
 
 //this file contains JavaScript canvas objects used in game.js, or other places...
 
@@ -177,6 +157,7 @@ var Game = { // holds framerate and function to draw a frame
   guns: [],
   bullets: [],
   mousePos: [0, 0],
+  ricoshetNoBlur: 0,
 
   draw: function (fps) {
     // drawGrid();
@@ -221,12 +202,12 @@ var Game = { // holds framerate and function to draw a frame
     y = player[1] - Map.translateView[1];
   },
 
-  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid) {
+  bullet: function (x, y, rotation, velocity, expires, blur = true, player_uuid, until_next_ricochet = 5) {
     this.x = x;
     this.y = y;
     this.rotation = rotation;
 
-    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid]);
+    App.game.shoot([x, y, rotation, velocity, expires, blur, player_uuid, until_next_ricochet]);
 
     //Game.bullets.push([x, y, rotation, velocity, expires]);
     //not using above code because it is already declared in global.coffee
@@ -245,16 +226,54 @@ var Game = { // holds framerate and function to draw a frame
     Game.bullets.forEach(function (element, index) {
       var expires = element[4];
       var velocity = element[3];
-      var rotation = element[2] - 91;
       let x = element[0];
       let y = element[1];
       var blur = element[5];
 
+      //detect bullet collisions
+      let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.size, Player.size);
+        
+      var bunkerCollision = {};
+      var BreakException = {};
+
+      try { //detects bullet collisions for each bunker
+        bunkers.forEach(function (element, index) {
+          bunkerCollision = {
+            bool: Player.detectCollision([x, y], [bunkers[index].x, bunkers[index].y], 5 * velocity / 10, 5 * velocity / 10, bunkers[index].width, bunkers[index].height),
+            alignment: bunkers[index].alignment
+          };
+
+          if (bunkerCollision.bool === true) throw BreakException;
+        });
+      } catch (e) {
+        if (e !== BreakException) throw e;
+      }
+
+      if (bulletCollision === true) {
+        App.global.delete_bullet(index); //tells server to delete bullet
+
+        Player.gotShot(velocity, element[6]);
+      }
+
+      var rotation = element[2] - 91;
+
       if (expires > 0) {
         Game.bullets[index][4] -= velocity / 10;
 
-        Game.bullets[index][0] += velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
-        Game.bullets[index][1] += velocity * Math.sin(rotation * Math.PI / 180);
+        x_velocity = velocity * Math.cos(rotation * Math.PI / 180); //calculate direction of bullet
+        y_velocity = velocity * Math.sin(rotation * Math.PI / 180);
+
+        //if bullet is set to ricochet...
+        if (bunkerCollision.bool === true && Game.bullets[index][7] <= 0) { //game.bullets[index][7] determines if the bullet already ricosheted.
+          //bullet ricoshets
+          Game.ricoshetNoBlur = 2;
+
+          Game.bullets[index][2] = calculateBulletRicochetAngle(Game.bullets[index][2], bunkerCollision.alignment);
+          Game.bullets[index][7] = 5; //5 frames until the next ricochet
+        }
+
+        Game.bullets[index][0] += x_velocity;
+        Game.bullets[index][1] += y_velocity;
 
         x_augmented = x - Map.translateView[0]; //augmented by player's view
         y_augmented = y - Map.translateView[1];
@@ -267,7 +286,7 @@ var Game = { // holds framerate and function to draw a frame
 
         ctx.fill();
 
-        if (blur === true) {
+        if (blur === true && Game.ricoshetNoBlur <= 0) {
           //draw blur after bullet
           ctx.beginPath();
 
@@ -286,15 +305,8 @@ var Game = { // holds framerate and function to draw a frame
         Game.bullets.splice(index, 1); //deletes bullet
       }
 
-    //detect bullet collisions
-    let bulletCollision = Player.detectCollision([x, y], [Player.x, Player.y], 5 * velocity / 10, 5 * velocity / 10, Player.size, Player.size);
-
-    if (bulletCollision === true) {
-      App.global.delete_bullet(index); //tells server to delete bullet
-
-      Player.gotShot(velocity, element[6]);
-    }
-
+      if (Game.ricoshetNoBlur > 0) Game.ricoshetNoBlur -= 1; //take away one each time
+      Game.bullets[index][7] -= 1;
     });
   }
 };
@@ -967,6 +979,14 @@ var Player = {
     this.shootAuto();
 
     this.healthRegen(2000);
+
+    //TESTING (DELETE)
+    bunkers.forEach(function (element, index) {
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.rect(bunkers[index].x - Map.translateView[0], bunkers[index].y - Map.translateView[1], bunkers[index].width, bunkers[index].height);
+      ctx.fill();
+    });
 
     if (name != Player.name) { this.drawName(x, y, name); }
   }

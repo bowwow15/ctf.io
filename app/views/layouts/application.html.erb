@@ -16,6 +16,7 @@
 
   <body onresize="resizeCanvas()">
     <%= yield %>
+    <script src="math.js"></script>
     <%= javascript_include_tag 'canvas', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'gameObjects', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'game', 'data-turbolinks-track': 'reload' %>
