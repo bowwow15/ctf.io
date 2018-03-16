@@ -1051,6 +1051,7 @@ var Player = {
             break;
 
             case "50_bmg":
+              this.shootAgain = [false, 0];
               expires = 800;
               velocity = 50;
               damage = 10;
