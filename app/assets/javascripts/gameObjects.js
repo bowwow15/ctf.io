@@ -300,13 +300,14 @@ var Game = { // holds framerate and function to draw a frame
 
           ctx.resetTransform();
         }
+
+        Game.bullets[index][7] -= 1;
+
+        if (Game.ricoshetNoBlur > 0) { Game.ricoshetNoBlur -= 1; } //take away one each time
       }
       else {
         Game.bullets.splice(index, 1); //deletes bullet
       }
-
-      if (Game.ricoshetNoBlur > 0) Game.ricoshetNoBlur -= 1; //take away one each time
-      Game.bullets[index][7] -= 1;
     });
   }
 };
