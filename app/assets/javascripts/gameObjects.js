@@ -271,7 +271,7 @@ var Game = { // holds framerate and function to draw a frame
         //if bullet is set to ricochet...
         if (bunkerCollision.bool === true && Game.bullets[index][7] <= 0) { //game.bullets[index][7] determines if the bullet already ricosheted.
           //bullet ricoshets
-          Game.ricoshetNoBlur = 2;
+          Game.ricoshetNoBlur = 3;
 
           Game.bullets[index][2] = calculateBulletRicochetAngle(Game.bullets[index][2], bunkerCollision.alignment);
           Game.bullets[index][7] = 2; //5 frames until the next ricochet
