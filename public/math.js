@@ -37,15 +37,19 @@ function calculateBulletRicochetAngle (angleOfBullet, angleOfObject) {
 bunker_texture = new Image();
 bunker_texture.src = '/images/bunker_texture.png';
 
+tile_wood_floor_texture = new Image();
+tile_wood_floor_texture.src = '/images/tile_wood_floor_texture.png';
+
 var Bunker = {
-	test: true,
+
 	square: function (x, y) {
 		bunkers.push({
 			x: x,
 			y: y,
 			width: 15,
 			height: 250,
-			alignment: "vertical"
+			alignment: "vertical",
+			type: "bunker"
 		},
 
 		{
@@ -53,7 +57,8 @@ var Bunker = {
 			y: y,
 			width: 250,
 			height: 15,
-			alignment: "horizontal"
+			alignment: "horizontal",
+			type: "bunker"
 		},
 		
 		{
@@ -61,7 +66,8 @@ var Bunker = {
 			y: y,
 			width: 15,
 			height: 250,
-			alignment: "vertical"
+			alignment: "vertical",
+			type: "bunker"
 		},
 
 		{
@@ -69,7 +75,8 @@ var Bunker = {
 			y: y + 250,
 			width: 70,
 			height: 15,
-			alignment: "horizontal"
+			alignment: "horizontal",
+			type: "bunker"
 		},
 
 		{
@@ -77,7 +84,174 @@ var Bunker = {
 			y: y + 250,
 			width: 70,
 			height: 15,
-			alignment: "horizontal"
+			alignment: "horizontal",
+			type: "bunker"
+		});
+	},
+
+	house: function (x, y) {
+		bunkers.push({
+			x: x + 15,
+			y: y + 15,
+			width: 500 - 15,
+			height: 500 - 15,
+			alignment: "none",
+			type: "tile_wood_floor",
+			collision: false
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 500,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 15,
+			height: 500,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y + 500,
+			width: 515,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x + 500,
+			y: y,
+			width: 15,
+			height: 400,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
+		});
+	},
+
+	house_opposite: function (x, y) {
+		bunkers.push({
+			x: x + 15,
+			y: y + 15,
+			width: 500 - 15,
+			height: 500 - 15,
+			alignment: "none",
+			type: "tile_wood_floor",
+			collision: false
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 500,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x + 500,
+			y: y,
+			width: 15,
+			height: 500,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y + 500,
+			width: 515,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 15,
+			height: 400,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
+		});
+	},
+
+	house_facing_up: function(x, y) {
+		bunkers.push({
+			x: x + 15,
+			y: y + 15,
+			width: 500 - 15,
+			height: 500 - 15,
+			alignment: "none",
+			type: "tile_wood_floor",
+			collision: false
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 200,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x + 300,
+			y: y,
+			width: 200,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x + 500,
+			y: y,
+			width: 15,
+			height: 500,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y + 500,
+			width: 515,
+			height: 15,
+			alignment: "horizontal",
+			type: "bunker",
+			collision: true
+		},
+
+		{
+			x: x,
+			y: y,
+			width: 15,
+			height: 500,
+			alignment: "vertical",
+			type: "bunker",
+			collision: true
 		});
 	},
 
@@ -85,14 +259,28 @@ var Bunker = {
 		bunkers.forEach(function (element, index) {
 			ctx.beginPath();
 			ctx.fillStyle = "black";
+
 			let x_augmented = element.x - Map.translateView[0];
 			let y_augmented = element.y - Map.translateView[1];
+			switch (element.type) {
+				case "bunker":
+					var pattern = ctx.createPattern(bunker_texture,"repeat");
+					ctx.fillStyle = pattern;
+				break;
 
-			var pattern = ctx.createPattern(bunker_texture,"repeat");
-			ctx.fillStyle = pattern;
+				case "tile_wood_floor":
+					var pattern = ctx.createPattern(tile_wood_floor_texture,"repeat");
+					ctx.fillStyle = pattern;
+				break;
+			}
 
 			ctx.rect(x_augmented, y_augmented, element.width, element.height);
+
+			ctx.translate(x_augmented, y_augmented);
+
 			ctx.fill();
+
+			ctx.resetTransform();
 		});
 	},
 
@@ -106,6 +294,18 @@ var Bunker = {
 			switch (bunkersArray[index][2]) {
 				case "square":
 				Bunker.square(x, y);
+				break;
+
+				case "house":
+				Bunker.house(x, y);
+				break;
+
+				case "house1":
+				Bunker.house_opposite(x, y);
+				break;
+
+				case "house2":
+				Bunker.house_facing_up(x, y);
 				break;
 			}
 		});

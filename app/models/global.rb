@@ -18,7 +18,8 @@ class Global < ApplicationRecord
 
 		REDIS.set("player_kills_#{uuid}", 0)
 
-		ActionCable.server.broadcast "global", {action: "send_map_bunkers", uuid: uuid, bunkersArray: @map.bunkersArray}
+		bunkers = eval(REDIS.get("global_bunkers"))
+		ActionCable.server.broadcast "global", {action: "send_map_bunkers", uuid: uuid, bunkersArray: bunkers}
 
 		ActionCable.server.broadcast "global", {action: "send_player_name", uuid: uuid, name: name}
 

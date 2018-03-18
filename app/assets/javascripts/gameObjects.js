@@ -263,7 +263,7 @@ var Game = { // holds framerate and function to draw a frame
             alignment: bunkers[index].alignment
           };
 
-          if (bunkerCollision.bool === true) throw BreakException;
+          if (bunkerCollision.bool === true && bunkers[index].collision != false) throw BreakException;
         });
       } catch (e) {
         if (e !== BreakException) throw e;
@@ -861,18 +861,18 @@ var Player = {
     return touching;
   },
 
-  objectCollisionDetect: function (x, y) {
+  objectCollisionDetect: function (x, y, x_velocity, y_velocity) {
     var BreakException = {};
     let playerBunkerCollision = {};
 
     try { //detects bullet collisions for each bunker
       bunkers.forEach(function (element, index) {
         playerBunkerCollision = {
-          bool: Player.detectCollision([x - Player.size, y - Player.size], [bunkers[index].x, bunkers[index].y], Player.hitBox.width, Player.hitBox.height, bunkers[index].width, bunkers[index].height),
+          bool: Player.detectCollision([x - Player.size, y - Player.size], [bunkers[index].x, bunkers[index].y], Player.hitBox.width + x_velocity, Player.hitBox.height + y_velocity, bunkers[index].width, bunkers[index].height),
           alignment: bunkers[index].alignment
         };
 
-        if (playerBunkerCollision.bool === true) throw BreakException;
+        if (playerBunkerCollision.bool === true && bunkers[index].collision != false) throw BreakException;
       });
     } catch (e) {
       if (e !== BreakException) throw e;
@@ -888,11 +888,11 @@ var Player = {
     x = this.mapEdgeDetect(x, y).x; //map edge detection first...
     y = this.mapEdgeDetect(x, y).y;
 
-    if (this.objectCollisionDetect(Player.x + x, Player.y) === true) { //then object detection
+    if (this.objectCollisionDetect(Player.x + x, Player.y, x, y) === true) { //then object detection
       x = 0;
     }
 
-    if (this.objectCollisionDetect(Player.x, Player.y + y) === true) {
+    if (this.objectCollisionDetect(Player.x, Player.y + y, x, y) === true) {
       y = 0;
     }
 
@@ -1134,6 +1134,10 @@ var Player = {
 
     var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
 
+    Bunker.drawAll();
+
+    Map.drawDroppedItems();
+
     this.drawGun(x, y, rotation, inventoryItem);
 
     Game.drawBullets();
@@ -1151,8 +1155,6 @@ var Player = {
     this.shootAuto();
 
     this.healthRegen(2000);
-
-    Bunker.drawAll();
   },
 
   drawAllOnline: function (x, y, rotation, name, inventoryItem) {
