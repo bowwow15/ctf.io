@@ -232,6 +232,23 @@ var Game = { // holds framerate and function to draw a frame
     //to do: draw bullet splash
   },
 
+  detectBulletObjectCollision: function (x, y, x_velocity, y_velocity) {
+    treeCollision = {};
+    BreakException = {};
+
+    try { //detects bullet collisions for each bunker
+      trees.forEach(function (element, index) {
+        treeCollision = Player.detectCollision([x + x_velocity, y + y_velocity], [trees[index].x + 130, trees[index].y + 130], Math.abs(x_velocity), Math.abs(y_velocity), 40, 40);
+
+        if (treeCollision === true) throw BreakException;
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+
+    return treeCollision;
+  },
+
   drawBullets: function () {
     Game.bullets.forEach(function (element, index) {
       var expires = element[4];
@@ -267,6 +284,14 @@ var Game = { // holds framerate and function to draw a frame
         });
       } catch (e) {
         if (e !== BreakException) throw e;
+      }
+
+      let treeCollision = Game.detectBulletObjectCollision(x, y, x_velocity, y_velocity);
+
+      if (treeCollision === true) {
+        App.global.delete_bullet(index); //tells server to delete bullet
+
+        return;
       }
 
       element[8] -= 1; //DONTSHOOTYOURSELFTIMER
