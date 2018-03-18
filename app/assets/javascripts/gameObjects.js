@@ -67,7 +67,8 @@ Map = {
   droppedItems: [],
 
   zoom: function (scopeChange) {
-    this.scope += scopeChange;
+    viewport += scopeChange;
+    resizeCanvas();
     // this.translateView[0] = this.translateView[0] / (this.scope);
     // this.translateView[1] = this.translateView[1] / (this.scope);
   },
@@ -1285,11 +1286,11 @@ function onKeyDown(event) {
       break;
     case 189:
       //ZOOMS OUT
-      Map.zoom(0.1);
+      //Map.zoom(0.1);
       break;
     case 187:
       //ZOOMS OUT
-      Map.zoom(-0.1);
+      //Map.zoom(-0.1);
       break;
   }
 
