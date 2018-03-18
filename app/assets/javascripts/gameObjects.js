@@ -547,7 +547,7 @@ var Player = {
     //draws two circles to represent hands on a player.
     ctx.fillStyle = this.skinTone;
 
-    ctx.strokeStyle = '#274729';
+    ctx.strokeStyle = '#4b2f02';
     ctx.lineWidth = 7;
       
     leftHand = [-(Player.size / 2 + 10), -(Player.size / 2 + 15)]; //default hand settings
