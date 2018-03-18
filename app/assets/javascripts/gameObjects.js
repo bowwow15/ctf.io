@@ -1176,7 +1176,7 @@ var Player = {
     });
 
     this.drawGun(x, y, rotation, inventoryItem);
-    
+
     this.drawPerson(x, y);
 
     this.drawHands(x, y, rotation, gun);
@@ -1227,8 +1227,8 @@ $("body").mousemove(function(e) {
     //tells the server that you "moved"
     Player.moveServerPlayer();
 
-    Game.mousePos[0] = e.pageX;
-    Game.mousePos[1] = e.pageY;
+    Game.mousePos[0] = e.pageX * viewport;
+    Game.mousePos[1] = e.pageY * viewport;
 });
 
 
