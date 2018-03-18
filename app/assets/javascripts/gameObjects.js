@@ -1166,8 +1166,6 @@ var Player = {
 
     Map.drawDroppedItems();
 
-    this.drawGun(x, y, rotation, inventoryItem);
-
     Game.drawBullets();
 
     this.drawPerson(x, y);
@@ -1180,6 +1178,8 @@ var Player = {
         Player.drawAllOnline(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"], OnlinePlayers[uuid][3]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name, inventory item]
       }
     });
+
+    this.drawGun(x, y, rotation, inventoryItem);
 
     Obsticle.drawTrees();
 
