@@ -21,6 +21,9 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "send_map_bunkers"
     		Obsticle.drawServerBunkers(data.bunkersArray);
 
+    	when "send_map_trees"
+    		Obsticle.drawServerTrees(data.treesArray);
+
     	when "send_bullets"
     		Game.bullets.push(eval(data.bullets));
 

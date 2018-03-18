@@ -45,14 +45,18 @@ tree_0.src = '/images/tree_0.png';
 
 var bunkers = [];
 
-var trees = [
-	{
-		x: 300,
-		y: 300
-	}
-];
+var trees = [];
 
 var Obsticle = {
+	tree: function (x, y, type) {
+		trees.push(
+			{
+				x: x,
+				y: y,
+				type: type
+			}
+		);
+	},
 
 	square: function (x, y) {
 		bunkers.push({
@@ -302,7 +306,7 @@ var Obsticle = {
 			let x_augmented = element.x - Map.translateView[0];
 			let y_augmented = element.y - Map.translateView[1];
 
-			ctx.drawImage(tree_0, x_augmented, y_augmented);
+			ctx.drawImage(eval(element.type), x_augmented, y_augmented);
 		});
 	},
 
@@ -330,6 +334,16 @@ var Obsticle = {
 				Obsticle.house_facing_up(x, y);
 				break;
 			}
+		});
+	},
+
+	drawServerTrees: function (treesArray) {
+		treesArray.forEach(function (element, index) {
+			let x = treesArray[index][0];
+			let y = treesArray[index][1];
+			let type = treesArray[index][2];
+
+			Obsticle.tree(x, y, type)
 		});
 	}
 };
