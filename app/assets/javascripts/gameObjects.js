@@ -1175,9 +1175,9 @@ var Player = {
       }
     });
 
-    this.drawPerson(x, y);
-
     this.drawGun(x, y, rotation, inventoryItem);
+    
+    this.drawPerson(x, y);
 
     this.drawHands(x, y, rotation, gun);
 
