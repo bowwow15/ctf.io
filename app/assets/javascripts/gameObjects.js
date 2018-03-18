@@ -763,20 +763,20 @@ var Player = {
 
   drawAmmoAmount: function () {
     let text = "AIRSOFT PELLETS LEFT: " + Player.ammo;
-    ctx.font = "15px Courier";
+    ctx.font = "" + 15 * viewport + "px Courier";
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, canvas.width - 15, 25);
+    ctx.fillText(text, canvas.width - 15, 25 * viewport);
   },
 
   drawHealth: function () {
     let text = "HEALTH: " + Player.health + "%";
-    ctx.font = "15px Courier";
+    ctx.font = "" + 15 * viewport + "px Courier";
     ctx.textAlign = "start";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, 15, 25);
+    ctx.fillText(text, 15, 25 * viewport);
   },
 
   healthRegen: function (rateOfRegeneration) {
@@ -791,11 +791,11 @@ var Player = {
 
   drawKills: function () {
     let text = "KILLS: " + Player.kills;
-    ctx.font = "15px Courier";
+    ctx.font = "" + 15 * viewport + "px Courier";
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, canvas.width - 15, 45);
+    ctx.fillText(text, canvas.width - 15, 45 * viewport);
   },
 
   registerPoint: function () {
