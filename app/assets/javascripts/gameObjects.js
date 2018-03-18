@@ -1170,8 +1170,6 @@ var Player = {
 
     this.drawPerson(x, y);
 
-    this.drawHands(x, y, rotation, gun);
-
     //loads server players...
     Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
       if (uuid != Player.self_uuid) { // if the player isn't your own
@@ -1180,6 +1178,8 @@ var Player = {
     });
 
     this.drawGun(x, y, rotation, inventoryItem);
+
+    this.drawHands(x, y, rotation, gun);
 
     Obsticle.drawTrees();
 
