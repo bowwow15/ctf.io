@@ -143,8 +143,7 @@ class Game < ApplicationRecord
 
 		ActionCable.server.broadcast "global", {action: "player_died", player: [@playerCoords[0], @playerCoords[1], player]}
 
-		REDIS.del("coords_for_#{uuid}")
-		REDIS.del("player_name_#{uuid}") #deletes user when dead
+		Game.delete_user(uuid);
 	end
 
 	def self.get_kills (uuid)
