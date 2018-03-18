@@ -232,7 +232,7 @@ var Game = { // holds framerate and function to draw a frame
     //to do: draw bullet splash
   },
 
-  detectBulletObjectCollision: function (x, y, x_velocity, y_velocity) {
+  detectTreeCollision: function (x, y, x_velocity, y_velocity) {
     treeCollision = {};
     BreakException = {};
 
@@ -286,10 +286,13 @@ var Game = { // holds framerate and function to draw a frame
         if (e !== BreakException) throw e;
       }
 
-      let treeCollision = Game.detectBulletObjectCollision(x, y, x_velocity, y_velocity);
+      let treeCollision = Game.detectTreeCollision(x, y, x_velocity, y_velocity);
 
       if (treeCollision === true) {
         App.global.delete_bullet(index); //tells server to delete bullet
+
+        //make bark particle effect
+        //coming soon
 
         return;
       }
