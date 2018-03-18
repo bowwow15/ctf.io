@@ -20,7 +20,6 @@ function getPoint(mx, my, cx, cy, angle) {
     return {x:x, y:y};
 }
 
-var bunkers = [];
 
 function calculateBulletRicochetAngle (angleOfBullet, angleOfObject) {
 	if (angleOfObject == "vertical") {
@@ -40,7 +39,20 @@ bunker_texture.src = '/images/bunker_texture.png';
 tile_wood_floor_texture = new Image();
 tile_wood_floor_texture.src = '/images/tile_wood_floor_texture.png';
 
-var Bunker = {
+var tree_0 = new Image();
+tree_0.src = '/images/tree_0.png';
+
+
+var bunkers = [];
+
+var trees = [
+	{
+		x: 300,
+		y: 300
+	}
+];
+
+var Obsticle = {
 
 	square: function (x, y) {
 		bunkers.push({
@@ -284,6 +296,16 @@ var Bunker = {
 		});
 	},
 
+	drawTrees: function () {
+		trees.forEach(function (element, index) {
+			//draws trees
+			let x_augmented = element.x - Map.translateView[0];
+			let y_augmented = element.y - Map.translateView[1];
+
+			ctx.drawImage(tree_0, x_augmented, y_augmented);
+		});
+	},
+
 	drawServerBunkers: function (bunkersArray) {
 		//coffeescript calls this function
 
@@ -293,19 +315,19 @@ var Bunker = {
 
 			switch (bunkersArray[index][2]) {
 				case "square":
-				Bunker.square(x, y);
+				Obsticle.square(x, y);
 				break;
 
 				case "house":
-				Bunker.house(x, y);
+				Obsticle.house(x, y);
 				break;
 
 				case "house1":
-				Bunker.house_opposite(x, y);
+				Obsticle.house_opposite(x, y);
 				break;
 
 				case "house2":
-				Bunker.house_facing_up(x, y);
+				Obsticle.house_facing_up(x, y);
 				break;
 			}
 		});

@@ -19,7 +19,7 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     		Map.droppedItems = eval(data.items)
 
     	when "send_map_bunkers"
-    		Bunker.drawServerBunkers(data.bunkersArray);
+    		Obsticle.drawServerBunkers(data.bunkersArray);
 
     	when "send_bullets"
     		Game.bullets.push(eval(data.bullets));

@@ -1134,7 +1134,7 @@ var Player = {
 
     var gun = HudItem.determineGun(inventoryItem); //returns object. bool = true, hands = 1, or 2
 
-    Bunker.drawAll();
+    Obsticle.drawAll();
 
     Map.drawDroppedItems();
 
@@ -1145,6 +1145,15 @@ var Player = {
     this.drawPerson(x, y);
 
     this.drawHands(x, y, rotation, gun);
+
+    //loads server players...
+    Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
+      if (uuid != Player.self_uuid) { // if the player isn't your own
+        Player.drawAllOnline(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"], OnlinePlayers[uuid][3]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name, inventory item]
+      }
+    });
+
+    Obsticle.drawTrees();
 
     this.drawAmmoAmount();
 

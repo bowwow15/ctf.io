@@ -61,13 +61,6 @@ function drawContent () {
 
 		Player.drawAll(Player.x, Player.y, Player.rotation, Player.name, Player.inventory[HudItem.selectedItem])
 
-		//loads server players...
-		Object.keys(OnlinePlayers).forEach(function (uuid) { //draws all players on server
-			if (uuid != Player.self_uuid) { // if the player isn't your own
-				Player.drawAllOnline(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"], OnlinePlayers[uuid][3]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name, inventory item]
-			}
-		});
-
 		//draws all queued animations
 		Animation.drawAll();
 
