@@ -927,7 +927,7 @@ var Player = {
 
     if (this.lastMove < Date.now()) {
       if (move === true) {
-        this.moveMargin = (Date.now() - this.lastMove) / 16;
+        this.moveMargin = (Date.now() - this.lastMove) / 12;
 
         this.x += x * this.moveMargin; //changes coordinates on the client side. (absolute coords)
         this.y += y * this.moveMargin;
