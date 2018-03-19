@@ -85,7 +85,7 @@ var SplashScreen = {
 	    ctx.fillStyle = '#4f6d2c';
 	    ctx.strokeStyle = '#31441b';
 
-	    ctx.font = "" + 100 * viewport + "px Arial";
+	    ctx.font = "" + 100 / viewport + "px Arial";
 	    ctx.textAlign="center";
 
 	    ctx.fillText("CTF.io", canvas.width / 2, canvas.height / 2 + 50);
