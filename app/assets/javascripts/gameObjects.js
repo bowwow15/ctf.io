@@ -62,7 +62,7 @@ var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
 var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
 var gunshot_the_orion_audio = new Audio('/audio/the_orion.mp3');
 
-var grenade_audio = new Audio('/audio/grenade.mp3');
+var bomb_audio = new Audio('/audio/explosion_c4.mp3');
 
 var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
@@ -496,7 +496,7 @@ var Explosive = {
       bullets++;
     }
 
-    Game.playAudio("grenade_audio", Player.x, Player.y);
+    Game.playAudio("bomb_audio", Player.x, Player.y);
   },
 
   placeBomb: function (bomb) {
