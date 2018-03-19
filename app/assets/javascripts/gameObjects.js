@@ -489,7 +489,7 @@ var Explosive = {
     let velocity = 20;
     let expires = 60;
 
-    while (bullets < 50) {
+    while (bullets < 20) {
       var randomRotation = Math.random() * 360;
       var randomVelocity = Math.random() * 5;
       new Game.bullet(x, y, rotation + randomRotation, velocity + randomVelocity, expires, true, uuid, 9); //single bullet
@@ -528,8 +528,8 @@ var Explosive = {
     this.tickAll();
 
     this.bombtick.forEach(function (element, index) {
-        let x = element[0] - Map.translateView[0];
-        let y = element[1] - Map.translateView[1];
+        let x = element[0] - Map.translateView[0] - 50; //image width and height is 100 (center image)
+        let y = element[1] - Map.translateView[1] - 50;
 
         ctx.beginPath();
         ctx.drawImage(bomb_on_ground_img, x, y); 
