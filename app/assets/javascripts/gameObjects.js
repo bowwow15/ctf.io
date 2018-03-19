@@ -550,7 +550,7 @@ var Player = {
     ctx.fillStyle = this.skinTone;
 
     ctx.strokeStyle = '#4b2f02';
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 10;
       
     leftHand = [-(Player.size / 2 + 10), -(Player.size / 2 + 15)]; //default hand settings
     rightHand = [(Player.size / 2 + 10), -(Player.size / 2 + 15)];
@@ -571,7 +571,7 @@ var Player = {
     ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
-    ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 3) / Map.scope, 0, 2*Math.PI, false);
+    ctx.arc(x + leftHand[0], y + leftHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
 
     ctx.stroke();
     ctx.fill();
@@ -582,7 +582,7 @@ var Player = {
     ctx.rotate(rotation * Math.PI / 180);
     ctx.translate(-x, -y);
     ctx.beginPath();
-    ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 3) / Map.scope, 0, 2*Math.PI, false);
+    ctx.arc(x + rightHand[0], y + rightHand[1], (Player.size / 4) / Map.scope, 0, 2*Math.PI, false);
 
     ctx.stroke();
     ctx.fill();
@@ -769,7 +769,7 @@ var Player = {
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, canvas.width - 15, 25 * viewport);
+    ctx.fillText(text, canvas.width - 15, 25 / viewport);
   },
 
   drawHealth: function () {
@@ -778,7 +778,7 @@ var Player = {
     ctx.textAlign = "start";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, 15, 25 * viewport);
+    ctx.fillText(text, 15, 25 / viewport);
   },
 
   healthRegen: function (rateOfRegeneration) {
@@ -797,7 +797,7 @@ var Player = {
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.fillText(text, canvas.width - 15, 45 * viewport);
+    ctx.fillText(text, canvas.width - 15, 45 / viewport);
   },
 
   registerPoint: function () {
