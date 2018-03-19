@@ -93,7 +93,13 @@ var SplashScreen = {
 		}
 }
 
-var viewport = 1.5;
+var viewport = Math.min( 
+  window.innerWidth / canvas.width, 
+  window.innerHeight / canvas.height 
+);
+
+viewport *= 2;
+
 function resizeCanvas () { //resizes canvas to browser window
 	if (Player.dead != true) {
         var aspectRatio = window.innerWidth / window.innerHeight;
@@ -106,7 +112,6 @@ function resizeCanvas () { //resizes canvas to browser window
         	Context.create("canvas");
         	ctx = Context.context;
         }
-
 
 
         GameCanvas = {
