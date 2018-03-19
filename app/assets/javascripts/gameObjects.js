@@ -61,6 +61,8 @@ var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
 var death_sound = new Audio('/audio/death_sound.mp3');
 
+var gun_cock = new Audio('/audio/gun_cock.mp3');
+
 
 Map = {
   translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
@@ -475,6 +477,18 @@ OnlinePlayers = {
   }
 }; 
 
+var Explosives = {
+  grenadeExplosion: function (x, y) {
+    bullets = 0;
+    while (bullets < 50) {
+      var randomRotation = Math.random() * 180 - 180;
+      var randomVelocity = Math.random() * 5;
+      new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires, true, this.self_uuid); //single bullet
+      bullets++;
+    }
+  } 
+};
+
 
 var Player = {
   size: 40,
@@ -834,6 +848,8 @@ var Player = {
         App.game.drop_from_inventory([Player.x, Player.y, index]);
       }
     });
+
+    //gun_cock.cloneNode(true).play();
 
     Player.inventory = inventory;
     Player.updateInventory();
