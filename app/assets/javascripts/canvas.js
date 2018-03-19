@@ -98,7 +98,7 @@ var viewport = Math.min(
   window.innerHeight / canvas.height 
 );
 
-viewport *= 2;
+//viewport *= 2;
 
 function resizeCanvas () { //resizes canvas to browser window
 	if (Player.dead != true) {
