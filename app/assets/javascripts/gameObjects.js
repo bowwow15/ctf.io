@@ -355,16 +355,9 @@ var Game = { // holds framerate and function to draw a frame
         x_augmented = x - Map.translateView[0]; //augmented by player's view
         y_augmented = y - Map.translateView[1];
 
-        //draws bullet
-        ctx.beginPath();
-
-        ctx.fillStyle = "black";
-        ctx.arc(x_augmented, y_augmented, 3, 0, 2 * Math.PI);
-
-        ctx.fill();
 
         if (blur === true) {
-          //draw blur after bullet
+          //draw blur for bullet
           ctx.beginPath();
 
           //img variable declared before game object
