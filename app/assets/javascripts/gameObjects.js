@@ -59,6 +59,8 @@ var gunshot_the_orion_audio = new Audio('/audio/the_orion.mp3');
 
 var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
+var death_sound = new Audio('/audio/death_sound.mp3');
+
 
 Map = {
   translateView: [0, 0], //used to determine where the screen is viewing on the map... (usage: translateView[x, y])
@@ -202,7 +204,7 @@ var Game = { // holds framerate and function to draw a frame
       if (window.chrome) audio.load();
 
       audio.cloneNode(true).play();
-    }
+    } 
   },
 
   drawCoords: function () {
@@ -981,6 +983,9 @@ var Player = {
   die: function () {
     if (this.dead != true) { //don't die if you're already dead
       this.dead = true;
+
+      App.game.play_audio([death_sound, this.x, this.y]);
+      death_sound.cloneNode(true).play();
 
       App.game.player_die(Player.lastPlayerThatDeltDamage);
 
