@@ -517,7 +517,7 @@ var Explosive = {
 
   tickAll: function () {
     this.bombtick.forEach(function (element, index) {
-      if (element[2] < Date.now()) {
+      if (element[2] < Date.now() && element[3] == Player.self_uuid) { //makes sure it's your own bomb
         Explosive.detonateBomb(element[0], element[1], element[3]);
         Explosive.bombtick.splice(index, 1);
       }
