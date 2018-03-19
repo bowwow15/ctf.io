@@ -297,10 +297,10 @@ var Obsticle = {
 
 					ctx.fill();
 
-					ctx.filter = 'blur(15px)';
-					ctx.lineWidth = 5;
+					// ctx.filter = 'blur(15px)';
+					// ctx.lineWidth = 5;
 					ctx.strokeStyle = 'black';
-					ctx.stroke(); //to create shadows
+					//ctx.stroke(); //to create shadows
 					ctx.filter = 'none';
 
 					ctx.resetTransform();
