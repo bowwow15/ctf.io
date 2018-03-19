@@ -79,6 +79,7 @@ Map = {
 
   drawDroppedItems: function () {
     ctx.textAlign="start";
+    ctx.lineWidth = 3;
     this.droppedItems.forEach(function (element, index) {
       let x = element[0] - Map.translateView[0];
       let y = element[1] - Map.translateView[1];
@@ -914,8 +915,13 @@ var Player = {
     this.lastCoordinates = [this.x, this.y]; //in case we need to go back
     var move = true; //sets default
 
+    this.moveMargin = (Date.now() - this.lastMove) / 12;
+
     x = this.mapEdgeDetect(x, y).x; //map edge detection first...
     y = this.mapEdgeDetect(x, y).y;
+
+    x *= this.moveMargin;
+    y *= this.moveMargin;
 
     if (this.objectCollisionDetect(Player.x + x, Player.y, x, y) === true) { //then object detection
       x = 0;
@@ -927,18 +933,16 @@ var Player = {
 
     if (this.lastMove < Date.now()) {
       if (move === true) {
-        this.moveMargin = (Date.now() - this.lastMove) / 12;
-
-        this.x += x * this.moveMargin; //changes coordinates on the client side. (absolute coords)
-        this.y += y * this.moveMargin;
+        this.x += x; //changes coordinates on the client side. (absolute coords)
+        this.y += y;
 
         //tell server that you moved
         if (x != 0 || y != 0) { //if movement doesn't equal the last coordinates
           this.moveServerPlayer();
 
           if (Player.center === true && move === true) {
-            Map.translateView[0] += x * this.moveMargin;
-            Map.translateView[1] += y * this.moveMargin;
+            Map.translateView[0] += x;
+            Map.translateView[1] += y;
           }
         }
       }

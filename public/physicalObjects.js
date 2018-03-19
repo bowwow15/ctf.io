@@ -273,28 +273,39 @@ var Obsticle = {
 
 	drawAll: function () {
 		bunkers.forEach(function (element, index) {
-			ctx.beginPath();
-			ctx.fillStyle = "black";
-
 			let x_augmented = element.x - Map.translateView[0];
 			let y_augmented = element.y - Map.translateView[1];
+
+			ctx.fillStyle = "black";
+
+			ctx.beginPath();
+
+			ctx.rect(x_augmented, y_augmented, element.width, element.height);
+
 			switch (element.type) {
 				case "bunker":
 					var pattern = ctx.createPattern(bunker_texture,"repeat");
 					ctx.fillStyle = pattern;
+					ctx.fill();
 				break;
 
 				case "tile_wood_floor":
 					var pattern = ctx.createPattern(tile_wood_floor_texture,"repeat");
 					ctx.fillStyle = pattern;
+
+					ctx.fill();
+
+					ctx.filter = 'blur(15px)';
+					ctx.lineWidth = 5;
+					ctx.strokeStyle = 'black';
+					ctx.stroke(); //to create shadows
+					ctx.filter = 'none';
 				break;
 			}
 
-			ctx.rect(x_augmented, y_augmented, element.width, element.height);
-
 			ctx.translate(x_augmented, y_augmented);
 
-			ctx.fill();
+			ctx.shadowBlur = 0;
 
 			ctx.resetTransform();
 		});
