@@ -487,7 +487,7 @@ var Explosive = {
     let bullets = 0;
     let rotation = 0;
     let velocity = 20;
-    let expires = 60;
+    let expires = 100;
 
     while (bullets < 20) {
       var randomRotation = Math.random() * 360;
@@ -506,7 +506,7 @@ var Explosive = {
 
     let time = Date.now() + 7000; // 7 seconds
 
-    App.game.push_to_bombs([x, y, time, uuid]); 
+    App.game.push_to_bombs([x, y, time, uuid, Math.random() * 360]); 
   },
 
   setBomb: function () {
@@ -530,9 +530,16 @@ var Explosive = {
     this.bombtick.forEach(function (element, index) {
         let x = element[0] - Map.translateView[0] - 50; //image width and height is 100 (center image)
         let y = element[1] - Map.translateView[1] - 50;
+        let rotation = element[4]; //random rotation of placed bomb
+
+        ctx.translate(x, y);
+        ctx.rotate(rotation * Math.PI / 180);
+        ctx.translate(-x, -y);
 
         ctx.beginPath();
         ctx.drawImage(bomb_on_ground_img, x, y); 
+
+        ctx.resetTransform();
     });
   }
 };
