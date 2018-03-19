@@ -98,14 +98,15 @@ var viewport = Math.min(
   window.innerHeight / canvas.height 
 );
 
-//viewport *= 2;
+viewport *= 1.1;
+
 
 function resizeCanvas () { //resizes canvas to browser window
 	if (Player.dead != true) {
         var aspectRatio = window.innerWidth / window.innerHeight;
 
-        canvas.width = window.innerWidth * viewport;
-        canvas.height = window.innerHeight * viewport;
+        canvas.width = window.innerWidth / viewport;
+        canvas.height = window.innerHeight / viewport;
 
         //draws background
         if (ctx === null) {

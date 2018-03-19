@@ -765,7 +765,7 @@ var Player = {
 
   drawAmmoAmount: function () {
     let text = "AIRSOFT PELLETS LEFT: " + Player.ammo;
-    ctx.font = "" + 15 * viewport + "px Courier";
+    ctx.font = "" + 15 / viewport + "px Courier";
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
@@ -774,7 +774,7 @@ var Player = {
 
   drawHealth: function () {
     let text = "HEALTH: " + Player.health + "%";
-    ctx.font = "" + 15 * viewport + "px Courier";
+    ctx.font = "" + 15 / viewport + "px Courier";
     ctx.textAlign = "start";
     ctx.fillStyle = "black";
     ctx.beginPath();
@@ -793,7 +793,7 @@ var Player = {
 
   drawKills: function () {
     let text = "KILLS: " + Player.kills;
-    ctx.font = "" + 15 * viewport + "px Courier";
+    ctx.font = "" + 15 / viewport + "px Courier";
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.beginPath();
@@ -1232,8 +1232,8 @@ $("body").mousemove(function(e) {
     //tells the server that you "moved"
     Player.moveServerPlayer();
 
-    Game.mousePos[0] = e.pageX * viewport;
-    Game.mousePos[1] = e.pageY * viewport;
+    Game.mousePos[0] = e.pageX / viewport;
+    Game.mousePos[1] = e.pageY / viewport;
 });
 
 
