@@ -290,6 +290,8 @@ var Obsticle = {
 				break;
 
 				case "tile_wood_floor":
+					ctx.translate(x_augmented, y_augmented);
+
 					var pattern = ctx.createPattern(tile_wood_floor_texture,"repeat");
 					ctx.fillStyle = pattern;
 
@@ -300,6 +302,8 @@ var Obsticle = {
 					ctx.strokeStyle = 'black';
 					ctx.stroke(); //to create shadows
 					ctx.filter = 'none';
+
+					ctx.resetTransform();
 				break;
 			}
 
