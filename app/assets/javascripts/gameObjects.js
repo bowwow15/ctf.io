@@ -43,8 +43,10 @@ barrett_m82a1_img.src = '/images/inventory/barrett_m82a1.png';
 var the_orion_img = new Image();
 the_orion_img.src = '/images/inventory/the_orion.png';
 
-var grenade_img = new Image();
-grenade_img.src = '/images/inventory/grenade.png';
+var bomb_img = new Image();
+bomb_img.src = '/images/inventory/bomb.png';
+var bomb_on_ground_img = new Image();
+bomb_on_ground_img.src = '/images/inventory/bomb_on_ground.png'; 
 
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
@@ -445,7 +447,7 @@ HudItem = {
       case "mac_11":
         hands = 1;
         break;
-      case "grenade":
+      case "bomb":
         hands = 1;
         break;
     }
@@ -486,24 +488,59 @@ OnlinePlayers = {
 }; 
 
 var Explosive = {
-  grenade: function (x, y, uuid = Player.self_uuid) {
+  bombtick: [],
+
+  detonateBomb: function (x, y, uuid = Player.self_uuid) {
     let bullets = 0;
     let rotation = 0;
-    let velocity = 50;
+    let velocity = 20;
     let expires = 60;
 
     while (bullets < 50) {
       var randomRotation = Math.random() * 360;
       var randomVelocity = Math.random() * 5;
-      new Game.bullet(x, y, rotation + randomRotation, velocity + randomVelocity, expires, true, uuid, 7); //single bullet
+      new Game.bullet(x, y, rotation + randomRotation, velocity + randomVelocity, expires, true, uuid, 9); //single bullet
       bullets++;
     }
 
     Game.playAudio("grenade_audio", Player.x, Player.y);
   },
 
-  launchGrenade: function () {
-    Explosive.grenade(Player.x, Player.y);
+  placeBomb: function (bomb) {
+    let x = bomb[0];
+    let y = bomb[1];
+    let uuid = bomb[2]
+
+    let time = Date.now() + 7000; // 7 seconds
+
+    App.game.push_to_bombs([x, y, time, uuid]); 
+  },
+
+  setBomb: function () {
+    this.placeBomb([Player.x, Player.y, Player.self_uuid]);
+
+    App.game.delete_from_inventory(HudItem.selectedItem);
+  },
+
+  tickAll: function () {
+    this.bombtick.forEach(function (element, index) {
+      if (element[2] < Date.now()) {
+        Explosive.detonateBomb(element[0], element[1], element[3]);
+        Explosive.bombtick.splice(index, 1);
+      }
+    });
+  },
+
+  drawAll: function () {
+    this.tickAll();
+
+    this.bombtick.forEach(function (element, index) {
+        let x = element[0] - Map.translateView[0];
+        let y = element[1] - Map.translateView[1];
+
+        ctx.beginPath();
+        ctx.drawImage(bomb_on_ground_img, x, y); 
+    });
   }
 };
 
@@ -785,19 +822,16 @@ var Player = {
           //the_orion_top_img
         break;
 
-        case "grenade":
-          Gun.spawnPoint = [5, -110];
-          Gun.type = "grenade";
+        case "bomb":
+          Gun.spawnPoint = [5, -108];
+          Gun.type = "bomb";
 
           ctx.translate(x, y);
           ctx.rotate(-5 * Math.PI / 180);
           ctx.translate(-x, -y);
 
           ctx.beginPath();
-          ctx.rect(x + 10, y - 50, 5, -45); //glock 19 is squared.
-
-          ctx.stroke();
-          ctx.fill();
+          ctx.drawImage(bomb_img, x, y - 90); 
         break;
       }
 
@@ -1174,9 +1208,9 @@ var Player = {
               shot = true;
               break;
 
-            case "grenade":
+            case "bomb":
               ammoAmount = 0;
-              Explosive.launchGrenade();
+              Explosive.setBomb();
               shot = true;
             break;
         }
@@ -1189,9 +1223,9 @@ var Player = {
             dryFire();
           break;
 
-          case "grenade":
+          case "bomb":
             ammoAmount = 0;
-            Explosive.launchGrenade();
+            Explosive.setBomb();
             shot = true;
           break;
 
@@ -1244,6 +1278,8 @@ var Player = {
         Player.drawAllOnline(OnlinePlayers[uuid][0], OnlinePlayers[uuid][1], OnlinePlayers[uuid][2], OnlinePlayers[uuid + "_name"], OnlinePlayers[uuid][3]); //OnlinePlayers["(uuid)"] = [coordinates, rotation, player name, inventory item]
       }
     });
+
+    Explosive.drawAll();
 
     this.drawGun(x, y, rotation, inventoryItem);
 

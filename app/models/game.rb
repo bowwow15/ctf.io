@@ -56,6 +56,20 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: @playerInventory}
 	end
 
+	def self.delete_from_inventory (uuid, item)
+		@playerInventory = eval(REDIS.get("player_inventory_#{uuid}"))
+
+		@playerInventory[item] = "empty"
+
+		REDIS.set("player_inventory_#{uuid}", @playerInventory)
+
+		ActionCable.server.broadcast "player_#{uuid}", {action: "send_player_inventory", inventory: @playerInventory}
+	end
+
+	def self.push_to_bombs (uuid, bombs)
+		ActionCable.server.broadcast "global", {action: "push_to_bombs", uuid: uuid, bombs: bombs}
+	end
+
 	def self.add_to_inventory (uuid, item)
 		itemName = item
 
@@ -144,6 +158,10 @@ class Game < ApplicationRecord
 		ActionCable.server.broadcast "global", {action: "player_died", player: [@playerCoords[0], @playerCoords[1], player]}
 
 		Game.delete_user(uuid);
+	end
+
+	def self.place_bomb (uuid, bomb)
+		ActionCable.server.broadcast "global", {action: "place_bomb", bomb: bomb}
 	end
 
 	def self.get_kills (uuid)

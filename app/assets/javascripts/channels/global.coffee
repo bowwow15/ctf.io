@@ -33,6 +33,12 @@ App.global = App.cable.subscriptions.create "GlobalChannel",
     	when "delete_player"
     		delete OnlinePlayers[data.uuid]; #deletes user from local object
 
+    	when "place_bomb"
+    		Explosive.placeBomb(data.bomb);
+
+    	when "push_to_bombs"
+    		Explosive.bombtick.push(data.bombs);
+
     	when "player_died"
     		Game.addGraveStone(data.player);
 

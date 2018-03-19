@@ -58,8 +58,20 @@ class GameChannel < ApplicationCable::Channel
   	Game.drop_from_inventory(uuid, data['item'])
   end
 
+  def delete_from_inventory (data)
+  	Game.delete_from_inventory(uuid, data['item'])
+  end
+
+  def push_to_bombs (data)
+  	Game.push_to_bombs(uuid, data['bombs'])
+  end
+
   def add_to_inventory (data)
   	Game.add_to_inventory(uuid, data['item'])
+  end
+
+  def place_bomb (data)
+  	Game.place_bomb(uuid, data['bomb'])
   end
 
   def pick_up_item (data)
