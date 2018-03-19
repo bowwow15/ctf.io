@@ -43,6 +43,9 @@ barrett_m82a1_img.src = '/images/inventory/barrett_m82a1.png';
 var the_orion_img = new Image();
 the_orion_img.src = '/images/inventory/the_orion.png';
 
+var grenade_img = new Image();
+grenade_img.src = '/images/inventory/grenade.png';
+
 var ammo_img = new Image();
 ammo_img.src = '/images/inventory/ammo.png';
 
@@ -56,6 +59,8 @@ var gunshot_shotgun_audio = new Audio('/audio/shotgun.mp3');
 var gunshot_pistol_audio = new Audio('/audio/pistol.mp3');
 var gunshot_assault_rifle_audio = new Audio('/audio/assault_rifle.mp3');
 var gunshot_the_orion_audio = new Audio('/audio/the_orion.mp3');
+
+var grenade_audio = new Audio('/audio/grenade.mp3');
 
 var dry_fire_audio = new Audio('/audio/dry_fire.mp3');
 
@@ -440,6 +445,9 @@ HudItem = {
       case "mac_11":
         hands = 1;
         break;
+      case "grenade":
+        hands = 1;
+        break;
     }
 
     return {
@@ -477,16 +485,26 @@ OnlinePlayers = {
   }
 }; 
 
-var Explosives = {
-  grenadeExplosion: function (x, y) {
-    bullets = 0;
+var Explosive = {
+  grenade: function (x, y, uuid = Player.self_uuid) {
+    let bullets = 0;
+    let rotation = 0;
+    let velocity = 50;
+    let expires = 60;
+
     while (bullets < 50) {
-      var randomRotation = Math.random() * 180 - 180;
+      var randomRotation = Math.random() * 360;
       var randomVelocity = Math.random() * 5;
-      new Game.bullet(pos.x, pos.y, rotation + randomRotation, velocity + randomVelocity, expires, true, this.self_uuid); //single bullet
+      new Game.bullet(x, y, rotation + randomRotation, velocity + randomVelocity, expires, true, uuid, 7); //single bullet
       bullets++;
     }
-  } 
+
+    Game.playAudio("grenade_audio", Player.x, Player.y);
+  },
+
+  launchGrenade: function () {
+    Explosive.grenade(Player.x, Player.y);
+  }
 };
 
 
@@ -637,7 +655,6 @@ var Player = {
 
           ctx.stroke();
           ctx.fill();
-          ctx.resetTransform();
         break;
 
         case "mac_11":
@@ -663,8 +680,6 @@ var Player = {
 
           ctx.stroke();
           ctx.fill();
-
-          ctx.resetTransform();
         break;
 
         case "ar_15":
@@ -676,7 +691,6 @@ var Player = {
 
           ctx.stroke();
           ctx.fill();
-          ctx.resetTransform();
         break;
 
         case "remington_870":
@@ -698,7 +712,6 @@ var Player = {
 
           ctx.stroke();
           ctx.fill();
-          ctx.resetTransform();
         break;
 
         case "ak_47":
@@ -732,8 +745,6 @@ var Player = {
           ctx.lineWidth = 1;
           ctx.rect(x + 12.5, y - 120, 0.5, -5);
           ctx.stroke();
-
-          ctx.resetTransform();
         break;
 
         case "barrett_m82a1":
@@ -758,7 +769,6 @@ var Player = {
 
           ctx.stroke();
           ctx.fill();
-          ctx.resetTransform();
         break;
 
         case "the_orion":
@@ -773,9 +783,25 @@ var Player = {
           ctx.drawImage(the_orion_top_img, x + 9, y - 150); 
 
           //the_orion_top_img
-          ctx.resetTransform();
+        break;
+
+        case "grenade":
+          Gun.spawnPoint = [5, -110];
+          Gun.type = "grenade";
+
+          ctx.translate(x, y);
+          ctx.rotate(-5 * Math.PI / 180);
+          ctx.translate(-x, -y);
+
+          ctx.beginPath();
+          ctx.rect(x + 10, y - 50, 5, -45); //glock 19 is squared.
+
+          ctx.stroke();
+          ctx.fill();
         break;
       }
+
+      ctx.resetTransform();
     }
   },
 
@@ -1147,11 +1173,29 @@ var Player = {
 
               shot = true;
               break;
+
+            case "grenade":
+              ammoAmount = 0;
+              Explosive.launchGrenade();
+              shot = true;
+            break;
         }
       }
 
       else { //dry fire
-        dryFire();
+        switch (Gun.type) { //explosives?
+
+          default:
+            dryFire();
+          break;
+
+          case "grenade":
+            ammoAmount = 0;
+            Explosive.launchGrenade();
+            shot = true;
+          break;
+
+        }
       }
 
       if (shot === false) {
