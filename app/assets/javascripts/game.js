@@ -45,11 +45,24 @@ function drawContent () {
         // Also, adjust for fpsInterval not being multiple of 16.67
         then = now - (elapsed % fpsInterval);
 
+		switch (Player.type) {
+			case "default":
+				ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
+				drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]);
+			break;
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height); //clears last input
+			case "spy":
+				ctx.globalCompositeOperation = "hard-light";
 
-		drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
+				ctx.globalAlpha = Game.blurLevel;
 
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+				drawGrid(200, 200, Map.mapLimit[0], Map.mapLimit[1]); //maplimit declared in gameobjects, drawGrid in canvas.js
+			break;
+		}
+
+		ctx.globalCompositeOperation = "source-over";
+		ctx.globalAlpha = 1;
 
 		//below methods defined in gameObjects.js...
 
@@ -63,6 +76,8 @@ function drawContent () {
 
 		//draws all queued animations
 		Animation.drawAll();
+
+		ctx.closePath();
 
 		//controls
 
@@ -120,6 +135,14 @@ EndGame = function () {
 function startGame () {
 	var name = $("#name").val();
 
+	switch (name) {
+		case "spy":
+			Player.type = name;
+
+			Player.skinTone = "black";
+		break;
+	}
+
 	$("#name").blur();
 	$("#name").slideUp(500); //500 ms (1/2) of a second
 	$(".upper").fadeOut(500);
@@ -129,4 +152,4 @@ function startGame () {
 	App.game.start_game(name, [Player.x, Player.y]);
 }
 
-
+console.clear();

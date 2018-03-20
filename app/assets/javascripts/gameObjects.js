@@ -182,6 +182,8 @@ var Game = { // holds framerate and function to draw a frame
   mousePos: [0, 0],
   ricoshetNoBlur: 0,
 
+  blurLevel: 0.4,
+
   draw: function (fps) {
     // drawGrid();
 
@@ -551,6 +553,7 @@ var Explosive = {
 
 
 var Player = {
+  type: "default",
   size: 40,
   hitBox: {
     width: 80,
