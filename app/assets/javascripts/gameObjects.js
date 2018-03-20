@@ -972,7 +972,7 @@ var Player = {
 
     inventory.forEach(function (element, index) { //automatically adds ammo to ammo count
       if (inventory[index] == "ammo") {
-        Animation.setLoadingWheel(2000, "Reloading...", Player.addAmmo);
+        Animation.setLoadingWheel(2000, "RELOADING", Player.addAmmo);
 
         //plays ammo sound effect
 
