@@ -578,6 +578,7 @@ var Player = {
   name: "",
   inventory: ["empty","empty","empty","empty","empty","empty","empty","empty"],
   skinTone: '#fcc875',
+  defaultSkinTone: '#fcc875',
   self_uuid: null,
   nameSize: 20,
   nameFont: "Helvetica",
@@ -587,13 +588,13 @@ var Player = {
   x: Map.spawnPoint[0], //ABSOLUTE COORDINATES TO BE SENT TO SERVER... (or other uses)
   y: Map.spawnPoint[1],
 
-  drawPerson: function (x, y) {
+  drawPerson: function (x, y, skinTone = this.skinTone) {
       ctx.beginPath(); //resets path that is being drawn.
 
       ctx.arc(x, y, Player.size / Map.scope, 0, 2*Math.PI, false); // ! augmented by Map.translateView and other such variables !
 
       if (this.color != true) {
-        ctx.fillStyle = Player.skinTone; //skin tone
+        ctx.fillStyle = skinTone; //skin tone
       }
       else {
         ctx.fillStyle = 'blue';
@@ -624,9 +625,9 @@ var Player = {
     }
   },
 
-  drawHands: function (x, y, rotation, gun) {
+  drawHands: function (x, y, rotation, gun, skinTone = this.skinTone) {
     //draws two circles to represent hands on a player.
-    ctx.fillStyle = this.skinTone;
+    ctx.fillStyle = skinTone;
 
     ctx.strokeStyle = '#4b2f02';
     ctx.lineWidth = 10;
@@ -1309,6 +1310,14 @@ var Player = {
   },
 
   drawAllOnline: function (x, y, rotation, name, inventoryItem) {
+    let skinTone = this.defaultSkinTone;
+
+    switch (name) {
+      case "spy":
+        skinTone = "black";
+      break;
+    }
+
     x = x - Map.translateView[0]; //augmented by player's view
     y = y - Map.translateView[1];
 
@@ -1316,9 +1325,9 @@ var Player = {
 
     this.drawGun(x, y, rotation, inventoryItem);
 
-    this.drawPerson(x, y);
+    this.drawPerson(x, y, skinTone);
 
-    this.drawHands(x, y, rotation, gun);
+    this.drawHands(x, y, rotation, gun, skinTone);
 
     this.drawName(x, y, name);
   }
