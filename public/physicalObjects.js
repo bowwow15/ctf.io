@@ -42,6 +42,9 @@ tile_wood_floor_texture.src = '/images/tile_wood_floor_texture.png';
 var tree_0 = new Image();
 tree_0.src = '/images/tree_0.png';
 
+var bush = new Image();
+bush.src = '/images/bush.png';
+
 
 var bunkers = [];
 
