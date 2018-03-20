@@ -168,8 +168,69 @@ var Animation = {
     this.hurtDraw = true;
   },
 
+  loadingWheelBool: false,
+  loadingWheelTimeout: 0,
+  timeoutMax: 0,
+  loadingWheelMessage: "reloading",
+  loadingWheelCallback: console.log,
+  loadingWheelArguments: null,
+
+  loadingWheel: function () {
+    let timeout = this.loadingWheelTimeout;
+    let message = this.loadingWheelMessage;
+    let callback = this.loadingWheelCallback;
+    let arguments = this.loadingWheelArguments;
+
+    if (this.loadingWheelBool === true) {
+      if (timeout > Date.now()) {
+        ctx.beginPath();
+        ctx.textAlign = "center";
+        ctx.fillText(message, canvas.width / 2, (canvas.height / 2) + 150);
+
+        this.timeoutMax = 0;
+        let progress = (timeout - Date.now()) / 5;
+
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "#0000007d";
+        ctx.lineWidth = 5;
+
+        let loadingWheelPosY = (canvas.height / 2) + 250;
+        let loadingWheelPosX = canvas.width / 2;
+
+        ctx.beginPath(); //loading wheel base
+        ctx.arc(loadingWheelPosX, loadingWheelPosY, 50, 0, 0);
+        ctx.fill();
+
+        ctx.translate(loadingWheelPosX, loadingWheelPosY);
+        ctx.rotate(-90 * Math.PI / 180);
+        ctx.translate(-loadingWheelPosX, -loadingWheelPosY);
+
+        ctx.beginPath(); //loading wheel
+        ctx.arc(loadingWheelPosX, loadingWheelPosY, 50, progress, 0);
+        ctx.stroke();
+        ctx.resetTransform();
+
+      } else {
+        callback(arguments);
+
+        this.loadingWheelBool = false; //don't repeat yourself
+      }
+    }
+  },
+
+  setLoadingWheel: function (timeout, message, callback, arguments = null) {
+    this.loadingWheelTimeout = Date.now() + timeout;
+    this.loadingWheelMessage = message;
+    this.loadingWheelCallback = callback;
+    this.loadingWheelArguments = arguments;
+
+    this.loadingWheelBool = true;
+  },
+
   drawAll: function () {
     this.hurt(20);
+
+    this.loadingWheel();
   }
 };
 
@@ -903,11 +964,15 @@ var Player = {
     });
   },
 
+  addAmmo: function () {
+    Player.ammo += 25;
+  },
+
   addToInventory: function (inventory) {
 
     inventory.forEach(function (element, index) { //automatically adds ammo to ammo count
       if (inventory[index] == "ammo") {
-        Player.ammo += 25;
+        Animation.setLoadingWheel(2000, "Reloading...", Player.addAmmo);
 
         //plays ammo sound effect
 
@@ -921,6 +986,7 @@ var Player = {
     //gun_cock.cloneNode(true).play();
 
     Player.inventory = inventory;
+
     Player.updateInventory();
   },
 
